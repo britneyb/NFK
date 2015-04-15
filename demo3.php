@@ -1,27 +1,18 @@
 <?php
-$fp = fopen("/dev/ttyACM0","w");
-if(!$fp){
+$serialDevice = fopen("/dev/ttyACM0","r");
+if(!$serialDevice){
 	//echo "Can't find /dev/ttyACM0";
-	$fp = fopen("/dev/ttyACM1","w");
-	if(!$fp){
-		echo "Can't find /dev/ttyACM1";
+	$serialDevice = fopen("/dev/ttyACM1","r");
+	if(!$serialDevice){
+		//echo "Can't find /dev/ttyACM1";
+		$serialDevice = fopen("/dev/ttyACM2","r");
+		if(!$serialDevice){
+			//echo "Can't find /dev/ttyACM2";
+		}
 	}
 }
-//sleep(1);
-$msg=$_POST["the_txt"];
-fwrite($fp,$msg);
-//usleep(1000);
-$response = fread($fp, 16);
-echo $response;
-fclose($fp);
+$response = fread($serialDevice, 48);
+preg_match("/\w+\s+(\w+)\s*\w+\s/", $response, $first);
+echo $first[1];
 
-?>
-
-<html>
-	<body>
-		<form method="POST" action="test.php">
-			<input type="text"  name="the_txt"><br />
-			<input type="submit" value="Send" name="btn_submit" > 
-		</form>
-	</body>
-</html>
+fclose($serialDevice);
