@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="sv">
+	<head>
+		<title>Mäskschema</title>
+		<meta charset="utf-8"/>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<link rel="stylesheet" type="text/css" href="brygg.css" />
+		<script src="maskschema.js"></script>
+	</head>
+	<body>
+		<h1>Mäskschema</h1>
+		<div id="divName">
+			Namn på Mäskschema<br />
+			<input type="text" id="name" />
+		</div>
+		<div id="steps">
+		<p>step ett</p>
+		<p>step två</p>
+		<p>step ett</p>
+		<p>step två</p>
+		</div>
+		<div id="nextStep">
+			<form id="addStepForm">
+				<p style="font-weight:bold">Nästa steg</p>
+				<p>Måltemperatur: <input id="temp" type="number" min="0" max="100" required /> C</p>
+				<p>Längd: <input id="time" type="number" min="0" required /> Min</p>
+				<input id="addStep" type="submit" value="Lägg till steg">
+			</form>
+			<button id="saveScheme">Spara Mäskschema</button>
+		</div>
+		<div id="menu">
+			<button onclick="location.href='index.html'">Huvudmeny</button>
+			<button id="openScheme">Öppna Mäskschema</button>
+			<button id="upLoadScheme">Ladda upp Mäskschema</button>
+		</div>
+	</body>
+</html>
