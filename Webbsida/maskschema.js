@@ -51,8 +51,17 @@ function normaliseEvent(event) {
 	return event;
 }
 
-
 loadEvent(function(){
+	var steps = [];
+	function addStep(temp, time){
+		document.getElementById('steps').innerHTML = "";
+		steps.push([temp,time]);
+		for(var i = 0; i<steps.length; i++){
+			var newParagraph = document.createElement('p');
+			newParagraph.textContent = "Steg " + (i+1) + " Måltemperatur: " + steps[i][0] + " C  Längd: " + steps[i][1] + " Min";
+			document.getElementById('steps').appendChild(newParagraph);
+		}
+	}
 	
 	function validateName(name){
 		//Läs in från databasen om namnet finns eller ej.
@@ -91,18 +100,28 @@ loadEvent(function(){
 			}
 		}
 		else{
-				time.focus();
-				document.getElementById('temp').style.backgroundColor = "#FF4D4D";
-				return false;
+			time.focus();
+			document.getElementById('temp').style.backgroundColor = "#FF4D4D";
+			return false;
 		}
 		//Kolla så det är siffror. Fråga om det överstiger 2 timmar.
 	}
 	
+	addEvent(document.getElementById('temp'), 'keypress', function(e){
+		if(e.keyCode == 13){
+			e.preventDefault();
+			document.getElementById('time').focus();
+		}
+	});
+
 	addEvent(document.getElementById('addStepForm'),'submit',function(e){
 		e.preventDefault();
 		if(validateTemp(document.getElementById('temp'))){
 			if(validateTime(document.getElementById('time'))){
-				alert("Allt Korrekt");
+				addStep(document.getElementById('temp').value, document.getElementById('time').value);
+				document.getElementById('temp').value = "";
+				document.getElementById('temp').focus();
+				document.getElementById('time').value = "";
 			}
 		}
 		
