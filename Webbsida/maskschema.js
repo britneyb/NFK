@@ -56,7 +56,7 @@ loadEvent(function(){
 	function addStep(temp, time){
 		document.getElementById('steps').innerHTML = "";
 		steps.push([temp,time]);
-		for(var i = 0; i<steps.length; i++){
+		for(var i = 0; i < steps.length; i++){
 			var newParagraph = document.createElement('p');
 			newParagraph.textContent = "Steg " + (i+1) + " Måltemperatur: " + steps[i][0] + " C  Längd: " + steps[i][1] + " Min";
 			document.getElementById('steps').appendChild(newParagraph);
@@ -64,6 +64,23 @@ loadEvent(function(){
 	}
 	
 	function validateName(name){
+		if(name != ""){
+			var XHR = new XMLHttpRequest();
+			XHR.onreadystatechange = function(){
+				if (XHR.readyState == 4 && XHR.status == 200) {
+					if(XHR.responseText != name);
+					true;
+				}
+				else{
+					document.getElementById('name').style.backgroundColor = "#FF4D4D";
+					alert("Namnet är upptaget");
+					document.getElementById('')
+					return false;
+				}
+			};
+			XHR.open("GET", "192.168.0.154/checkName.php?name="+name, true);
+			XHR.send();
+		}
 		//Läs in från databasen om namnet finns eller ej.
 	}
 	
@@ -124,7 +141,29 @@ loadEvent(function(){
 				document.getElementById('time').value = "";
 			}
 		}
-		
+	});
+	
+	addEvent(document.getElementById('saveScheme'), 'click', function(e){
+		//alert("Spara schema");
+		var XHR = new XMLHttpRequest();
+		XHR.onreadystatechange = function(){
+			if (XHR.readyState == 4 && XHR.status == 200) {
+                alert(XHR.responseText);
+            }
+        }
+        XHR.open("GET", "sqlfunctions.php?array="+JSON.stringify(steps), true);
+        XHR.send();
+	});
+
+	addEvent(document.getElementById('openScheme'), 'click', function(e){
+		var XHR = new XMLHttpRequest();
+		XHR.onreadystatechange = function(){
+			if (XHR.readyState == 4 && XHR.status == 200) {
+                alert(XHR.responseText);
+            }
+        }
+        XHR.open("GET", "openScheme", true);
+        XHR.send();
 	});
 	
 });
