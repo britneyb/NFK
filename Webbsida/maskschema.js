@@ -62,24 +62,50 @@ loadEvent(function(){
 			document.getElementById('steps').appendChild(newParagraph);
 		}
 	}
+
+	function saveScheme(){
+		alert("test");
+		
+	}
+
+	function checkName(free){
+		if(free == "success"){
+			document.getElementById('name').style.backgroundColor = "white";
+			alert("Namnet är ledigt");
+			if(steps){
+				var XHR = new XMLHttpRequest();
+				XHR.onreadystatechange = function(){
+					if (XHR.readyState == 4 && XHR.status == 200) {
+		                alert(XHR.responseText);
+		            }
+		        }
+		        XHR.open("GET", "sqlfunctions.php?type=saveSchedule&name="+document.getElementById('name').value+"&array="+JSON.stringify(steps), true);
+		        XHR.send();
+	    	}
+		}
+		else{
+			alert("Namnet är upptaget");
+			document.getElementById('name').style.backgroundColor = "#FF4D4D";
+			document.getElementById('name').focus();
+		}
+	}
 	
 	function validateName(name){
-		if(name != ""){
+		if(name.value != ""){
+			
 			var XHR = new XMLHttpRequest();
 			XHR.onreadystatechange = function(){
 				if (XHR.readyState == 4 && XHR.status == 200) {
-					if(XHR.responseText != name);
-					true;
-				}
-				else{
-					document.getElementById('name').style.backgroundColor = "#FF4D4D";
-					alert("Namnet är upptaget");
-					document.getElementById('')
-					return false;
+					checkName(XHR.responseText);
 				}
 			};
-			XHR.open("GET", "192.168.0.154/checkName.php?name="+name, true);
+			XHR.open("GET", "sqlfunctions.php?type=checkName&name="+name.value, true);
 			XHR.send();
+		}
+		else{
+			name.style.backgroundColor = "#FF4D4D";
+			name.focus();
+			return false;
 		}
 		//Läs in från databasen om namnet finns eller ej.
 	}
@@ -87,18 +113,18 @@ loadEvent(function(){
 	function validateTemp(temp){
 		if(temp.value != ""){
 			if(/^\d+$/.test(temp.value) && temp.value > 0 && temp.value <= 100){
-				document.getElementById('temp').style.backgroundColor = "white";
+				temp.style.backgroundColor = "white";
 				return true;
 			}
 			else{
 				temp.focus();
-				document.getElementById('temp').style.backgroundColor = "#FF4D4D";
+				temp.style.backgroundColor = "#FF4D4D";
 				return false;
 			}
 		}
 		else{
 			temp.focus();
-			document.getElementById('temp').style.backgroundColor = "#FF4D4D";
+			temp.style.backgroundColor = "#FF4D4D";
 			return false;
 		}
 		//Kolla så det är siffror och så det är mellan 0 och 100
@@ -107,18 +133,18 @@ loadEvent(function(){
 	function validateTime(time){
 		if(time.value != ""){
 			if(/^\d+$/.test(time.value) && time.value > 0){
-				document.getElementById('time').style.backgroundColor = "white";
+				time.style.backgroundColor = "white";
 				return true;
 			}
 			else{
 				time.focus();
-				document.getElementById('temp').style.backgroundColor = "#FF4D4D";
+				time.style.backgroundColor = "#FF4D4D";
 				return false;
 			}
 		}
 		else{
 			time.focus();
-			document.getElementById('temp').style.backgroundColor = "#FF4D4D";
+			time.style.backgroundColor = "#FF4D4D";
 			return false;
 		}
 		//Kolla så det är siffror. Fråga om det överstiger 2 timmar.
@@ -144,15 +170,7 @@ loadEvent(function(){
 	});
 	
 	addEvent(document.getElementById('saveScheme'), 'click', function(e){
-		//alert("Spara schema");
-		var XHR = new XMLHttpRequest();
-		XHR.onreadystatechange = function(){
-			if (XHR.readyState == 4 && XHR.status == 200) {
-                alert(XHR.responseText);
-            }
-        }
-        XHR.open("GET", "sqlfunctions.php?array="+JSON.stringify(steps), true);
-        XHR.send();
+		validateName(document.getElementById('name'));
 	});
 
 	addEvent(document.getElementById('openScheme'), 'click', function(e){
