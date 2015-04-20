@@ -178,7 +178,7 @@ loadEvent(function(){
 					var newButton = document.createElement('button');
 					newButton.id = "listButton"+i;
 					newButton.onclick = function(){
-						alert(this.textContent);
+						loadScheme(this.textContent);
 					}
 					newButton.textContent = list[i];
 					document.getElementById('list').appendChild(newButton);
@@ -187,5 +187,36 @@ loadEvent(function(){
         }
         XHR.open("GET", "sqlfunctions.php?type=getList", true);
         XHR.send();
+	});
+
+	function loadScheme(name){
+		steps = [];
+		var XHR = new XMLHttpRequest();
+		XHR.onreadystatechange = function(){
+			if(XHR.readyState == 4 && XHR.status == 200){
+				str = XHR.responseText;
+				var scheme = str.match(/\w+/ig);
+				alert(scheme);
+				document.getElementById('name').value = scheme[0];
+				document.getElementById('list').innerHTML = "";
+				document.getElementById('list').style.display = "none";
+				for(var i = 1; i <= (scheme.length-1)/2; i++){
+					addStep(scheme[i], scheme[i+((scheme.length-1)/2)]);
+				}
+			}
+		}
+		XHR.open("GET", "sqlfunctions.php?type=getSchedule&name="+name, true);
+		XHR.send();
+	}
+
+	addEvent(document.getElementById('upLoadScheme'), 'click', function(e){
+		var XHR = new XMLHttpRequest();
+		XHR.onreadystatechange = function(){
+			if(XHR.readyState == 4 && XHR.status == 200){
+				alert(XHR.responseText);
+			}
+		}
+		XHR.open("GET", "sqlfunctions.php?type=upLoad&text=test", true);
+		XHR.send();
 	});
 });

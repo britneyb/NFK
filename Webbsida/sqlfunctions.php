@@ -24,6 +24,9 @@ else if ($type == "getSchedule") {        //sqlfunctions.php?type=getSchedule&na
 else if ($type == "getList") {            //sqlfunctions.php?type=getList
    getList();
 }
+else if ($type == "upLoad"){                //sqlfunctions.php?type=upLoad&text="texten"
+   load();
+}
 
 function checkName(){
    $name = $_REQUEST["name"];
@@ -61,7 +64,22 @@ function saveSchedule(){
 }
 
 function getSchedule(){
-
+   $name = $_REQUEST["name"];
+   $db = new MyDB("sqltemptime.db");
+   if(!$db){
+      echo $db->lastErrorMsg();
+   }
+   $sql = <<<EOF
+      SELECT * FROM mashschedule WHERE name = "$name";
+EOF;
+   $ret = $db->query($sql);
+   
+   $row=$ret->fetchArray();
+   
+   for ($i = 0; $i < 3; $i++) {
+      print($row[$i]." ");
+   }
+   $db->close();
 }
 
 function getList(){
@@ -99,6 +117,22 @@ EOF;
       echo "Data insertet\n";
    }
    $db->close();
+}
+
+function load(){
+   $text = $_REQUEST["text"];
+   $fp = fopen("/dev/ttyACM0","w");
+   if(!$fp){
+      echo "Can't find /dev/ttyACM0";
+      $fp = fopen("/dev/ttyACM1","w");
+      if(!$fp){
+         echo "Can't find /dev/ttyACM1";
+      }
+   }
+   fwrite($fp,$text);
+   echo "Text sent";
+   sleep(1);
+   fclose($fp);
 }
 
 //function delete, readData, checkName
