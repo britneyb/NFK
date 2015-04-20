@@ -65,7 +65,18 @@ function getSchedule(){
 }
 
 function getList(){
-
+   $db = new MyDB("sqltemptime.db");
+   if(!$db){
+      echo $db->lastErrorMsg();
+   }
+   $sql = <<<EOF
+      SELECT name FROM mashschedule;
+EOF;
+   $ret = $db->query($sql);
+   while($row=$ret->fetchArray()){
+      print($row[0]."/");
+   }
+   $db->close();
 }
 
 

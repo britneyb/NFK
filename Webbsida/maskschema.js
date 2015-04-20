@@ -63,11 +63,6 @@ loadEvent(function(){
 		}
 	}
 
-	function saveScheme(){
-		alert("test");
-		
-	}
-
 	function checkName(free){
 		if(free == "success"){
 			document.getElementById('name').style.backgroundColor = "white";
@@ -91,8 +86,7 @@ loadEvent(function(){
 	}
 	
 	function validateName(name){
-		if(name.value != ""){
-			
+		if(name.value != "" && (/^[a-zA-ZåäöÅÄÖ]+$/.test(name.value))){
 			var XHR = new XMLHttpRequest();
 			XHR.onreadystatechange = function(){
 				if (XHR.readyState == 4 && XHR.status == 200) {
@@ -105,7 +99,6 @@ loadEvent(function(){
 		else{
 			name.style.backgroundColor = "#FF4D4D";
 			name.focus();
-			return false;
 		}
 		//Läs in från databasen om namnet finns eller ej.
 	}
@@ -177,11 +170,22 @@ loadEvent(function(){
 		var XHR = new XMLHttpRequest();
 		XHR.onreadystatechange = function(){
 			if (XHR.readyState == 4 && XHR.status == 200) {
-                alert(XHR.responseText);
+                str = XHR.responseText;
+                var list = str.match(/(\w+)/ig);
+                document.getElementById('list').style.display = "initial";
+                document.getElementById('list').innerHTML = "";
+				for(var i = 0; i < list.length; i++){
+					var newButton = document.createElement('button');
+					newButton.id = "listButton"+i;
+					newButton.onclick = function(){
+						alert(this.textContent);
+					}
+					newButton.textContent = list[i];
+					document.getElementById('list').appendChild(newButton);
+				}
             }
         }
-        XHR.open("GET", "openScheme", true);
+        XHR.open("GET", "sqlfunctions.php?type=getList", true);
         XHR.send();
 	});
-	
 });
