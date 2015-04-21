@@ -1,4 +1,4 @@
-function loadEvent(fn) {
+function loadEvent(fn) {						//Funktion so gör det möjligt att ladda flera funktioner när sidan laddas.
 	var oldonload = window.onload;
 	if (typeof window.onload != 'function') {
 		window.onload = fn;
@@ -11,7 +11,7 @@ function loadEvent(fn) {
 	}
 }
 
-var regEvent=(function(){
+var regEvent=(function(){						//Funktion som gör att man kan ska event som funkar i både IE och moderna webbläsare utan något extra arbete.
 	var elem=document.createElement('div');
 	if(elem.addEventListener){
 		return function(elem, eventName, fn){
@@ -25,7 +25,7 @@ var regEvent=(function(){
 	}
 })();
 
-function addEvent(elem, eventName, fn){
+function addEvent(elem, eventName, fn){			//Funktion man använder för att lägga till nya event så det automatiskt funker i IE också.
 	var cb=(function(){
 		return function(event){
 			fn.call(this, normaliseEvent(event || window.event));
@@ -34,7 +34,7 @@ function addEvent(elem, eventName, fn){
 	regEvent(elem, eventName, cb);
 }
 
-function normaliseEvent(event) {
+function normaliseEvent(event) {				//Funktion som normaliserar events.
 	if (!event.stopPropagation) {
 		event.stopPropagation = function() {this.cancelBubble = true;};
 		event.preventDefault = function() {this.returnValue = false;};
@@ -51,9 +51,10 @@ function normaliseEvent(event) {
 	return event;
 }
 
-loadEvent(function(){
-	var steps = [];
-	function addStep(temp, time){
+loadEvent(function(){							//Alla funktioner innanför här laddas in samtidigt som sidan.
+	
+	var steps = [];								//Array som håller alla mäsksteg.
+	function addStep(temp, time){				//Funktion som lägger till mäsksteg i arrayen och i listan.
 		document.getElementById('steps').innerHTML = "";
 		steps.push([temp,time]);
 		for(var i = 0; i < steps.length; i++){
@@ -63,7 +64,7 @@ loadEvent(function(){
 		}
 	}
 
-	function checkName(free){
+	function checkName(free){					//Funktion som lägger till schemat i databasen om namnet är ledigt.
 		if(free == "success"){
 			document.getElementById('name').style.backgroundColor = "white";
 			alert("Namnet är ledigt");
@@ -85,8 +86,8 @@ loadEvent(function(){
 		}
 	}
 	
-	function validateName(name){
-		if(name.value != "" && (/^[a-zA-ZåäöÅÄÖ]+$/.test(name.value))){
+	function validateName(name){				//Funktion som kollar om namnet är giltligt och sedan om det redan finns i databasen.
+		if(name.value != "" && (/^[a-zA-ZåäöÅÄÖ0-9]+$/.test(name.value))){
 			var XHR = new XMLHttpRequest();
 			XHR.onreadystatechange = function(){
 				if (XHR.readyState == 4 && XHR.status == 200) {
@@ -100,10 +101,9 @@ loadEvent(function(){
 			name.style.backgroundColor = "#FF4D4D";
 			name.focus();
 		}
-		//Läs in från databasen om namnet finns eller ej.
 	}
 	
-	function validateTemp(temp){
+	function validateTemp(temp){				//Funktion som kollar så temperaturen är en siffra mellan 0 och 100.
 		if(temp.value != ""){
 			if(/^\d+$/.test(temp.value) && temp.value > 0 && temp.value <= 100){
 				temp.style.backgroundColor = "white";
@@ -120,10 +120,9 @@ loadEvent(function(){
 			temp.style.backgroundColor = "#FF4D4D";
 			return false;
 		}
-		//Kolla så det är siffror och så det är mellan 0 och 100
 	}
 	
-	function validateTime(time){
+	function validateTime(time){				//Funktion som kollar så tiden är en siffra över 0.
 		if(time.value != ""){
 			if(/^\d+$/.test(time.value) && time.value > 0){
 				time.style.backgroundColor = "white";
@@ -140,18 +139,17 @@ loadEvent(function(){
 			time.style.backgroundColor = "#FF4D4D";
 			return false;
 		}
-		//Kolla så det är siffror. Fråga om det överstiger 2 timmar.
 	}
 	
-	addEvent(document.getElementById('temp'), 'keypress', function(e){
-		if(e.keyCode == 13){
+	addEvent(document.getElementById('temp'), 'keypress', function(e){		//Event som skickar användaren vidare till time-fältet
+		if(e.keyCode == 13){												//när man är i temp-fältet och trycker Enter.
 			e.preventDefault();
 			document.getElementById('time').focus();
 		}
 	});
 
-	addEvent(document.getElementById('addStepForm'),'submit',function(e){
-		e.preventDefault();
+	addEvent(document.getElementById('addStepForm'),'submit',function(e){	//Event som lyssnar på submitknappen och gör alla checkar för att sedan
+		e.preventDefault();													//lägga till steget i listan.
 		if(validateTemp(document.getElementById('temp'))){
 			if(validateTime(document.getElementById('time'))){
 				addStep(document.getElementById('temp').value, document.getElementById('time').value);
@@ -162,12 +160,12 @@ loadEvent(function(){
 		}
 	});
 	
-	addEvent(document.getElementById('saveScheme'), 'click', function(e){
-		validateName(document.getElementById('name'));
+	addEvent(document.getElementById('saveScheme'), 'click', function(e){	//Event som lyssnar på "spara schema"-knappen och kollar då så namnet är
+		validateName(document.getElementById('name'));						//unikt innan det sparas till databasen.
 	});
 
-	addEvent(document.getElementById('openScheme'), 'click', function(e){
-		var XHR = new XMLHttpRequest();
+	addEvent(document.getElementById('openScheme'), 'click', function(e){	//Event som lyssnar på "öppna schema"-knappen och skapar sedan en lista
+		var XHR = new XMLHttpRequest();										//av knappar av alla scheman som ligger i databasen.
 		XHR.onreadystatechange = function(){
 			if (XHR.readyState == 4 && XHR.status == 200) {
                 str = XHR.responseText;
@@ -189,15 +187,15 @@ loadEvent(function(){
         XHR.send();
 	});
 
-	function loadScheme(name){
-		steps = [];
+	function loadScheme(name){												//Funktion som körs när man tryckt på en knapp till ett schema 
+		steps = [];															//som sedan tar bort knapparna och lägger fram shemat på ett snyggt sätt.
 		var XHR = new XMLHttpRequest();
 		XHR.onreadystatechange = function(){
 			if(XHR.readyState == 4 && XHR.status == 200){
 				str = XHR.responseText;
 				var scheme = str.match(/\w+/ig);
-				alert(scheme);
 				document.getElementById('name').value = scheme[0];
+				document.getElementById('name').style.backgroundColor = "white";
 				document.getElementById('list').innerHTML = "";
 				document.getElementById('list').style.display = "none";
 				for(var i = 1; i <= (scheme.length-1)/2; i++){
@@ -209,8 +207,8 @@ loadEvent(function(){
 		XHR.send();
 	}
 
-	addEvent(document.getElementById('upLoadScheme'), 'click', function(e){
-		var XHR = new XMLHttpRequest();
+	addEvent(document.getElementById('upLoadScheme'), 'click', function(e){		//Event som lyssnar på "ladda upp"-knappen och skickar en sträng till
+		var XHR = new XMLHttpRequest();											//php.
 		XHR.onreadystatechange = function(){
 			if(XHR.readyState == 4 && XHR.status == 200){
 				alert(XHR.responseText);
