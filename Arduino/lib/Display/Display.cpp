@@ -15,7 +15,7 @@ void Display::Write(String str)
 	lcd.print(str);
 }
 
-void Display::Begin()
+void Display::Begin() //Have not yet been tested
 {
 	lcd.init(); 
 	lcd.backlight();
