@@ -1,11 +1,11 @@
 #include <Time.h>
-#include <LiquidCrystal_I2C.h>
+#include <LiquidCrystal.h>
 #include <Wire.h>
 #include <OneWire.h>
 #include <DallasTemperature.h>
-LiquidCrystal_I2C lcd(0x27,20,4);
-#define TIME_MSG_LEN  11   // time sync to PC is HEADER followed by unix time_t as ten ascii digits
-#define TIME_HEADER  255
+LiquidCrystal lcd(0x27,20,4);
+//#define TIME_MSG_LEN  11   // time sync to PC is HEADER followed by unix time_t as ten ascii digits
+//#define TIME_HEADER  255
 
 
 //Defines our Pin
@@ -37,77 +37,68 @@ void setup()
 	lcd.print("Wait for program:");
 }
 
-void loop()
-
-
+void loop() 
 { 
 	
 	setTime(0,0,0,0,0,0);
-   while(Serial.available())
-
-
-{	lcd.setCursor(0,0);
-	lcd.print("Totalt:");lcd.print(minute()); lcd.print(" min ");lcd.print(second()); lcd.print(" sek"); lcd.print(" ");
-	state  = digitalRead(buttonInput);
-	if(state ==HIGH)
+	
+	while (Serial.available()) 
 	{
-		t = now();
-		Cheak=false;
+
+		lcd.setCursor(0,0);
+		lcd.print("Totalt:");lcd.print(minute()); lcd.print(" min ");lcd.print(second()); lcd.print(" sek"); lcd.print(" ");
+		state  = digitalRead(buttonInput);
+		
+		if(state ==HIGH)
+		{
+			t = now();
+			Cheak=false;
+			
+		}
+
+		aktuell=now()-t;
+
+		if (!Cheak)
+		{	changefromSecTomin();
+			if(second()%2==0)
+			getTemp();
+			
+		}
+
+
+		if (CurrentTemp == 33)
+		{
+			digitalWrite(led,HIGH);
+		}
+		else if (CurrentTemp == 27)
+		{
+		    digitalWrite(led,LOW);
+
+		}	
+	}
+}
+
+
+
+
+void changefromSecTomin()
+{
+	if (minute(aktuell)==0)
+	{	
+		lcd.setCursor(0,1);
+		lcd.print("Aktuellt:");lcd.print(CurrentTemp);lcd.print((char)223);lcd.print("C ");lcd.print(second(aktuell)); lcd.print(" sek");
 		
 	}
-	
-	
-	aktuell=now()-t;
-	
-	if (!Cheak)
-	{	changefromSecTomin();
-		if(second()%2==0)
-		getTemp();
-		
-	}
-	
-	
-	if (CurrentTemp == 33)
+	else
 	{
-		digitalWrite(led,HIGH);
+		lcd.setCursor(0,1);
+		lcd.print("Aktuellt:");lcd.print(CurrentTemp);lcd.print((char)223); lcd.print("C ");lcd.print(minute(aktuell));lcd.print(" min");lcd.print("    ");
 	}
-	else if (CurrentTemp == 27)
-	{
-	    digitalWrite(led,LOW);
-	
-	}
-		
 }
 
 
+void getTemp()
+{		
+	sensors.requestTemperatures();
+	CurrentTemp =sensors.getTempCByIndex(0);		
 }
-
-
-
-
-void changefromSecTomin(){
-	
-if (minute(aktuell)==0)
-{	
-	lcd.setCursor(0,1);
-	lcd.print("Aktuellt:");lcd.print(CurrentTemp);lcd.print((char)223);lcd.print("C ");lcd.print(second(aktuell)); lcd.print(" sek");
-	
-}
-else{
-	lcd.setCursor(0,1);
-	lcd.print("Aktuellt:");lcd.print(CurrentTemp);lcd.print((char)223); lcd.print("C ");lcd.print(minute(aktuell));lcd.print(" min");lcd.print("    ");
-}
-
-
-
-
-};
-
-
-void getTemp(){
-		
-		sensors.requestTemperatures();
-		CurrentTemp =sensors.getTempCByIndex(0);
-		
-	
-};
