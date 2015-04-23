@@ -18,10 +18,9 @@ extern "C" void __cxa_pure_virtual() {;}
 
 //
 //
-//
-//
+void changefromSecTomin();
+void getTemp();
 
 #include "C:\Program Files (x86)\Arduino\hardware\arduino\avr\variants\standard\pins_arduino.h" 
 #include "C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\arduino.h"
 #include <testingsomeshit.ino>
-#include <Sprint3.ino>
