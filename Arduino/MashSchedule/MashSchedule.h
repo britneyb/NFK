@@ -1,5 +1,6 @@
 /*
  Main class to handle the mashshedule
+ Example for a scheme: Dipa2,56,15,65,20,70,10,85,30,356,
 */
 
 #ifndef MashSchedule_h
