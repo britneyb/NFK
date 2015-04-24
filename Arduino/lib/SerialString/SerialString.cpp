@@ -25,7 +25,7 @@ String SerialString::Read()
 	}
 	else
 	{
-		return "NoSignal";
+		return "";
 	}
 
 }

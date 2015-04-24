@@ -13,7 +13,7 @@ class Display
 {
   public:
     Display();
-    void Write(String str);
+    void Print(String str, int row = 0, int column = 0);
     void Begin();
   private:
   	LiquidCrystal lcd = LiquidCrystal(0x27,20,4);

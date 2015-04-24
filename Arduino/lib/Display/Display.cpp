@@ -10,12 +10,13 @@ Display::Display()
  	
 }
 
-void Display::Write(String str)
+void Display::Print(String str, int row, int column)
 {
+	lcd.setCursor(column, row);
 	lcd.print(str);
 }
 
-void Display::Begin() //Have not yet been tested
+void Display::Begin()
 {
 	lcd.init(); 
 	lcd.backlight();
