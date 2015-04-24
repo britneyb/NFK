@@ -54,6 +54,7 @@ function normaliseEvent(event) {				//Funktion som normaliserar events.
 loadEvent(function(){							//Alla funktioner innanför här laddas in samtidigt som sidan.
 	
 	var steps = [];								//Array som håller alla mäsksteg.
+	var open = false;
 	function addStep(temp, time){				//Funktion som lägger till mäsksteg i arrayen och i listan.
 		steps.push([temp,time]);
 		updateSteps();
@@ -97,11 +98,36 @@ loadEvent(function(){							//Alla funktioner innanför här laddas in samtidigt
 	    	}
 		}
 		else{
-			alert("Namnet är upptaget");
-			document.getElementById('name').style.backgroundColor = "#FF4D4D";
-			document.getElementById('name').focus();
+			if (open){
+				document.getElementById('edited').style.display = "initial";
+			}
+			else{
+				alert("Namnet är upptaget");
+				document.getElementById('name').style.backgroundColor = "#FF4D4D";
+				document.getElementById('name').focus();
+			}
 		}
 	}
+
+	addEvent(document.getElementById('yes'), 'click', function(e){
+		var XHR = new XMLHttpRequest();
+		XHR.onreadystatechange = function(){
+			if(XHR.readyState == 4 && XHR.status == 200){
+				alert(XHR.responseText);
+				document.getElementById('edited').style.display = "none";
+				open = false;
+				checkName("success");
+			}
+		}
+		XHR.open("GET", "sqlfunctions.php?type=delete&name="+document.getElementById('name').value, true);
+		XHR.send();
+	});
+
+	addEvent(document.getElementById('no'), 'click', function(e){
+		document.getElementById('edited').style.display = "none";
+		document.getElementById('name').style.backgroundColor = "#FF4D4D";
+		document.getElementById('name').focus();
+	});
 	
 	function validateName(name){				//Funktion som kollar om namnet är giltligt och sedan om det redan finns i databasen.
 		if(name.value != "" && (/^[a-zA-ZåäöÅÄÖ0-9]+$/.test(name.value))){
@@ -212,6 +238,7 @@ loadEvent(function(){							//Alla funktioner innanför här laddas in samtidigt
 
 	function loadScheme(name){												//Funktion som körs när man tryckt på en knapp till ett schema 
 		steps = [];															//som sedan tar bort knapparna och lägger fram shemat på ett snyggt sätt.
+		open = true;
 		var XHR = new XMLHttpRequest();
 		XHR.onreadystatechange = function(){
 			if(XHR.readyState == 4 && XHR.status == 200){

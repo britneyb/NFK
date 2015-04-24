@@ -25,6 +25,9 @@ else if ($type == "upLoad"){                 //sqlfunctions.php?type=upLoad&name
 else if ($type == "response"){               //sqlfunctions.php?type=response
    response();
 }
+else if ($type = "delete"){                  //sqlfunctions.php?type=delete&name="namnet"
+   delete();
+}
 
 function checkName(){                        //Funktion som kollar om namnet finns i databsen.
    $name = $_REQUEST["name"];
@@ -168,6 +171,25 @@ function upLoad(){                                    //Funktion som skickar en 
    else{
       echo "Invalid namn";
    }
+}
+
+function delete(){
+   $db = new MyDB("sqltemptime.db");
+   if(!$db){
+      echo $db->lastErrorMsg();
+   }
+   $name = $_REQUEST["name"];
+   $sql = <<<EOF
+      DELETE FROM mashschedule
+      WHERE name = "$name";
+EOF;
+   $ret = $db->exec($sql);
+   if(!$ret){
+      echo $db->lastErrorMsg();
+   } else {
+      echo "Row deleted";
+   }
+   $db->close();
 }
 
 function response(){
