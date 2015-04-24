@@ -54,20 +54,20 @@ function normaliseEvent(event) {				//Funktion som normaliserar events.
 loadEvent(function(){							//Alla funktioner innanför här laddas in samtidigt som sidan.
 	
 	var steps = [];								//Array som håller alla mäsksteg.
-	var open = false;
+	var open = false;							//Bool som kollar om man har öppnat ett schema från databasen eller inte.
 	function addStep(temp, time){				//Funktion som lägger till mäsksteg i arrayen och i listan.
 		steps.push([temp,time]);
 		updateSteps();
 	}
 
-	function updateSteps(){
+	function updateSteps(){						//Funktion som skriver ut alla steg som finns i arrayen i en lista med ett kryss efter..
 		document.getElementById('steps').innerHTML = "";
 		for(var i = 0; i < steps.length; i++){
 			var newParagraph = document.createElement('p');
 			newParagraph.textContent = "Steg " + (i+1) + " Måltemperatur: " + steps[i][0] + " C  Längd: " + steps[i][1] + " Min ";
 			var spanDelete = document.createElement("span");
 		    spanDelete.id = i;
-		    spanDelete.className = "deleteStep";
+		    spanDelete.className = "delete";
 		    spanDelete.innerHTML = "&nbsp;&#10007;&nbsp;";
 		    spanDelete.onclick = function(){
 		    	deleteStep(this.id);
@@ -77,7 +77,7 @@ loadEvent(function(){							//Alla funktioner innanför här laddas in samtidigt
 		}
 	}
 
-	function deleteStep(id){
+	function deleteStep(id){					//Funktion som tar bort ett värde i arrayen och sedan kallar på en funktion som skriver ut arrayen igen.
 		steps.splice(id,1);
 		updateSteps();
 	}
@@ -98,7 +98,7 @@ loadEvent(function(){							//Alla funktioner innanför här laddas in samtidigt
 	    	}
 		}
 		else{
-			if (open){
+			if (open){							//Om man har öppnat från databas så visas en div.
 				document.getElementById('edited').style.display = "initial";
 			}
 			else{
@@ -109,7 +109,7 @@ loadEvent(function(){							//Alla funktioner innanför här laddas in samtidigt
 		}
 	}
 
-	addEvent(document.getElementById('yes'), 'click', function(e){
+	addEvent(document.getElementById('yes'), 'click', function(e){			//Tar bort nuvarande schema i databasen och lägger till den med nya värden.
 		var XHR = new XMLHttpRequest();
 		XHR.onreadystatechange = function(){
 			if(XHR.readyState == 4 && XHR.status == 200){
@@ -123,7 +123,7 @@ loadEvent(function(){							//Alla funktioner innanför här laddas in samtidigt
 		XHR.send();
 	});
 
-	addEvent(document.getElementById('no'), 'click', function(e){
+	addEvent(document.getElementById('no'), 'click', function(e){		//Gömmer en div och visar att man borde byta namn.	
 		document.getElementById('edited').style.display = "none";
 		document.getElementById('name').style.backgroundColor = "#FF4D4D";
 		document.getElementById('name').focus();
@@ -190,7 +190,7 @@ loadEvent(function(){							//Alla funktioner innanför här laddas in samtidigt
 		}
 	});
 
-	addEvent(document.getElementById('time'), 'keypress', function(e){
+	addEvent(document.getElementById('time'), 'keypress', function(e){		//Event som trycker på en knapp när man trycker enter.
 		if(e.keyCode == 13){
 			document.getElementById('addStep').click();
 		}
@@ -218,6 +218,13 @@ loadEvent(function(){							//Alla funktioner innanför här laddas in samtidigt
                 str = XHR.responseText;
                 var list = str.match(/(\w+)/ig);
                 document.getElementById('list').style.display = "initial";
+                document.getElementById('steps').innerHTML = "";
+                document.getElementById('name').value = "";
+                document.getElementById('name').backgroundColor = "white";
+                document.getElementById('temp').value = "";
+                document.getElementById('temp').backgroundColor = "white";
+                document.getElementById('time').value = "";
+                document.getElementById('time').backgroundColor = "white";
                 document.getElementById('list').innerHTML = "";
 				for(var i = 0; i < list.length; i++){
 					var newParagraph = document.createElement('p');
@@ -227,7 +234,16 @@ loadEvent(function(){							//Alla funktioner innanför här laddas in samtidigt
 						loadScheme(this.textContent);
 					}
 					newButton.textContent = list[i];
-					newParagraph.appendChild(newButton);
+					var spanDelete = document.createElement("span");
+				    spanDelete.id = list[i];
+				    spanDelete.className = "delete";
+				    spanDelete.innerHTML = "&nbsp;&#10007;&nbsp;";
+				    spanDelete.onclick = function(){
+				    	deleteScheme(this.id);
+				    }
+					newParagraph.appendChild(newButton)
+					newParagraph.appendChild(spanDelete);
+					
 					document.getElementById('list').appendChild(newParagraph);
 				}
             }
@@ -235,6 +251,17 @@ loadEvent(function(){							//Alla funktioner innanför här laddas in samtidigt
         XHR.open("GET", "sqlfunctions.php?type=getList", true);
         XHR.send();
 	});
+
+	function deleteScheme(name){
+		var XHR = new XMLHttpRequest();
+		XHR.onreadystatechange = function(){
+			if(XHR.readyState == 4 && XHR.status == 200){
+				alert(XHR.responseText);
+			}
+		}
+		XHR.open("GET", "sqlfunctions.php?type=delete&name="+name, true);
+		XHR.send();
+	}
 
 	function loadScheme(name){												//Funktion som körs när man tryckt på en knapp till ett schema 
 		steps = [];															//som sedan tar bort knapparna och lägger fram shemat på ett snyggt sätt.
@@ -290,7 +317,7 @@ loadEvent(function(){							//Alla funktioner innanför här laddas in samtidigt
 		XHR.send();
 	}
 
-	addEvent(document.getElementById('mainMenu'), 'click', function(e){
+	addEvent(document.getElementById('mainMenu'), 'click', function(e){		//Event för att gå tillbaka till huvudmenyn.
 		window.location.href = "index.html";
 	});
 });
