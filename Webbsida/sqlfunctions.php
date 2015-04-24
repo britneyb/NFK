@@ -19,8 +19,11 @@ else if ($type == "getSchedule"){            //sqlfunctions.php?type=getSchedule
 else if ($type == "getList"){                //sqlfunctions.php?type=getList
    getList();
 }
-else if ($type == "upLoad"){                 //sqlfunctions.php?type=upLoad&text="texten"
-   load();
+else if ($type == "upLoad"){                 //sqlfunctions.php?type=upLoad&name="namnet"&array="arrayen"
+   upLoad();
+}
+else if ($type == "response"){               //sqlfunctions.php?type=response
+   response();
 }
 
 function checkName(){                        //Funktion som kollar om namnet finns i databsen.
@@ -54,7 +57,7 @@ function saveSchedule(){                     //Funktion som läser datan från G
       if(!empty($array)){
          $temp = "";
          $time = "";
-         for ($i = 0; $i < count($array); $i++){
+         for($i = 0; $i < count($array); $i++){
             $temp .= "/".$array[$i][0];
             $time .= "/".$array[$i][1];
          }
@@ -131,18 +134,54 @@ EOF;
    $db->close();
 }
 
-function load(){                             //Funktion som skickar en sträng till arduinon.
-   $text = $_REQUEST["text"];
-   $fp = fopen("/dev/ttyACM0","w");
+function upLoad(){                                    //Funktion som skickar en sträng till arduinon.
+   $name = $_REQUEST["name"];                         //name,temp1,time1,temp2,time2....tempn,timen,checksum
+   $array = json_decode($_REQUEST["array"]);          //checksum = strlen(name)+temp1+time1+temp2+...+tempn+timen
+   if(preg_match("/[a-zA-ZåäöÅÄÖ0-9]+/", $name)){
+      if(!empty($array)){
+         $check = strlen($name);
+         $text = $name;
+         for($i = 0; $i < count($array); $i++){
+            $text .= ",".$array[$i][0];
+            $text .= ",".$array[$i][1];
+            $check += $array[$i][0];
+            $check += $array[$i][1];
+         }
+         $text .= ",".$check.",";
+         //echo $text;
+         $fp = fopen("/dev/ttyACM0","w");
+         if(!$fp){
+            echo "Can't find /dev/ttyACM0";
+            $fp = fopen("/dev/ttyACM1","w");
+            if(!$fp){
+               echo "Can't find /dev/ttyACM1";
+            }
+         }
+         fwrite($fp,$text);
+         echo "Scheme sent";
+         fclose($fp);
+      }
+      else{
+         echo "Arrayen tom";
+      }
+   }
+   else{
+      echo "Invalid namn";
+   }
+}
+
+function response(){
+   $fp = fopen("/dev/ttyACM0","r");
    if(!$fp){
       echo "Can't find /dev/ttyACM0";
-      $fp = fopen("/dev/ttyACM1","w");
+      $fp = fopen("/dev/ttyACM1","r");
       if(!$fp){
          echo "Can't find /dev/ttyACM1";
       }
    }
-   fwrite($fp,$text);
-   echo "Text sent";
-   sleep(1);
+   //$respond = "";
+   $respond = fread($fp,10);
+   echo "test";
+   echo $respond;
    fclose($fp);
 }

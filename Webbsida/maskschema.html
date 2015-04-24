@@ -18,16 +18,14 @@
 		<div id="steps">
 		</div>
 		<div id="nextStep">
-			<form id="addStepForm">
-				<p style="font-weight:bold">Nästa steg</p>
-				<p>Måltemperatur: <input id="temp" type="number" min="0" max="100" required /> C</p>
-				<p>Längd: <input id="time" type="number" min="0" required /> Min</p>
-				<input id="addStep" type="submit" value="Lägg till steg">
-			</form>
+			<p style="font-weight:bold">Nästa steg</p>
+			<p>Måltemperatur: <input id="temp" type="number" min="0" max="100" required /> C</p>
+			<p>Längd: <input id="time" type="number" min="0" required /> Min</p>
+			<button id="addStep">Lägg till steg</button>
 			<button id="saveScheme">Spara Mäskschema</button>
 		</div>
 		<div id="menu">
-			<button onclick="location.href='index.html'">Huvudmeny</button>
+			<button id="mainMenu">Huvudmeny</button>
 			<button id="openScheme">Öppna Mäskschema</button>
 			<button id="upLoadScheme">Ladda upp Mäskschema</button>
 		</div>

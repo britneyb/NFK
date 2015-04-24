@@ -55,13 +55,30 @@ loadEvent(function(){							//Alla funktioner innanför här laddas in samtidigt
 	
 	var steps = [];								//Array som håller alla mäsksteg.
 	function addStep(temp, time){				//Funktion som lägger till mäsksteg i arrayen och i listan.
-		document.getElementById('steps').innerHTML = "";
 		steps.push([temp,time]);
+		updateSteps();
+	}
+
+	function updateSteps(){
+		document.getElementById('steps').innerHTML = "";
 		for(var i = 0; i < steps.length; i++){
 			var newParagraph = document.createElement('p');
-			newParagraph.textContent = "Steg " + (i+1) + " Måltemperatur: " + steps[i][0] + " C  Längd: " + steps[i][1] + " Min";
+			newParagraph.textContent = "Steg " + (i+1) + " Måltemperatur: " + steps[i][0] + " C  Längd: " + steps[i][1] + " Min ";
+			var spanDelete = document.createElement("span");
+		    spanDelete.id = i;
+		    spanDelete.className = "deleteStep";
+		    spanDelete.innerHTML = "&nbsp;&#10007;&nbsp;";
+		    spanDelete.onclick = function(){
+		    	deleteStep(this.id);
+		    }
+		    newParagraph.appendChild(spanDelete);
 			document.getElementById('steps').appendChild(newParagraph);
 		}
+	}
+
+	function deleteStep(id){
+		steps.splice(id,1);
+		updateSteps();
 	}
 
 	function checkName(free){					//Funktion som lägger till schemat i databasen om namnet är ledigt.
@@ -143,14 +160,18 @@ loadEvent(function(){							//Alla funktioner innanför här laddas in samtidigt
 	
 	addEvent(document.getElementById('temp'), 'keypress', function(e){		//Event som skickar användaren vidare till time-fältet
 		if(e.keyCode == 13){												//när man är i temp-fältet och trycker Enter.
-			e.preventDefault();
 			document.getElementById('time').focus();
 		}
 	});
 
-	addEvent(document.getElementById('addStepForm'),'submit',function(e){	//Event som lyssnar på submitknappen och gör alla checkar för att sedan
-		e.preventDefault();													//lägga till steget i listan.
-		if(validateTemp(document.getElementById('temp'))){
+	addEvent(document.getElementById('time'), 'keypress', function(e){
+		if(e.keyCode == 13){
+			document.getElementById('addStep').click();
+		}
+	});
+
+	addEvent(document.getElementById('addStep'),'click',function(e){	//Event som lyssnar på submitknappen och gör alla checkar för att sedan
+		if(validateTemp(document.getElementById('temp'))){				//lägga till steget i listan.
 			if(validateTime(document.getElementById('time'))){
 				addStep(document.getElementById('temp').value, document.getElementById('time').value);
 				document.getElementById('temp').value = "";
@@ -173,13 +194,15 @@ loadEvent(function(){							//Alla funktioner innanför här laddas in samtidigt
                 document.getElementById('list').style.display = "initial";
                 document.getElementById('list').innerHTML = "";
 				for(var i = 0; i < list.length; i++){
+					var newParagraph = document.createElement('p');
 					var newButton = document.createElement('button');
 					newButton.id = "listButton"+i;
 					newButton.onclick = function(){
 						loadScheme(this.textContent);
 					}
 					newButton.textContent = list[i];
-					document.getElementById('list').appendChild(newButton);
+					newParagraph.appendChild(newButton);
+					document.getElementById('list').appendChild(newParagraph);
 				}
             }
         }
@@ -207,14 +230,40 @@ loadEvent(function(){							//Alla funktioner innanför här laddas in samtidigt
 		XHR.send();
 	}
 
-	addEvent(document.getElementById('upLoadScheme'), 'click', function(e){		//Event som lyssnar på "ladda upp"-knappen och skickar en sträng till
-		var XHR = new XMLHttpRequest();											//php.
+	addEvent(document.getElementById('upLoadScheme'), 'click', function(e){		//Event som lyssnar på "ladda upp"-knappen och skickar namnet och
+		var XHR = new XMLHttpRequest();											//alla steg till php.
+		if(document.getElementById('name').value != "" && (/^[a-zA-ZåäöÅÄÖ0-9]+$/.test(document.getElementById('name').value))){
+			if(steps){
+				XHR.onreadystatechange = function(){
+					if(XHR.readyState == 4 && XHR.status == 200){
+						//getRespond();
+						alert(XHR.responseText);
+					}
+				}
+				XHR.open("GET", "sqlfunctions.php?type=upLoad&name="+document.getElementById('name').value+"&array="+JSON.stringify(steps), true);
+				XHR.send();
+			}
+			else{
+				alert("Inga steg");
+			}
+		}
+		else{
+			alert("Otillåtet namn");
+		}
+	});
+
+	function getRespond(){
+		var XHR = new XMLHttpRequest();
 		XHR.onreadystatechange = function(){
-			if(XHR.readyState == 4 && XHR.status == 200){
+			if (XHR.readyState == 4 && XHR.status == 200){
 				alert(XHR.responseText);
 			}
 		}
-		XHR.open("GET", "sqlfunctions.php?type=upLoad&text=test", true);
+		XHR.open("GET", "sqlfunctions.php?type=response", true);
 		XHR.send();
+	}
+
+	addEvent(document.getElementById('mainMenu'), 'click', function(e){
+		window.location.href = "index.html";
 	});
 });

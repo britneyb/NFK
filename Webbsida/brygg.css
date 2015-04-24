@@ -1,1 +1,5 @@
-test
+span.deleteStep{
+    display: inline-block;
+    position: absolute;
+    cursor: pointer;
+}
