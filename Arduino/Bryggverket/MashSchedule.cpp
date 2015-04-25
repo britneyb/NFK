@@ -93,75 +93,67 @@ void MashSchedule::Receive()
 
 	if(loaded && state == HIGH)
 	{
-		lcd.Print("                              ", 2);
-	    setTime(0,0,0,0,0,0);
+		lcd.Print("                    ", 0); //Just temporary, will instead implement a function clear() on the display class
+		lcd.Print("                    ", 1);
+		lcd.Print("                    ", 2);
 
+	    setTime(0,0,0,0,0,0);
+	    
 		while(loaded)
-		{
+		{			
 			Start();
 		}
 	}
 }
 
 void MashSchedule::Start()
-{
-	boolean check = true;
-	//sensors.begin(); //Kan kanske bortkommenteras
+{	
 
-	sensors.requestTemperatures();
-	CurrentTemp = sensors.getTempCByIndex(0);
+	totTime = now();
+	curTime = totTime - difTime;
 
-	//lcd.Begin();
-	lcd.Print("Totalt:             ");
-	lcd.Print(String(minute()), 0, 7); 
-	lcd.Print(" min ", 0, 9);
-	lcd.Print(String(second()), 0, 14); 
-	lcd.Print("sek", 0, 16); 
-	state  = digitalRead(buttonInput);
-	
-
-	t = now();
-	check=false;
-	
-
-	aktuell = now()-t;
-
-	if (!check)
-	{	
-		if (minute(aktuell)==0)
-		{	
-			lcd.Print("Aktuellt:           ",1);
-			lcd.Print(String(CurrentTemp), 1, 9);
-			lcd.Print(String(degree), 1, 11);
-			lcd.Print("C ", 1, 12);
-			lcd.Print(String(second(aktuell)), 1, 14);
-			lcd.Print("sek", 1, 16);
-			
-		}
-		else
-		{
-			lcd.Print("Aktuellt:           ", 1);
-			lcd.Print(String(CurrentTemp), 1, 9);
-			lcd.Print(String(degree), 1, 11);
-			lcd.Print("C ", 1, 12);
-			lcd.Print(String(minute(aktuell)), 1, 14);
-			lcd.Print(" min    ", 1, 16);
-		}
-
-		if(second()%2==0)
-		{
-			sensors.requestTemperatures();
-			CurrentTemp =sensors.getTempCByIndex(0);
-		}	
+	if(second() % 2 == 0) //Updates the temp every two seconds
+	{
+		sensors.requestTemperatures();
+		CurrentTemp = sensors.getTempCByIndex(0);
 	}
 
-	if (CurrentTemp == 33)
+	lcd.Print("Totalt:");
+	lcd.Print(String(minute(totTime)), 0, 7);
+	lcd.Print("min ", 0, 9);
+	lcd.Print("  ", 0, 14);
+	lcd.Print(String(second(totTime)), 0, 14);
+	lcd.Print(" sek", 0, 16);
+	
+	if(!curStarted && CurrentTemp >= temp) //Starts counting when the current temp is right
+	{		
+		difTime = totTime;
+		curStarted = true;
+	}	
+
+	lcd.Print("Aktuellt:", 1);
+	lcd.Print(String(CurrentTemp), 1, 9);
+	lcd.Print(String(degree), 1, 11);
+	lcd.Print("C ", 1, 12);
+	lcd.Print("  ", 1, 14);
+
+	if (minute(curTime) <= 0 && curStarted) //Changing between min and sec on the current step
+	{
+		lcd.Print(String(second(curTime)), 1, 14);
+		lcd.Print(" sek ", 1, 16);
+	}
+	else if(curStarted)
+	{
+		lcd.Print(String(minute(curTime)), 1, 14);
+		lcd.Print(" min ", 1, 16);
+	}
+
+	if(CurrentTemp >= temp) //For the relay
+	{
+		digitalWrite(led,LOW);
+	}
+	else
 	{
 		digitalWrite(led,HIGH);
 	}
-	else if (CurrentTemp == 27)
-	{
-	    digitalWrite(led,LOW);
-	}	
-	
 }

@@ -31,8 +31,7 @@ class MashSchedule
 
   	OneWire oneWire = OneWire(ONE_WIRE_BUS);
 
-  	//Pass our oneWire reference to Dallas Temperature.
-  	DallasTemperature sensors = DallasTemperature(&oneWire);
+  	DallasTemperature sensors = DallasTemperature(&oneWire); //Pass our oneWire reference to Dallas Temperature.
 
   	int maxStep = 32; //The max number of steps that can be received
 
@@ -47,9 +46,12 @@ class MashSchedule
 	int buttonInput = 2; //The pin where the button is connected
 	int led = 7; //The pin where the led is connected
 
-	int total;
-	int aktuell;
-	time_t t=0;
+	time_t totTime = 0; //The total time
+	time_t curTime = 0; //The time of the current step
+	time_t difTime = 0; //The total time when the current step started
+
+	boolean curStarted = false; //A flag to check whether the current step has started
+	int temp = 27; //temporary variable for the temperature
 };
 
 #endif
