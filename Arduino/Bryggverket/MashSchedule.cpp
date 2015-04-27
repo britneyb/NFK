@@ -98,6 +98,11 @@ void MashSchedule::Receive()
 		lcd.Print("                    ", 2);
 
 	    setTime(0,0,0,0,0,0);
+	    _temp = 0; //temporary variable for the temperature
+		_time = 1;
+		_step = 1;
+		_steps = arrSize/2;
+		difTime = 0;
 	    
 		while(loaded)
 		{			
@@ -108,6 +113,7 @@ void MashSchedule::Receive()
 
 void MashSchedule::Start()
 {	
+	//temp = 27;
 
 	totTime = now();
 	curTime = totTime - difTime;
@@ -124,8 +130,8 @@ void MashSchedule::Start()
 	lcd.Print("  ", 0, 14);
 	lcd.Print(String(second(totTime)), 0, 14);
 	lcd.Print(" sek", 0, 16);
-	
-	if(!curStarted && CurrentTemp >= temp) //Starts counting when the current temp is right
+
+	if(!curStarted && CurrentTemp >= arr[_temp]) //Starts counting when the current temp is right
 	{		
 		difTime = totTime;
 		curStarted = true;
@@ -137,18 +143,36 @@ void MashSchedule::Start()
 	lcd.Print("C ", 1, 12);
 	lcd.Print("  ", 1, 14);
 
+	lcd.Print("Steg ", 2);
+	lcd.Print(String(_step), 2, 5);
+	lcd.Print(": ",2,6);
+	lcd.Print(String(arr[_temp]),2,8);
+	lcd.Print("C ",2,10);
+	lcd.Print(String(arr[_time]),2,12);
+	lcd.Print(" min",2,14);
+
+	if(_step < _steps){
+		lcd.Print("Steg ", 3);
+		lcd.Print(String(_step+1), 3, 5);
+		lcd.Print(": ",3,6);
+		lcd.Print(String(arr[_temp+2]),3,8);
+		lcd.Print("C ",3,10);
+		lcd.Print(String(arr[_time+2]),3,12);
+		lcd.Print(" min",3,14);
+	}
+
 	if (minute(curTime) <= 0 && curStarted) //Changing between min and sec on the current step
 	{
 		lcd.Print(String(second(curTime)), 1, 14);
-		lcd.Print(" sek ", 1, 16);
+		lcd.Print(" sek", 1, 16);
 	}
 	else if(curStarted)
 	{
 		lcd.Print(String(minute(curTime)), 1, 14);
-		lcd.Print(" min ", 1, 16);
+		lcd.Print(" min", 1, 16);
 	}
 
-	if(CurrentTemp >= temp) //For the relay
+	if(CurrentTemp >= arr[_temp]) //For the relay
 	{
 		digitalWrite(led,LOW);
 	}
@@ -156,4 +180,17 @@ void MashSchedule::Start()
 	{
 		digitalWrite(led,HIGH);
 	}
+
+	if(minute(curTime) >= arr[_time] && _steps > _step)
+	{
+		_step += 1;
+		_temp += 2;
+		_time += 2;
+		curStarted = false;
+		difTime = 0;
+		lcd.Print("                    ",1);
+		lcd.Print("                    ",3);
+	}
+
+	
 }
