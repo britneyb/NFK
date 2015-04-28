@@ -197,19 +197,19 @@ void MashSchedule::Start()
 	}	
 }
 
-MashSchedule::Random(){
-	int randLed = random(4);
-	if(randLed == 0)
+void MashSchedule::Random(){
+	//int randLed = random(4);
+	//if(randLed == 0)
 		//digitalWrite(pinRelä1,HIGH);
-	else if(randLed == 1)
+	//else if(randLed == 1)
 		//digitalWrite(pinRelä2,HIGH);
-	else if(randLed == 2)
+	//else if(randLed == 2)
 		//digitalWrite(pinRelä3,HIGH);
-	else if(randLed == 3)
+	//else if(randLed == 3)
 		//digitalWrite(pinRelä4,HIGH);
 }
 
-MashSchedule::TurnOff(){
+void MashSchedule::TurnOff(){
 	//digitalWrite(pinRelä1,LOW);
 	//digitalWrite(pinRelä2,LOW);
 	//digitalWrite(pinRelä3,LOW);
