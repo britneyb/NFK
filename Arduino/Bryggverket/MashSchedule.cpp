@@ -97,12 +97,13 @@ void MashSchedule::Receive()
 		lcd.Print("                    ", 1);
 		lcd.Print("                    ", 2);
 
-	    setTime(0,0,0,0,0,0);
+	   
 	    _temp = 0; //temporary variable for the temperature
 		_time = 1;
 		_step = 1;
 		_steps = arrSize/2;
 		difTime = 0;
+		 setTime(0,0,0,0,0,0);
 	    
 		while(loaded)
 		{			
