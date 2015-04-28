@@ -24,6 +24,8 @@ class MashSchedule
     void Default();
     void Receive();
     void Start();
+    void Random();
+    void TurnOff();
   private:
 
   	Display lcd; //Our display functions
@@ -33,18 +35,18 @@ class MashSchedule
 
   	DallasTemperature sensors = DallasTemperature(&oneWire); //Pass our oneWire reference to Dallas Temperature.
 
-  	int maxStep = 32; //The max number of steps that can be received
+  	const int maxStep = 32; //The max number of steps that can be received
 
   	const int Calibrator = 3.5; //Calibration for the temp-sensor
 	int CurrentTemp; //Stores the current temp
-	char degree = char(223); //To get the right Celcius-symbol
+	const char degree = char(223); //To get the right Celcius-symbol
 	String name = ""; //The name for the scheme
 	int* arr = 0; //Array that stores the values of time and temp 
 	int arrSize = 0; //Stores the number of steps in the current scheme
 	boolean loaded = false; //A flag to check if the scheme has been loaded or not 
 	int state = LOW; //Stores the input if the button is pressed or not
-	int buttonInput = 2; //The pin where the button is connected
-	int led = 7; //The pin where the led is connected
+	const int buttonInput = 2; //The pin where the button is connected
+	const int led = 7; //The pin where the led is connected
 
 	time_t totTime = 0; //The total time
 	time_t curTime = 0; //The time of the current step
