@@ -141,7 +141,7 @@ void MashSchedule::Start()
 	lcd.Print(String(CurrentTemp), 1, 9);
 	lcd.Print(String(degree), 1, 11);
 	lcd.Print("C ", 1, 12);
-	lcd.Print("  ", 1, 14);
+//	lcd.Print("  ", 1, 14); //we did this later down for minutes
 
 	lcd.Print("Steg ", 2);
 	lcd.Print(String(_step), 2, 5);
@@ -151,7 +151,8 @@ void MashSchedule::Start()
 	lcd.Print(String(arr[_time]),2,12);
 	lcd.Print(" min",2,14);
 
-	if(_step < _steps){
+	if(_step < _steps)
+	{
 		lcd.Print("Steg ", 3);
 		lcd.Print(String(_step+1), 3, 5);
 		lcd.Print(": ",3,6);
@@ -168,6 +169,7 @@ void MashSchedule::Start()
 	}
 	else if(curStarted)
 	{
+		lcd.Print(" ", 1, 15);
 		lcd.Print(String(minute(curTime)), 1, 14);
 		lcd.Print(" min", 1, 16);
 	}
@@ -181,16 +183,16 @@ void MashSchedule::Start()
 		digitalWrite(led,HIGH);
 	}
 
-	if(minute(curTime) >= arr[_time] && _steps > _step)
+	if(minute(curTime) == arr[_time] && _steps > _step && curStarted)
 	{
 		_step += 1;
 		_temp += 2;
 		_time += 2;
+
 		curStarted = false;
 		difTime = 0;
+
 		lcd.Print("                    ",1);
 		lcd.Print("                    ",3);
-	}
-
-	
+	}	
 }
