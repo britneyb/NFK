@@ -26,7 +26,7 @@ void MashSchedule::Default()
 	pinMode(SWITCH4, INPUT);
 	pinMode(SWITCH5, INPUT);
 
-	pinMode(startButton,INPUT);
+	pinMode(startButton,OUTPUT);
     pinMode(led, OUTPUT);
     
 	lcd.Begin();
