@@ -118,7 +118,6 @@ void MashSchedule::Receive()
 		//_steps = arrSize/2;
 		difTime = 0;
 		curStarted = false;
-
 	    _step=1;
 	    
 		while(loaded)
@@ -151,7 +150,6 @@ void MashSchedule::Start()
 		difTime = totTime;
 		curTime = totTime - difTime;
 		curStarted = true;
-		randNumber = random(4);
 		someFlag=false;
 	}
 	lcd.Print("Aktuellt:", 1);
@@ -195,13 +193,12 @@ void MashSchedule::Start()
 	{	
 		TurnOff();
 		//digitalWrite(led,LOW);
-		
 	}
 	else if(CurrentTemp >= arr[_temp])
 	{
 	
-		
 	}
+
 	else
 	{
 		//digitalWrite(led,HIGH);
@@ -255,6 +252,11 @@ void MashSchedule::AllOn(){
 }
 
 void MashSchedule::Random(){
+	if (someFlag_2)
+	{
+		randNumber = random(4);
+		someFlag_2=false;
+	}
 	// stateRelay1 = digitalRead((SWITCH1));
 	// stateRelay2 = digitalRead((SWITCH2));
 	// stateRelay3 = digitalRead((SWITCH3));
@@ -307,10 +309,11 @@ void MashSchedule::Random(){
 			break;        
 		case 3:
 			digitalWrite(RELAY4,HIGH);           // Turns ON Relays 4
-			break;   
-}
+			break;    
+	}
 }
 void MashSchedule::TurnOff(){
+	someFlag_2=true;
 	digitalWrite(RELAY1,LOW);
 	digitalWrite(RELAY2,LOW);
 	digitalWrite(RELAY3,LOW);
