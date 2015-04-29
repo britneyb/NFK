@@ -102,12 +102,12 @@ void MashSchedule::Receive()
 	state  = digitalRead(buttonInput);
 
 	if(loaded && state == HIGH)
-	{
+	{	randomSeed(now());
 		setTime(0,0,0,0,0,0);
 		lcd.Print("                    ", 0); //Just temporary, will instead implement a function clear() on the display class
 		lcd.Print("                    ", 1);
 		lcd.Print("                    ", 2);
-
+		
 	    _temp = 0; //temporary variable for the temperature
 		_time = 1;
 		//_steps = arrSize/2;
