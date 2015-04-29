@@ -57,6 +57,7 @@ class MashSchedule
 	time_t curTime; //The time of the current step
 	time_t difTime; //The total time when the current step started
 	boolean someFlag=true;
+	boolean someFlag_2=true;
 	boolean curStarted; //A flag to check whether the current step has started
 	int _temp; //temporary variable for the temperature
 	int _time;
