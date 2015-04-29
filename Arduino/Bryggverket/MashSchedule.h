@@ -24,6 +24,7 @@ class MashSchedule
     void Default();
     void Receive();
     void Start();
+    void AllOn();
     void Random();
     void TurnOff();
   private:

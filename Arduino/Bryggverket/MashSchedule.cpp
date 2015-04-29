@@ -180,13 +180,18 @@ void MashSchedule::Start()
 		lcd.Print(" min", 1, 16);
 	}
 
-	if(CurrentTemp >= arr[_temp]) //For the relay
+	if(CurrentTemp >= arr[_temp] && curStarted) //For the relay
 	{
 		digitalWrite(led,LOW);
+		//Rabdom();
+	}
+	else if(CurrentTemp >= arr[_temp]){
+		//AllOn();
 	}
 	else
 	{
 		digitalWrite(led,HIGH);
+		//TurnOff();
 	}
 
 	if(minute(curTime) == arr[_time] && (_steps) > _step && curStarted)
@@ -201,6 +206,13 @@ void MashSchedule::Start()
 		lcd.Print("                    ",1);
 		lcd.Print("                    ",3);
 	}	
+}
+
+void MashSchedule::AllOn(){
+	//digitalWrite(pinRelä1,HIGH);
+	//digitalWrite(pinRelä2,HIGH);
+	//digitalWrite(pinRelä3,HIGH);
+	//digitalWrite(pinRelä4,HIGH);
 }
 
 void MashSchedule::Random(){
