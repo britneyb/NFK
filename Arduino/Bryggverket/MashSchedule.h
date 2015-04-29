@@ -25,6 +25,7 @@ class MashSchedule
     void Default();
     void Receive();
     void Start();
+    void Pause();
     void AllOn();
     void Random();
     void TurnOff();
@@ -48,7 +49,7 @@ class MashSchedule
 	boolean loaded; //A flag to check if the scheme has been loaded or not 
 	int state; //Stores the input if the button is pressed or not
 	const int startButton = 2; //The pin where the button is connected
-	const int led = 7; //The pin where the led is connected
+	//const int led = 7; //The pin where the led is connected
 	const int  RELAY1  =6;//the pin where the relay is connected
 	const int  RELAY2  =5;//the pin where the relay is connected
 	const int  RELAY3  =4;//the pin where the relay is connected
@@ -58,6 +59,7 @@ class MashSchedule
 	const int SWITCH3 = 10;
 	const int SWITCH4 = 11;
 	const int SWITCH5 = 12;
+	const int stopButton = 7;
 	int stateRelay1;
 	int stateRelay2;
 	int stateRelay3;
@@ -68,6 +70,7 @@ class MashSchedule
 	time_t difTime; //The total time when the current step started
 	boolean someFlag=true;
 	boolean someFlag_2=true;
+	boolean running;
 	boolean curStarted; //A flag to check whether the current step has started
 	int _temp; //temporary variable for the temperature
 	int _time;

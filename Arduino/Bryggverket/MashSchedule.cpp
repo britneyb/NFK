@@ -25,9 +25,9 @@ void MashSchedule::Default()
 	pinMode(SWITCH3, INPUT);
 	pinMode(SWITCH4, INPUT);
 	pinMode(SWITCH5, INPUT);
-
+	pinMode(stopButton, OUTPUT);
 	pinMode(startButton,OUTPUT);
-    pinMode(led, OUTPUT);
+    //pinMode(led, OUTPUT);
     
 	lcd.Begin();
 	lcd.Print("Waiting for program");
@@ -119,10 +119,24 @@ void MashSchedule::Receive()
 		difTime = 0;
 		curStarted = false;
 	    _step=1;
+	    running = true;
 	    
 		while(loaded)
-		{			
-			Start();
+		{
+			if(digitalRead(stopButton))
+			{
+			    running = false;
+			}
+
+			if(running)
+			{
+				Start();
+			}
+			else
+			{
+				Pause();
+			}
+			
 		}
 	}
 }
@@ -225,6 +239,15 @@ void MashSchedule::Start()
 		lcd.Print("                    ",1);
 		lcd.Print("                    ",3);
 	}	
+}
+
+void MashSchedule::Pause()
+{
+	if(digitalRead(startButton))
+	{
+	    running = true;
+	    setTime(totTime);
+	}
 }
 
 void MashSchedule::AllOn(){
