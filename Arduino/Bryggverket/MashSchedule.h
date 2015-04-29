@@ -41,22 +41,22 @@ class MashSchedule
 	int CurrentTemp; //Stores the current temp
 	const char degree = char(223); //To get the right Celcius-symbol
 	String name = ""; //The name for the scheme
-	int* arr = 0; //Array that stores the values of time and temp 
+	int* arr; //Array that stores the values of time and temp 
 	int arrSize; //Stores the number of steps in the current scheme
-	boolean loaded = false; //A flag to check if the scheme has been loaded or not 
-	int state = LOW; //Stores the input if the button is pressed or not
+	boolean loaded; //A flag to check if the scheme has been loaded or not 
+	int state; //Stores the input if the button is pressed or not
 	const int buttonInput = 2; //The pin where the button is connected
 	const int led = 7; //The pin where the led is connected
 
-	time_t totTime = 0; //The total time
-	time_t curTime = 0; //The time of the current step
-	time_t difTime = 0; //The total time when the current step started
+	time_t totTime; //The total time
+	time_t curTime; //The time of the current step
+	time_t difTime; //The total time when the current step started
 
-	boolean curStarted = false; //A flag to check whether the current step has started
-	int _temp = 0; //temporary variable for the temperature
-	int _time = 1;
-	int _step = 1;
-	int _steps = 0;
+	boolean curStarted; //A flag to check whether the current step has started
+	int _temp; //temporary variable for the temperature
+	int _time;
+	int _step;
+	int _steps;
 };
 
 #endif

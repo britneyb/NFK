@@ -7,6 +7,11 @@
 
 void MashSchedule::Default()
 {
+	 //  _temp = 0; //temporary variable for the temperature
+		// _time = 1;
+		// //_steps = arrSize/2;
+		// difTime = 0;
+		// curStarted = false;
 	sensors.begin();
 	//Send request to get Temperature
 	//sensors.requestTemperatures();
@@ -14,7 +19,7 @@ void MashSchedule::Default()
 
 	pinMode(buttonInput,OUTPUT);
     pinMode(led, OUTPUT);
-
+    
 	lcd.Begin();
 	lcd.Print("Waiting for program");
 	//lcd.Print("Current Temp: ", 1); //Bortkommenterad pågrund av att den redan gör detta i funktionen receive()
@@ -59,6 +64,7 @@ void MashSchedule::Receive()
 		}
 
 		arrSize = i-2;
+		_steps = arrSize/2;
 		arr = new int [arrSize];
 		int check = name.length();
 		int checkSum = data[i-1];
@@ -93,17 +99,18 @@ void MashSchedule::Receive()
 
 	if(loaded && state == HIGH)
 	{
+		setTime(0,0,0,0,0,0);
 		lcd.Print("                    ", 0); //Just temporary, will instead implement a function clear() on the display class
 		lcd.Print("                    ", 1);
 		lcd.Print("                    ", 2);
 
-	   
 	    _temp = 0; //temporary variable for the temperature
 		_time = 1;
-		_step = 1;
-		_steps = arrSize/2;
+		//_steps = arrSize/2;
 		difTime = 0;
-		 setTime(0,0,0,0,0,0);
+		curStarted = false;
+
+	    _step=1;
 	    
 		while(loaded)
 		{			
@@ -114,7 +121,6 @@ void MashSchedule::Receive()
 
 void MashSchedule::Start()
 {	
-
 	totTime = now();
 	curTime = totTime - difTime;
 
@@ -141,7 +147,7 @@ void MashSchedule::Start()
 	lcd.Print(String(CurrentTemp), 1, 9);
 	lcd.Print(String(degree), 1, 11);
 	lcd.Print("C ", 1, 12);
-	lcd.Print("  ", 1, 14);
+//	lcd.Print("  ", 1, 14); //we did this later down for minutes
 
 	lcd.Print("Steg ", 2);
 	lcd.Print(String(_step), 2, 5);
@@ -151,7 +157,8 @@ void MashSchedule::Start()
 	lcd.Print(String(arr[_time]),2,12);
 	lcd.Print(" min",2,14);
 
-	if(_step < _steps){
+	if(_step < _steps)
+	{
 		lcd.Print("Steg ", 3);
 		lcd.Print(String(_step+1), 3, 5);
 		lcd.Print(": ",3,6);
@@ -168,6 +175,7 @@ void MashSchedule::Start()
 	}
 	else if(curStarted)
 	{
+		lcd.Print(" ", 1, 15);
 		lcd.Print(String(minute(curTime)), 1, 14);
 		lcd.Print(" min", 1, 16);
 	}
@@ -181,18 +189,18 @@ void MashSchedule::Start()
 		digitalWrite(led,HIGH);
 	}
 
-	if(minute(curTime) >= arr[_time] && _steps > _step)
+	if(minute(curTime) == arr[_time] && (_steps) > _step && curStarted)
 	{
-		_step += 1;
+		//_step += 1;
 		_temp += 2;
 		_time += 2;
+
 		curStarted = false;
 		difTime = 0;
+
 		lcd.Print("                    ",1);
 		lcd.Print("                    ",3);
-	}
-
-	
+	}	
 }
 
 void MashSchedule::Random(){
