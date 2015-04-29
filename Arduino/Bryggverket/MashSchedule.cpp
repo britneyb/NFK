@@ -242,7 +242,8 @@ void MashSchedule::Pause()
 	}
 }
 
-void MashSchedule::AllOn(){
+void MashSchedule::AllOn()
+{
 	 stateRelay1 = digitalRead(SWITCH1);
 	 stateRelay2 = digitalRead(SWITCH2);
 	 stateRelay3 = digitalRead(SWITCH3);
@@ -265,7 +266,8 @@ void MashSchedule::AllOn(){
 	 	digitalWrite(RELAY4,LOW);
 }
 
-void MashSchedule::Random(){
+void MashSchedule::Random()
+{
 	if (someFlag_2)
 	{
 		randNumber = random(4);
@@ -297,7 +299,8 @@ void MashSchedule::Random(){
 	 			relayOn = true;
 	 		}
 	 	}
-	 	if(stateRelay3 == LOW){
+	 	if(stateRelay3 == LOW)
+	 	{
 	 		if(randNumber == 2)
 	 		{
 				digitalWrite(RELAY3,LOW);
@@ -305,7 +308,8 @@ void MashSchedule::Random(){
 	 			relayOn = true;
 	 		}
 	 	}
-	 	if(stateRelay4 == LOW){
+	 	if(stateRelay4 == LOW)
+	 	{
 	 		if(randNumber == 3)
 	 		{
 				digitalWrite(RELAY4,LOW);
@@ -330,7 +334,8 @@ void MashSchedule::Random(){
 			break;    
 	}
 }
-void MashSchedule::TurnOff(){
+void MashSchedule::TurnOff()
+{
 	someFlag_2=true;
 	digitalWrite(RELAY1,LOW);
 	digitalWrite(RELAY2,LOW);
