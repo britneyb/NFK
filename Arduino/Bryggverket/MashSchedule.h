@@ -18,6 +18,15 @@
 
 //Defines our Pin
 #define ONE_WIRE_BUS A0
+#define RELAY1  6//the pin where the relay is connected
+#define RELAY2  5//the pin where the relay is connected
+#define RELAY3  4//the pin where the relay is connected
+#define RELAY4  3//the pin where the relay is connected
+#define SWITCH1  8
+#define SWITCH2  9
+#define SWITCH3 10
+#define SWITCH4  11
+#define SWITCH5  12
 
 class MashSchedule
 {
@@ -49,15 +58,7 @@ class MashSchedule
 	int state; //Stores the input if the button is pressed or not
 	const int startButton = 2; //The pin where the button is connected
 	const int led = 7; //The pin where the led is connected
-	const int  RELAY1  =6;//the pin where the relay is connected
-	const int  RELAY2  =5;//the pin where the relay is connected
-	const int  RELAY3  =4;//the pin where the relay is connected
-	const int  RELAY4  =3;//the pin where the relay is connected
-	const int SWITCH1 = 8;
-	const int SWITCH2 = 9;
-	const int SWITCH3 = 10;
-	const int SWITCH4 = 11;
-	const int SWITCH5 = 12;
+	
 	int stateRelay1;
 	int stateRelay2;
 	int stateRelay3;
