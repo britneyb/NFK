@@ -26,7 +26,7 @@ void MashSchedule::Default()
 	pinMode(SWITCH4, INPUT);
 	pinMode(SWITCH5, INPUT);
 
-	pinMode(buttonInput,OUTPUT);
+	pinMode(startButton,INPUT);
     pinMode(led, OUTPUT);
     
 	lcd.Begin();
@@ -104,7 +104,7 @@ void MashSchedule::Receive()
 	lcd.Print(String(degree), 2, 16);
 	lcd.Print("C", 2, 17);
 
-	state  = digitalRead(buttonInput);
+	state  = digitalRead(startButton);
 
 	if(loaded && state == HIGH)
 	{

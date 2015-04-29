@@ -47,7 +47,7 @@ class MashSchedule
 	int arrSize; //Stores the number of steps in the current scheme
 	boolean loaded; //A flag to check if the scheme has been loaded or not 
 	int state; //Stores the input if the button is pressed or not
-	const int buttonInput = 2; //The pin where the button is connected
+	const int startButton = 12; //The pin where the button is connected
 	const int led = 7; //The pin where the led is connected
 	const int  RELAY1  =6;//the pin where the relay is connected
 	const int  RELAY2  =5;//the pin where the relay is connected
