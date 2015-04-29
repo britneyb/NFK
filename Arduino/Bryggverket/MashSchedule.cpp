@@ -20,6 +20,11 @@ void MashSchedule::Default()
 	//Send request to get Temperature
 	//sensors.requestTemperatures();
 	//CurrentTemp = sensors.getTempCByIndex(0);
+	pinMode(SWITCH1, INPUT);
+	pinMode(SWITCH2, INPUT);
+	pinMode(SWITCH3, INPUT);
+	pinMode(SWITCH4, INPUT);
+	pinMode(SWITCH5, INPUT);
 
 	pinMode(buttonInput,OUTPUT);
     pinMode(led, OUTPUT);
@@ -187,11 +192,13 @@ void MashSchedule::Start()
 	}
 
 	if(CurrentTemp >= arr[_temp] && curStarted) //For the relay
-	{	TurnOff();
+	{	
+		TurnOff();
 		//digitalWrite(led,LOW);
 		
 	}
-	else if(CurrentTemp >= arr[_temp]){
+	else if(CurrentTemp >= arr[_temp])
+	{
 	
 		
 	}
@@ -199,13 +206,13 @@ void MashSchedule::Start()
 	{
 		//digitalWrite(led,HIGH);
 		
-		if(!someFlag){
-		Random();
+		if(!someFlag)
+		{
+			Random();
 		}
 		else
 		{
-		AllOn();
-		
+			AllOn();
 		}
 	}
 
@@ -224,34 +231,83 @@ void MashSchedule::Start()
 }
 
 void MashSchedule::AllOn(){
-	digitalWrite(RELAY1,HIGH);
-	digitalWrite(RELAY2,HIGH);
-	digitalWrite(RELAY3,HIGH);
-	digitalWrite(RELAY4,HIGH);
+	// stateRelay1 = digitalRead(SWITCH1);
+	// stateRelay2 = digitalRead(SWITCH2);
+	// stateRelay3 = digitalRead(SWITCH3);
+	// stateRelay4 = digitalRead(SWITCH4);
+	// if(stateRelay1 == HIGH)
+	     digitalWrite(RELAY1,HIGH);
+	// else
+	// 	digitalWrite(RELAY1,LOW);
+	// if(stateRelay2 == HIGH)
+	 	digitalWrite(RELAY2,HIGH);
+	// else
+	// 	digitalWrite(RELAY2,LOW);
+	// if(stateRelay3 == HIGH)
+	 	digitalWrite(RELAY3,HIGH);
+	// else
+	// 	digitalWrite(RELAY3,LOW);
+	// if(stateRelay4 == HIGH)
+	 	digitalWrite(RELAY4,HIGH);
+	// else
+	// 	digitalWrite(RELAY4,LOW);
 	someFlag=false;
 }
 
 void MashSchedule::Random(){
-
-
-
+	// stateRelay1 = digitalRead((SWITCH1));
+	// stateRelay2 = digitalRead((SWITCH2));
+	// stateRelay3 = digitalRead((SWITCH3));
+	// stateRelay4 = digitalRead((SWITCH4));
+	// boolean relayOn = true;
+	// while(relayOn)
+	// {
+	// 	relayOn = true;
+	// 	if(stateRelay1 == LOW)
+	// 	{
+	// 		if(randNumber == 0)
+	// 		{
+	// 			//Gör random igen.
+	// 			relayOn = false;
+	// 		}
+	// 	}
+	// 	if(stateRelay2 == LOW)
+	// 	{
+	// 		if(randNumber == 1)
+	// 		{
+	// 			//Gör random igen.
+	// 			relayOn = false;
+	// 		}
+	// 	}
+	// 	if(stateRelay3 == LOW){
+	// 		if(randNumber == 2)
+	// 		{
+	// 			//Gör random igen.
+	// 			relayOn = false;
+	// 		}
+	// 	}
+	// 	if(stateRelay4 == LOW){
+	// 		if(randNumber == 3)
+	// 		{
+	// 			//Gör random igen.
+	// 			relayOn = false;
+	// 		}
+	// 	}
+	// }
 	switch (randNumber)
 	{
-		
 		case  0:
-		digitalWrite(RELAY1,HIGH); 
-		           
-		break;
+			digitalWrite(RELAY1,HIGH); 
+			break;
 		case 1:
-		digitalWrite(RELAY2,HIGH);           // Turns ON Relays 2
-								         
-		break;
+			digitalWrite(RELAY2,HIGH);           // Turns ON Relays 2				         
+			break;
 		case 2:
-		digitalWrite(RELAY3,HIGH);           // Turns ON Relays 3
-		break;        
+			digitalWrite(RELAY3,HIGH);           // Turns ON Relays 3
+			break;        
 		case 3:
-		digitalWrite(RELAY4,HIGH);           // Turns ON Relays 4
-		break;   
+			digitalWrite(RELAY4,HIGH);           // Turns ON Relays 4
+			break;   
 }
 }
 void MashSchedule::TurnOff(){

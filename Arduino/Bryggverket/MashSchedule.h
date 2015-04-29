@@ -53,6 +53,16 @@ class MashSchedule
 	const int  RELAY2  =5;//the pin where the relay is connected
 	const int  RELAY3  =4;//the pin where the relay is connected
 	const int  RELAY4  =3;//the pin where the relay is connected
+	const int SWITCH1 = 8;
+	const int SWITCH2 = 9;
+	const int SWITCH3 = 10;
+	const int SWITCH4 = 11;
+	const int SWITCH5 = 12;
+	int stateRelay1;
+	int stateRelay2;
+	int stateRelay3;
+	int stateRelay4;
+	
 	time_t totTime; //The total time
 	time_t curTime; //The time of the current step
 	time_t difTime; //The total time when the current step started
