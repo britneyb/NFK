@@ -13,6 +13,10 @@ void MashSchedule::Default()
 		// difTime = 0;
 		// curStarted = false;
 	sensors.begin();
+	pinMode(RELAY1, OUTPUT);
+	pinMode(RELAY2, OUTPUT);
+	pinMode(RELAY3, OUTPUT);
+	pinMode(RELAY4, OUTPUT);
 	//Send request to get Temperature
 	//sensors.requestTemperatures();
 	//CurrentTemp = sensors.getTempCByIndex(0);
@@ -140,9 +144,11 @@ void MashSchedule::Start()
 	if(!curStarted && CurrentTemp >= arr[_temp]) //Starts counting when the current temp is right
 	{		
 		difTime = totTime;
+		curTime = totTime - difTime;
 		curStarted = true;
-	}	
-
+		randNumber = random(4);
+		someFlag=false;
+	}
 	lcd.Print("Aktuellt:", 1);
 	lcd.Print(String(CurrentTemp), 1, 9);
 	lcd.Print(String(degree), 1, 11);
@@ -181,25 +187,34 @@ void MashSchedule::Start()
 	}
 
 	if(CurrentTemp >= arr[_temp] && curStarted) //For the relay
-	{
-		digitalWrite(led,LOW);
-		//Rabdom();
+	{	TurnOff();
+		//digitalWrite(led,LOW);
+		
 	}
 	else if(CurrentTemp >= arr[_temp]){
-		//AllOn();
+	
+		
 	}
 	else
 	{
-		digitalWrite(led,HIGH);
-		//TurnOff();
+		//digitalWrite(led,HIGH);
+		
+		if(!someFlag){
+		Random();
+		}
+		else
+		{
+		AllOn();
+		
+		}
 	}
 
-	if(minute(curTime) == arr[_time] && (_steps) > _step && curStarted)
+	if(minute(curTime) >= arr[_time] && (_steps) > _step && curStarted)
 	{
-		//_step += 1;
+		_step += 1;
 		_temp += 2;
 		_time += 2;
-
+		someFlag=true;
 		curStarted = false;
 		difTime = 0;
 
@@ -209,27 +224,39 @@ void MashSchedule::Start()
 }
 
 void MashSchedule::AllOn(){
-	//digitalWrite(pinRelä1,HIGH);
-	//digitalWrite(pinRelä2,HIGH);
-	//digitalWrite(pinRelä3,HIGH);
-	//digitalWrite(pinRelä4,HIGH);
+	digitalWrite(RELAY1,HIGH);
+	digitalWrite(RELAY2,HIGH);
+	digitalWrite(RELAY3,HIGH);
+	digitalWrite(RELAY4,HIGH);
+	someFlag=false;
 }
 
 void MashSchedule::Random(){
-	//int randLed = random(4);
-	//if(randLed == 0)
-		//digitalWrite(pinRelä1,HIGH);
-	//else if(randLed == 1)
-		//digitalWrite(pinRelä2,HIGH);
-	//else if(randLed == 2)
-		//digitalWrite(pinRelä3,HIGH);
-	//else if(randLed == 3)
-		//digitalWrite(pinRelä4,HIGH);
-}
 
+
+
+	switch (randNumber)
+	{
+		
+		case  0:
+		digitalWrite(RELAY1,HIGH); 
+		           
+		break;
+		case 1:
+		digitalWrite(RELAY2,HIGH);           // Turns ON Relays 2
+								         
+		break;
+		case 2:
+		digitalWrite(RELAY3,HIGH);           // Turns ON Relays 3
+		break;        
+		case 3:
+		digitalWrite(RELAY4,HIGH);           // Turns ON Relays 4
+		break;   
+}
+}
 void MashSchedule::TurnOff(){
-	//digitalWrite(pinRelä1,LOW);
-	//digitalWrite(pinRelä2,LOW);
-	//digitalWrite(pinRelä3,LOW);
-	//digitalWrite(pinRelä4,LOW);
+	digitalWrite(RELAY1,LOW);
+	digitalWrite(RELAY2,LOW);
+	digitalWrite(RELAY3,LOW);
+	digitalWrite(RELAY4,LOW);
 }
