@@ -15,6 +15,7 @@ class Display
     Display();
     void Print(String str, int row = 0, int column = 0);
     void Begin();
+    void getTemp(String temp);
   private:
   	LiquidCrystal lcd = LiquidCrystal(0x27,20,4);
 };

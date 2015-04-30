@@ -15,19 +15,20 @@
 #include <DallasTemperature.h>
 #include "Display.h"
 #include "SerialString.h"
+#include "Pins.h"
 
 //Defines our Pin
-#define ONE_WIRE_BUS A0
-#define RELAY1 6//the pin where the relay is connected
-#define RELAY2 5//the pin where the relay is connected
-#define RELAY3 4//the pin where the relay is connected
-#define RELAY4 3//the pin where the relay is connected
-#define PUMP 13
-#define SWITCH1 8
-#define SWITCH2 9
-#define SWITCH3 10
-#define SWITCH4 11
-#define SWITCH5 12
+//#define ONE_WIRE_BUS A0
+//#define RELAY1 6//the pin where the relay is connected
+//#define RELAY2 5//the pin where the relay is connected
+//#define RELAY3 4//the pin where the relay is connected
+//#define RELAY4 3//the pin where the relay is connected
+//#define PUMP 13
+//#define SWITCH1 8
+//#define SWITCH2 9
+//#define SWITCH3 10
+//#define SWITCH4 11
+//#define SWITCH5 12
 
 class MashSchedule
 {
@@ -48,18 +49,18 @@ class MashSchedule
 
   	DallasTemperature sensors = DallasTemperature(&oneWire); //Pass our oneWire reference to Dallas Temperature.
 
-  	const int maxStep = 32; //The max number of steps that can be received
+  	//const int maxStep = 32; //The max number of steps that can be received
   	long randNumber;
-  	const int Calibrator = 3.5; //Calibration for the temp-sensor
+  	//const int Calibrator = 3.5; //Calibration for the temp-sensor
 	int CurrentTemp; //Stores the current temp
-	const char degree = char(223); //To get the right Celcius-symbol
+	//const char degree = char(223); //To get the right Celcius-symbol
 	String name = ""; //The name for the scheme
 	int* arr; //Array that stores the values of time and temp 
 	int arrSize; //Stores the number of steps in the current scheme
 	boolean loaded; //A flag to check if the scheme has been loaded or not 
 	int state; //Stores the input if the button is pressed or not
-	const int startButton = 2; //The pin where the button is connected
-	const int stopButton = 7;
+	//const int startButton = 2; //The pin where the button is connected
+	//const int stopButton = 7;
 	//const int led = 7; //The pin where the led is connected
 	
 	int stateRelay1;

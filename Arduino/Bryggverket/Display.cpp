@@ -24,3 +24,15 @@ void Display::Begin()
 	lcd.clear(); 
 }
 
+void Display::getTemp(String temp)
+{
+	lcd.setCursor(0,2);
+	lcd.print("Current temp: ");
+	lcd.setCursor(14,2);
+	lcd.print(temp);
+	lcd.setCursor(16,2);
+	lcd.print(String(char(223)));//String(degree), 2, 16);
+	lcd.setCursor(17,2);
+	lcd.print("C");
+}
+

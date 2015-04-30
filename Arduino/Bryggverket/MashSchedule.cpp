@@ -100,11 +100,12 @@ void MashSchedule::Receive()
 	}
 
 	sensors.requestTemperatures();
-	CurrentTemp = sensors.getTempCByIndex(0);
-	lcd.Print("Current temp: ", 2);
-	lcd.Print(String(CurrentTemp), 2, 14);
-	lcd.Print(String(degree), 2, 16);
-	lcd.Print("C", 2, 17);
+	CurrentTemp = sensors.getTempCByIndex(0) + Calibrator;
+	lcd.getTemp(String(CurrentTemp));
+	//lcd.Print("Current temp: ", 2);
+	//lcd.Print(String(CurrentTemp), 2, 14);
+	//lcd.Print(String(degree), 2, 16);
+	//lcd.Print("C", 2, 17);
 
 	state  = digitalRead(startButton);
 
@@ -133,6 +134,7 @@ void MashSchedule::Receive()
 				digitalWrite(RELAY2, LOW);
 				digitalWrite(RELAY3, LOW);
 				digitalWrite(RELAY4, LOW);
+				lcd.Print("Paused              ",3);
 			}
 
 			if(running)
@@ -141,9 +143,11 @@ void MashSchedule::Receive()
 			}
 			else
 			{
-				Pause();
+				if(!digitalRead((stopButton)))
+				{
+					Pause();
+				}
 			}
-			
 		}
 	}
 }
@@ -156,7 +160,7 @@ void MashSchedule::Start()
 	if(second() % 2 == 0) //Updates the temp every two seconds
 	{
 		sensors.requestTemperatures();
-		CurrentTemp = sensors.getTempCByIndex(0);
+		CurrentTemp = sensors.getTempCByIndex(0) + Calibrator;
 	}
 
 	lcd.Print("Totalt:");
@@ -249,6 +253,15 @@ void MashSchedule::Start()
 
 void MashSchedule::Pause()
 {
+	lcd.Print("Aktuellt:", 1);
+	lcd.Print(String(CurrentTemp), 1, 9);
+	lcd.Print(String(degree), 1, 11);
+	lcd.Print("C ", 1, 12);
+	if(second() % 2 == 0) //Updates the temp every two seconds
+	{
+		sensors.requestTemperatures();
+		CurrentTemp = sensors.getTempCByIndex(0) + Calibrator;
+	}
 	if(digitalRead(startButton))
 	{
 	    running = true;
@@ -258,26 +271,26 @@ void MashSchedule::Pause()
 
 void MashSchedule::AllOn()
 {
-	 stateRelay1 = digitalRead(SWITCH1);
-	 stateRelay2 = digitalRead(SWITCH2);
-	 stateRelay3 = digitalRead(SWITCH3);
-	 stateRelay4 = digitalRead(SWITCH4);
-	 if(stateRelay1 == HIGH)
-	     digitalWrite(RELAY1,HIGH);
-	 else
-	 	digitalWrite(RELAY1,LOW);
-		 if(stateRelay2 == HIGH)
-	 	digitalWrite(RELAY2,HIGH);
-	 else
-	 	digitalWrite(RELAY2,LOW);
-	 if(stateRelay3 == HIGH)
-	 	digitalWrite(RELAY3,HIGH);
-	 else
+	stateRelay1 = digitalRead(SWITCH1);
+	stateRelay2 = digitalRead(SWITCH2);
+	stateRelay3 = digitalRead(SWITCH3);
+	stateRelay4 = digitalRead(SWITCH4);
+	if(stateRelay1 == HIGH)
+		digitalWrite(RELAY1,HIGH);
+	else
+		digitalWrite(RELAY1,LOW);
+	if(stateRelay2 == HIGH)
+		digitalWrite(RELAY2,HIGH);
+	else
+		digitalWrite(RELAY2,LOW);
+	if(stateRelay3 == HIGH)
+		digitalWrite(RELAY3,HIGH);
+	else
 		digitalWrite(RELAY3,LOW);
-	 if(stateRelay4 == HIGH)
-	 	digitalWrite(RELAY4,HIGH);
-	 else
-	 	digitalWrite(RELAY4,LOW);
+	if(stateRelay4 == HIGH)
+		digitalWrite(RELAY4,HIGH);
+	else
+		digitalWrite(RELAY4,LOW);
 }
 
 void MashSchedule::Random()
@@ -348,6 +361,7 @@ void MashSchedule::Random()
 			break;    
 	}
 }
+
 void MashSchedule::TurnOff()
 {
 	someFlag_2=true;

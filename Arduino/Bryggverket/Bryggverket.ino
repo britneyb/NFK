@@ -6,6 +6,7 @@
 #include <LiquidCrystal.h>
 #include "Display.h"
 #include "SerialString.h"
+#include "Pins.h"
 
 MashSchedule test1;
 
