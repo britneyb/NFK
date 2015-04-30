@@ -22,7 +22,7 @@
 #define RELAY2 5//the pin where the relay is connected
 #define RELAY3 4//the pin where the relay is connected
 #define RELAY4 3//the pin where the relay is connected
-#define PUMP 13
+#define PUMP 7
 #define SWITCH1 8
 #define SWITCH2 9
 #define SWITCH3 10
@@ -59,7 +59,7 @@ class MashSchedule
 	boolean loaded; //A flag to check if the scheme has been loaded or not 
 	int state; //Stores the input if the button is pressed or not
 	const int startButton = 2; //The pin where the button is connected
-	const int stopButton = 7;
+	const int stopButton = 13;
 	//const int led = 7; //The pin where the led is connected
 	
 	int stateRelay1;
