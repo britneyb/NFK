@@ -129,7 +129,7 @@ void MashSchedule::Receive()
 			if(digitalRead(stopButton))
 			{
 			    running = false;
-			    //digitalWrite(PUMP, LOW);
+			    digitalWrite(PUMP, LOW);
 				digitalWrite(RELAY1, LOW);
 				digitalWrite(RELAY2, LOW);
 				digitalWrite(RELAY3, LOW);
@@ -230,14 +230,14 @@ void MashSchedule::Start()
 		AllOn();
 	}
 
-	// if(digitalRead(SWITCH5))
-	// {
-	// 	digitalWrite(PUMP, HIGH);
-	// }
-	// else
-	// {
-	// 	digitalWrite(PUMP, LOW);
-	// }
+if(digitalRead(SWITCH5))
+{
+	digitalWrite(PUMP, HIGH);
+}
+else
+{
+	digitalWrite(PUMP, LOW);
+}
 
 	if(minute(curTime) >= arr[_time] && (_steps) > _step && curStarted)
 	{
