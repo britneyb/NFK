@@ -72,6 +72,6 @@ void Display::currentTemp(int temp)
 	lcd.print(String(temp));
 	lcd.setCursor(11,1);
 	lcd.print(String(char(223)));
-	lcd.print(12,1);
+	lcd.setCursor(12,1);
 	lcd.print("C ");
 }
