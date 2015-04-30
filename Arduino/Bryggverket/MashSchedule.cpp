@@ -28,7 +28,7 @@ void MashSchedule::Default()
 	pinMode(SWITCH3, OUTPUT);
 	pinMode(SWITCH4, OUTPUT);
 	pinMode(SWITCH5, OUTPUT);
-	pinMode(startButton,OUTPUT);
+	pinMode(startButton,INPUT);
     //pinMode(led, OUTPUT);
     
 	lcd.Begin();
@@ -88,20 +88,22 @@ void MashSchedule::Receive()
 
 		if(check == checkSum)
 		{
-			lcd.Print("Paused              ");
-			lcd.Print("Mashschemed uploaded", 1);
+			//lcd.Print("Paused              ");
+			//lcd.Print("Mashschemed uploaded", 1);
+			lcd.loaded();
 			loaded = true;	
 		}
 		else
 		{
-			lcd.Print("Fail",1);
+			//lcd.Print("Fail",1);
+			lcd.failed();
 			loaded = false;
 		}
 	}
 
 	sensors.requestTemperatures();
 	CurrentTemp = sensors.getTempCByIndex(0) + Calibrator;
-	lcd.getTemp(String(CurrentTemp));
+	lcd.getTemp(2,CurrentTemp);
 	//lcd.Print("Current temp: ", 2);
 	//lcd.Print(String(CurrentTemp), 2, 14);
 	//lcd.Print(String(degree), 2, 16);
@@ -178,43 +180,45 @@ void MashSchedule::Start()
 		curStarted = true;
 		someFlag = false;
 	}
-	lcd.currentTemp(CurrentTemp);
+	lcd.currentTemp(CurrentTemp, curTime, curStarted);
 	//lcd.Print("Aktuellt:", 1);
 	//lcd.Print(String(CurrentTemp), 1, 9);
 	//lcd.Print(String(degree), 1, 11);
 	//lcd.Print("C ", 1, 12);
 	//lcd.Print("  ", 1, 14); //we did this later down for minutes
 
-	lcd.Print("Steg ", 2);
-	lcd.Print(String(_step), 2, 5);
-	lcd.Print(": ",2,6);
-	lcd.Print(String(arr[_temp]),2,8);
-	lcd.Print("C ",2,10);
-	lcd.Print(String(arr[_time]),2,12);
-	lcd.Print(" min",2,14);
+	lcd.step(2, _step, arr[_temp], arr[_time]);
+	// lcd.Print("Steg ", 2);
+	// lcd.Print(String(_step), 2, 5);
+	// lcd.Print(": ",2,6);
+	// lcd.Print(String(arr[_temp]),2,8);
+	// lcd.Print("C ",2,10);
+	// lcd.Print(String(arr[_time]),2,12);
+	// lcd.Print(" min",2,14);
 
 	if(_step < _steps)
 	{
-		lcd.Print("Steg ", 3);
-		lcd.Print(String(_step+1), 3, 5);
-		lcd.Print(": ",3,6);
-		lcd.Print(String(arr[_temp+2]),3,8);
-		lcd.Print("C ",3,10);
-		lcd.Print(String(arr[_time+2]),3,12);
-		lcd.Print(" min",3,14);
+		lcd.step(3, _step+1, arr[_temp+2], arr[_time+2]);
+		// lcd.Print("Steg ", 3);
+		// lcd.Print(String(_step+1), 3, 5);
+		// lcd.Print(": ",3,6);
+		// lcd.Print(String(arr[_temp+2]),3,8);
+		// lcd.Print("C ",3,10);
+		// lcd.Print(String(arr[_time+2]),3,12);
+		// lcd.Print(" min",3,14);
 	}
 
-	if (minute(curTime) <= 0 && curStarted) //Changing between min and sec on the current step
-	{
-		lcd.Print(String(second(curTime)), 1, 14);
-		lcd.Print(" sek", 1, 16);
-	}
-	else if(curStarted)
-	{
-		lcd.Print(" ", 1, 15);
-		lcd.Print(String(minute(curTime)), 1, 14);
-		lcd.Print(" min", 1, 16);
-	}
+	// if (minute(curTime) <= 0 && curStarted) //Changing between min and sec on the current step
+	// {
+	// 	lcd.Print(String(second(curTime)), 1, 14);
+	// 	lcd.Print(" sek", 1, 16);
+	// }
+	// else if(curStarted)
+	// {
+	// 	lcd.Print(" ", 1, 15);
+	// 	lcd.Print(String(minute(curTime)), 1, 14);
+	// 	lcd.Print(" min", 1, 16);
+	// }
 
 	if(CurrentTemp >= arr[_temp] && curStarted) //For the relay
 	{	
@@ -230,14 +234,14 @@ void MashSchedule::Start()
 		AllOn();
 	}
 
-if(digitalRead(SWITCH5))
-{
-	digitalWrite(PUMP, HIGH);
-}
-else
-{
-	digitalWrite(PUMP, LOW);
-}
+	if(digitalRead(SWITCH5))
+	{
+		digitalWrite(PUMP, HIGH);
+	}
+	else
+	{
+		digitalWrite(PUMP, LOW);
+	}
 
 	if(minute(curTime) >= arr[_time] && (_steps) > _step && curStarted)
 	{
@@ -259,7 +263,7 @@ void MashSchedule::Pause()
 	// lcd.Print(String(CurrentTemp), 1, 9);
 	// lcd.Print(String(degree), 1, 11);
 	// lcd.Print("C ", 1, 12);
-	lcd.currentTemp(CurrentTemp);
+	lcd.getTemp(1, CurrentTemp);
 	if(second() % 2 == 0) //Updates the temp every two seconds
 	{
 		sensors.requestTemperatures();

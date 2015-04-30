@@ -16,13 +16,13 @@ class Display
     Display();
     void Print(String str, int row = 0, int column = 0);
     void Begin();
-    void getTemp(String temp);
+    void getTemp(int row, int temp);
     void loaded();
     void failed();
     void paused();
     void totalTime(time_t time);
-    void currentTemp(int temp);
-    void step();
+    void currentTemp(int temp, time_t curTime, boolean started);
+    void step(int row, int cStep, int cTemp, int cTime);
   private:
   	LiquidCrystal lcd = LiquidCrystal(0x27,20,4);
 };

@@ -25,20 +25,21 @@ void Display::Begin()
 	lcd.print("Waiting for program");
 }
 
-void Display::getTemp(String temp)
+void Display::getTemp(int row, int temp)
 {
-	lcd.setCursor(0,2);
-	lcd.print("Current temp: ");
-	lcd.setCursor(14,2);
-	lcd.print(temp);
-	lcd.setCursor(16,2);
+	lcd.setCursor(0,row);
+	lcd.print("Current: ");
+	lcd.setCursor(9,row);
+	lcd.print(String(temp));
+	lcd.setCursor(11,row);
 	lcd.print(String(char(223)));//String(degree), 2, 16);
-	lcd.setCursor(17,2);
+	lcd.setCursor(12,row);
 	lcd.print("C");
 }
 
 void Display::loaded()
 {
+	lcd.setCursor(0,0);
 	lcd.print("Paused              ");
 	lcd.setCursor(0,1);
 	lcd.print("Mashschemed uploaded");
@@ -53,10 +54,10 @@ void Display::failed()
 void Display::totalTime(time_t t)
 {
 	lcd.setCursor(0,0);
-	lcd.print("Totalt:");
+	lcd.print("Total: ");
 	lcd.setCursor(7,0);
 	lcd.print(String(minute(t)));
-	lcd.setCursor(9,0);
+	lcd.setCursor(10,0);
 	lcd.print("min   ");
 	lcd.setCursor(14,0);
 	lcd.print(String(second(t)));
@@ -64,14 +65,44 @@ void Display::totalTime(time_t t)
 	lcd.print(" sek");
 }
 
-void Display::currentTemp(int temp)
+void Display::currentTemp(int temp, time_t curTime, boolean started)
 {
-	lcd.setCursor(0,1);
-	lcd.print("Aktuellt:");
-	lcd.setCursor(9,1);
-	lcd.print(String(temp));
-	lcd.setCursor(11,1);
+	getTemp(1,temp);
+
+	if (minute(curTime) <= 0 && started) //Changing between min and sec on the current step
+	{
+		lcd.setCursor(14,1);
+		lcd.print(String(second(curTime)));
+		lcd.setCursor(16,1);
+		lcd.print(" sek");
+	}
+	else if(started)
+	{
+		lcd.setCursor(15,1);
+		lcd.print(" ");
+		lcd.setCursor(14,1);
+		lcd.print(String(minute(curTime)));
+		lcd.setCursor(16,1);
+		lcd.print(" min");
+	}
+}
+
+void Display::step(int row, int cStep, int cTemp, int cTime)
+{
+	lcd.setCursor(0,row);
+	lcd.print("Step ");
+	lcd.setCursor(5,row);
+	lcd.print(String(cStep));
+	lcd.setCursor(6,row);
+	lcd.print(": ");
+	lcd.setCursor(8,row);
+	lcd.print(String(cTemp));
+	lcd.setCursor(10,row);
 	lcd.print(String(char(223)));
-	lcd.setCursor(12,1);
+	lcd.setCursor(11,row);
 	lcd.print("C ");
+	lcd.setCursor(13,row);
+	lcd.print(String(cTime));
+	lcd.setCursor(15,row);
+	lcd.print(" min");
 }
