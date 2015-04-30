@@ -18,15 +18,16 @@
 
 //Defines our Pin
 #define ONE_WIRE_BUS A0
-#define RELAY1  6//the pin where the relay is connected
-#define RELAY2  5//the pin where the relay is connected
-#define RELAY3  4//the pin where the relay is connected
-#define RELAY4  3//the pin where the relay is connected
-#define SWITCH1  8
-#define SWITCH2  9
+#define RELAY1 6//the pin where the relay is connected
+#define RELAY2 5//the pin where the relay is connected
+#define RELAY3 4//the pin where the relay is connected
+#define RELAY4 3//the pin where the relay is connected
+#define PUMP 13
+#define SWITCH1 8
+#define SWITCH2 9
 #define SWITCH3 10
-#define SWITCH4  11
-#define SWITCH5  12
+#define SWITCH4 11
+#define SWITCH5 12
 
 class MashSchedule
 {
@@ -65,6 +66,7 @@ class MashSchedule
 	int stateRelay2;
 	int stateRelay3;
 	int stateRelay4;
+	int statePump;
 	
 	time_t totTime; //The total time
 	time_t curTime; //The time of the current step

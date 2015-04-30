@@ -17,6 +17,7 @@ void MashSchedule::Default()
 	pinMode(RELAY2, OUTPUT);
 	pinMode(RELAY3, OUTPUT);
 	pinMode(RELAY4, OUTPUT);
+	pinMode(PUMP, OUTPUT);
 	//Send request to get Temperature
 	//sensors.requestTemperatures();
 	//CurrentTemp = sensors.getTempCByIndex(0);
@@ -207,7 +208,6 @@ void MashSchedule::Start()
 	if(CurrentTemp >= arr[_temp] && curStarted) //For the relay
 	{	
 		TurnOff();
-		//digitalWrite(led,LOW);
 	}
 	else if(CurrentTemp < arr[_temp] && curStarted)
 	{
@@ -218,6 +218,15 @@ void MashSchedule::Start()
 	{
 		AllOn();
 	}
+
+	// if(digitalRead(SWITCH5))
+	// {
+	// 	digitalWrite(PUMP, HIGH);
+	// }
+	// else
+	// {
+	// 	digitalWrite(PUMP, LOW);
+	// }
 
 	if(minute(curTime) >= arr[_time] && (_steps) > _step && curStarted)
 	{
