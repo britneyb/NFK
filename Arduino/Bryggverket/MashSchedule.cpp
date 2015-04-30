@@ -128,6 +128,11 @@ void MashSchedule::Receive()
 			if(digitalRead(stopButton))
 			{
 			    running = false;
+			    //digitalWrite(PUMP, LOW);
+				digitalWrite(RELAY1, LOW);
+				digitalWrite(RELAY2, LOW);
+				digitalWrite(RELAY3, LOW);
+				digitalWrite(RELAY4, LOW);
 			}
 
 			if(running)
