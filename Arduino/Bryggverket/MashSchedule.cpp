@@ -32,7 +32,7 @@ void MashSchedule::Default()
     //pinMode(led, OUTPUT);
     
 	lcd.Begin();
-	lcd.Print("Waiting for program");
+	//lcd.Print("Waiting for program");
 	//lcd.Print("Current Temp: ", 1); //Bortkommenterad pågrund av att den redan gör detta i funktionen receive()
 	//lcd.Print(String(CurrentTemp));	
 }
@@ -88,7 +88,7 @@ void MashSchedule::Receive()
 
 		if(check == checkSum)
 		{
-			lcd.Print("Paused             ");
+			lcd.Print("Paused              ");
 			lcd.Print("Mashschemed uploaded", 1);
 			loaded = true;	
 		}
@@ -163,25 +163,27 @@ void MashSchedule::Start()
 		CurrentTemp = sensors.getTempCByIndex(0) + Calibrator;
 	}
 
-	lcd.Print("Totalt:");
-	lcd.Print(String(minute(totTime)), 0, 7);
-	lcd.Print("min ", 0, 9);
-	lcd.Print("  ", 0, 14);
-	lcd.Print(String(second(totTime)), 0, 14);
-	lcd.Print(" sek", 0, 16);
+	lcd.totalTime(totTime);
+	//lcd.Print("Totalt:");
+	//lcd.Print(String(minute(totTime)), 0, 7);
+	//lcd.Print("min ", 0, 9);
+	//lcd.Print("  ", 0, 14);
+	//lcd.Print(String(second(totTime)), 0, 14);
+	//lcd.Print(" sek", 0, 16);
 
 	if(!curStarted && CurrentTemp >= arr[_temp]) //Starts counting when the current temp is right
 	{		
 		difTime = totTime;
 		curTime = totTime - difTime;
 		curStarted = true;
-		someFlag=false;
+		someFlag = false;
 	}
-	lcd.Print("Aktuellt:", 1);
-	lcd.Print(String(CurrentTemp), 1, 9);
-	lcd.Print(String(degree), 1, 11);
-	lcd.Print("C ", 1, 12);
-//	lcd.Print("  ", 1, 14); //we did this later down for minutes
+	lcd.currentTemp(CurrentTemp);
+	//lcd.Print("Aktuellt:", 1);
+	//lcd.Print(String(CurrentTemp), 1, 9);
+	//lcd.Print(String(degree), 1, 11);
+	//lcd.Print("C ", 1, 12);
+	//lcd.Print("  ", 1, 14); //we did this later down for minutes
 
 	lcd.Print("Steg ", 2);
 	lcd.Print(String(_step), 2, 5);
@@ -253,10 +255,11 @@ void MashSchedule::Start()
 
 void MashSchedule::Pause()
 {
-	lcd.Print("Aktuellt:", 1);
-	lcd.Print(String(CurrentTemp), 1, 9);
-	lcd.Print(String(degree), 1, 11);
-	lcd.Print("C ", 1, 12);
+	// lcd.Print("Aktuellt:", 1);
+	// lcd.Print(String(CurrentTemp), 1, 9);
+	// lcd.Print(String(degree), 1, 11);
+	// lcd.Print("C ", 1, 12);
+	lcd.currentTemp(CurrentTemp);
 	if(second() % 2 == 0) //Updates the temp every two seconds
 	{
 		sensors.requestTemperatures();
