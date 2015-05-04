@@ -39,6 +39,7 @@ class MashSchedule
     void Start();
     void Pause();
     void AllOn();
+    int Uniqe();
     void Random();
     void TurnOff();
   private:
