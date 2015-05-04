@@ -125,6 +125,7 @@ void MashSchedule::Receive()
 		curStarted = false;
 	    _step=1;
 	    running = true;
+	    randNum = new int[noRandom];
 	    
 		while(loaded)
 		{
@@ -304,68 +305,75 @@ void MashSchedule::Random()
 {
 	if (someFlag_2)
 	{
-		randNumber = random(4);
+		//randNumber = random(4);
+		for (int i = 0; i < noRandom; i++)
+		{
+			randNum[i] = random(4);
+		}
 		someFlag_2=false;
 	}
-	 boolean relayOn = true;
-	 while(relayOn)
-	 {
+	boolean relayOn = true;
+	for (int i = 0; i < noRandom; i++)
+	{
+		while(relayOn)
+		{
 		stateRelay1 = digitalRead((SWITCH1));
 		stateRelay2 = digitalRead((SWITCH2));
 		stateRelay3 = digitalRead((SWITCH3));
 		stateRelay4 = digitalRead((SWITCH4));
-	 	relayOn = false;
-	 	if(stateRelay1 == LOW)
-	 	{
-	 		if(randNumber == 0)
-	 		{
-				digitalWrite(RELAY1,LOW);
-	 			randNumber = random(4);
-	 			relayOn = true;
-	 		}
-	 	}
-	 	if(stateRelay2 == LOW)
-	 	{
-	 		if(randNumber == 1)
-	 		{
-				digitalWrite(RELAY2,LOW);
-	 			randNumber = random(4);
-	 			relayOn = true;
-	 		}
-	 	}
-	 	if(stateRelay3 == LOW)
-	 	{
-	 		if(randNumber == 2)
-	 		{
-				digitalWrite(RELAY3,LOW);
-	 			randNumber = random(4);
-	 			relayOn = true;
-	 		}
-	 	}
-	 	if(stateRelay4 == LOW)
-	 	{
-	 		if(randNumber == 3)
-	 		{
-				digitalWrite(RELAY4,LOW);
-	 			randNumber = random(4);
-	 			relayOn = true;
-	 		}
-	 	}
-	 }
-	switch (randNumber)
-	{
-		case  0:
-			digitalWrite(RELAY1,HIGH); 
-			break;
-		case 1:
-			digitalWrite(RELAY2,HIGH);           // Turns ON Relays 2				         
-			break;
-		case 2:
-			digitalWrite(RELAY3,HIGH);           // Turns ON Relays 3
-			break;        
-		case 3:
-			digitalWrite(RELAY4,HIGH);           // Turns ON Relays 4
-			break;    
+			relayOn = false;
+			if(stateRelay1 == LOW)
+			{
+				if(randNum[i] == 0)
+				{
+					digitalWrite(RELAY1,LOW);
+					randNum[i] = random(4);
+					relayOn = true;
+				}	
+			}
+			if(stateRelay2 == LOW)
+			{
+				if(randNum[i] == 1)
+				{
+					digitalWrite(RELAY1,LOW);
+					randNum[i] = random(4);
+					relayOn = true;
+				}	
+			}
+			if(stateRelay3 == LOW)
+			{
+				if(randNum[i] == 2)
+				{
+					digitalWrite(RELAY1,LOW);
+					randNum[i] = random(4);
+					relayOn = true;
+				}	
+			}
+			if(stateRelay4 == LOW)
+			{
+				if(randNum[i] == 3)
+				{
+					digitalWrite(RELAY1,LOW);
+					randNum[i] = random(4);
+					relayOn = true;
+				}
+			}
+		}
+		switch (randNum[i])
+		{
+			case  0:
+				digitalWrite(RELAY1,HIGH); 
+				break;
+			case 1:
+				digitalWrite(RELAY2,HIGH);           // Turns ON Relays 2				         
+				break;
+			case 2:
+				digitalWrite(RELAY3,HIGH);           // Turns ON Relays 3
+				break;        
+			case 3:
+				digitalWrite(RELAY4,HIGH);           // Turns ON Relays 4
+				break;    
+		}
 	}
 }
 

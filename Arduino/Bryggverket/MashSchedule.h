@@ -64,6 +64,7 @@ class MashSchedule
 	//const int stopButton = 7;
 	//const int led = 7; //The pin where the led is connected
 	
+	int* randNum;
 	int stateRelay1;
 	int stateRelay2;
 	int stateRelay3;

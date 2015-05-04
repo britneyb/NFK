@@ -19,3 +19,4 @@
 #define degree char(223) //To get the right Celcius-symbol
 
 #define Calibrator 0 //Calibration for the temp-sensor
+#define noRandom 2
