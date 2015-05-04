@@ -22,7 +22,7 @@ void MashSchedule::Default()
 	//sensors.requestTemperatures();
 	//CurrentTemp = sensors.getTempCByIndex(0);
 
-	pinMode(stopButton, OUTPUT);
+	pinMode(stopButton, INPUT);
 	pinMode(SWITCH1, OUTPUT);
 	pinMode(SWITCH2, OUTPUT);
 	pinMode(SWITCH3, OUTPUT);
@@ -301,33 +301,58 @@ void MashSchedule::AllOn()
 		digitalWrite(RELAY4,LOW);
 }
 
+int MashSchedule::Uniqe()
+{
+	int temp = random(4);
+	int j = 0;
+	boolean uniqe = true;	
+	while(j < noRandom)
+	{
+		if (temp == randNum[j])
+		{
+			temp = random(4);
+			j = 0;
+		}
+		else
+		{
+			j++;
+		}
+	}
+	return temp;
+}
+
 void MashSchedule::Random()
 {
 	if (someFlag_2)
 	{
-		//randNumber = random(4);
 		for (int i = 0; i < noRandom; i++)
 		{
-			randNum[i] = random(4);
+			if(i > 0)
+				randNum[i] = Uniqe();
+			else
+				randNum[i] = random(4);
 		}
+
 		someFlag_2=false;
 	}
-	boolean relayOn = true;
+	
 	for (int i = 0; i < noRandom; i++)
 	{
+		boolean relayOn = true;
 		while(relayOn)
 		{
-		stateRelay1 = digitalRead((SWITCH1));
-		stateRelay2 = digitalRead((SWITCH2));
-		stateRelay3 = digitalRead((SWITCH3));
-		stateRelay4 = digitalRead((SWITCH4));
+			stateRelay1 = digitalRead((SWITCH1));
+			stateRelay2 = digitalRead((SWITCH2));
+			stateRelay3 = digitalRead((SWITCH3));
+			stateRelay4 = digitalRead((SWITCH4));
 			relayOn = false;
+
 			if(stateRelay1 == LOW)
 			{
 				if(randNum[i] == 0)
 				{
 					digitalWrite(RELAY1,LOW);
-					randNum[i] = random(4);
+					randNum[i] = Uniqe(); //random(4);
 					relayOn = true;
 				}	
 			}
@@ -335,8 +360,8 @@ void MashSchedule::Random()
 			{
 				if(randNum[i] == 1)
 				{
-					digitalWrite(RELAY1,LOW);
-					randNum[i] = random(4);
+					digitalWrite(RELAY2,LOW);
+					randNum[i] = Uniqe(); //random(4);
 					relayOn = true;
 				}	
 			}
@@ -344,8 +369,8 @@ void MashSchedule::Random()
 			{
 				if(randNum[i] == 2)
 				{
-					digitalWrite(RELAY1,LOW);
-					randNum[i] = random(4);
+					digitalWrite(RELAY3,LOW);
+					randNum[i] = Uniqe(); //random(4);
 					relayOn = true;
 				}	
 			}
@@ -353,8 +378,8 @@ void MashSchedule::Random()
 			{
 				if(randNum[i] == 3)
 				{
-					digitalWrite(RELAY1,LOW);
-					randNum[i] = random(4);
+					digitalWrite(RELAY4,LOW);
+					randNum[i] = Uniqe(); //random(4);
 					relayOn = true;
 				}
 			}
