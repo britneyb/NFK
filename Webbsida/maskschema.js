@@ -196,7 +196,8 @@ loadEvent(function(){							//Alla funktioner innanför här laddas in samtidigt
 		}
 	});
 
-	addEvent(document.getElementById('addStep'),'click',function(e){	//Event som lyssnar på submitknappen och gör alla checkar för att sedan
+	addEvent(document.getElementById('newStep'),'submit',function(e){	//Event som lyssnar på submitknappen och gör alla checkar för att sedan
+		e.preventDefault();
 		if(validateTemp(document.getElementById('temp'))){				//lägga till steget i listan.
 			if(validateTime(document.getElementById('time'))){
 				addStep(document.getElementById('temp').value, document.getElementById('time').value);

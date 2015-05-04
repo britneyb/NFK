@@ -52,6 +52,9 @@ function normaliseEvent(event) {				//Funktion som normaliserar events.
 }
 
 loadEvent(function(){							//Alla funktioner innanför här laddas in samtidigt som sidan.
+	
+	
+
 	addEvent(document.getElementById('mainMenu'), 'click', function(e){
 		window.location.href = "index.html";
 	});

@@ -9,10 +9,38 @@
 	</head>
 	<body>
 		<h1>Kokschema</h1>
-		<p>Här kommer kokschemat vara</p>
-		exempelschema: Demo,25,1,30,2,35,1,98,
+		<div id="divName">
+			<div id="textName">
+				Namn på kokschema<br />
+				<input type="text" id="name" />
+			</div>
+			<div id="textTime">
+				Total koktid<br />
+				<input type="number" id="boilTime" min="0" />
+			</div>
+		</div>
+		<div id="list" style="display:none">
+		</div>
+		<div id="edited" style="display:none">
+			<p>Säkert att du vill spara över?</p>
+			<button id="yes">Ja</button>
+			<button id="no">Nej</button>
+		</div>
+		<div id="steps">
+		</div>
+		<div id="nextStep">
+			<form id="newStep">
+				<p style="font-weight:bold">Nästa steg</p>
+				<p>Humle/Krydda: <input id="hops" type="text" required /></p>
+				<p>Minuter från slutet: <input id="time" type="number" min="0" required /> Min</p>
+				<input type="submit" id="addStep" value="Lägg till steg">
+			</form>
+			<button id="saveScheme">Spara Mäskschema</button>
+		</div>
 		<div id="menu">
 			<button id="mainMenu">Huvudmeny</button>
+			<button id="openScheme">Öppna Mäskschema</button>
+			<button id="upLoadScheme">Ladda upp Mäskschema</button>
 		</div>
 	</body>
 </html>
