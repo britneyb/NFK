@@ -83,6 +83,70 @@ loadEvent(function(){							//Alla funktioner innanför här laddas in samtidigt
 		updateSteps();
 	}
 
+	function checkName(free){					//Funktion som lägger till schemat i databasen om namnet är ledigt.
+		if(free == "success"){
+			document.getElementById('name').style.backgroundColor = "white";
+			alert("Namnet är ledigt");
+			if(steps){
+				var XHR = new XMLHttpRequest();
+				XHR.onreadystatechange = function(){
+					if (XHR.readyState == 4 && XHR.status == 200) {
+		                alert(XHR.responseText);
+		            }
+		        }
+		        XHR.open("GET", "kokschema.php?type=saveSchedule&name="+document.getElementById('name').value+"&array="+JSON.stringify(steps)+"&total="+document.getElementById('boilTime').value, true);
+		        XHR.send();
+	    	}
+		}
+		else{
+			if (open){							//Om man har öppnat från databas så visas en div.
+				document.getElementById('edited').style.display = "initial";
+			}
+			else{
+				alert("Namnet är upptaget");
+				document.getElementById('name').style.backgroundColor = "#FF4D4D";
+				document.getElementById('name').focus();
+			}
+		}
+	}
+
+	addEvent(document.getElementById('yes'), 'click', function(e){			//Tar bort nuvarande schema i databasen och lägger till den med nya värden.
+		var XHR = new XMLHttpRequest();
+		XHR.onreadystatechange = function(){
+			if(XHR.readyState == 4 && XHR.status == 200){
+				alert(XHR.responseText);
+				document.getElementById('edited').style.display = "none";
+				open = false;
+				checkName("success");
+			}
+		}
+		XHR.open("GET", "kokschema.php?type=delete&name="+document.getElementById('name').value, true);
+		XHR.send();
+	});
+
+	addEvent(document.getElementById('no'), 'click', function(e){		//Gömmer en div och visar att man borde byta namn.	
+		document.getElementById('edited').style.display = "none";
+		document.getElementById('name').style.backgroundColor = "#FF4D4D";
+		document.getElementById('name').focus();
+	});
+
+	function validateName(name){				//Funktion som kollar om namnet är giltligt och sedan om det redan finns i databasen.
+		if(name.value != "" && (/^[a-zA-ZåäöÅÄÖ0-9]+$/.test(name.value))){
+			var XHR = new XMLHttpRequest();
+			XHR.onreadystatechange = function(){
+				if (XHR.readyState == 4 && XHR.status == 200) {
+					checkName(XHR.responseText);
+				}
+			};
+			XHR.open("GET", "kokschema.php?type=checkName&name="+name.value, true);
+			XHR.send();
+		}
+		else{
+			name.style.backgroundColor = "#FF4D4D";
+			name.focus();
+		}
+	}
+
 	function validateTotalTime(totalTime){				//Funktion som kollar så tiden är en siffra över 0.
 		if(totalTime.value != ""){
 			if(/^\d+$/.test(totalTime.value) && totalTime.value > 0){
@@ -103,14 +167,13 @@ loadEvent(function(){							//Alla funktioner innanför här laddas in samtidigt
 	}
 
 	function validateHops(hops){				//Funktion som kollar så temperaturen är en siffra mellan 0 och 100.
-		hops.setCustomValidity("");
 		if(hops.value != "" && /^[a-zA-ZåäöÅÄÖ0-9]+$/.test(hops.value)){
 			hops.style.backgroundColor = "white";
 			return true;
 		}
 		else{
 			hops.focus();
-			hops.setCustomValidity("Inga mellanslag");
+			alert("Inga mellanslag");
 			hops.style.backgroundColor = "#FF4D4D";
 			return false;
 		}
@@ -162,6 +225,113 @@ loadEvent(function(){							//Alla funktioner innanför här laddas in samtidigt
 		}
 	});
 
+	addEvent(document.getElementById('saveScheme'), 'click', function(e){	//Event som lyssnar på "spara schema"-knappen och kollar då så namnet är
+		validateName(document.getElementById('name'));						//unikt innan det sparas till databasen.
+	});
+
+	addEvent(document.getElementById('openScheme'), 'click', function(e){	//Event som lyssnar på "öppna schema"-knappen och skapar sedan en lista
+		var XHR = new XMLHttpRequest();										//av knappar av alla scheman som ligger i databasen.
+		XHR.onreadystatechange = function(){
+			if (XHR.readyState == 4 && XHR.status == 200) {
+                str = XHR.responseText;
+                var list = str.match(/(\w+)/ig);
+                document.getElementById('list').style.display = "initial";
+                document.getElementById('steps').innerHTML = "";
+                document.getElementById('name').value = "";
+                document.getElementById('name').backgroundColor = "white";
+                document.getElementById('hops').value = "";
+                document.getElementById('hops').backgroundColor = "white";
+                document.getElementById('boilTime').value = "";
+                document.getElementById('boilTime').backgroundColor = "white";
+                document.getElementById('time').value = "";
+                document.getElementById('time').backgroundColor = "white";
+                document.getElementById('list').innerHTML = "";
+				for(var i = 0; i < list.length; i++){
+					var newParagraph = document.createElement('p');
+					var newButton = document.createElement('button');
+					newButton.id = "listButton"+i;
+					newButton.onclick = function(){
+						loadScheme(this.textContent);
+					}
+					newButton.textContent = list[i];
+					var spanDelete = document.createElement("span");
+				    spanDelete.id = list[i];
+				    spanDelete.className = "delete";
+				    spanDelete.innerHTML = "&nbsp;&#10007;&nbsp;";
+				    spanDelete.onclick = function(){
+				    	deleteScheme(this.id);
+				    }
+					newParagraph.appendChild(newButton)
+					newParagraph.appendChild(spanDelete);
+					
+					document.getElementById('list').appendChild(newParagraph);
+				}
+            }
+        }
+        XHR.open("GET", "kokschema.php?type=getList", true);
+        XHR.send();
+	});
+
+	function deleteScheme(name){
+		var XHR = new XMLHttpRequest();
+		XHR.onreadystatechange = function(){
+			if(XHR.readyState == 4 && XHR.status == 200){
+				alert(XHR.responseText);
+			}
+		}
+		XHR.open("GET", "kokschema.php?type=delete&name="+name, true);
+		XHR.send();
+	}
+
+	function loadScheme(name){												//Funktion som körs när man tryckt på en knapp till ett schema 
+		steps = [];															//som sedan tar bort knapparna och lägger fram shemat på ett snyggt sätt.
+		open = true;
+		var XHR = new XMLHttpRequest();
+		XHR.onreadystatechange = function(){
+			if(XHR.readyState == 4 && XHR.status == 200){
+				str = XHR.responseText;
+				var scheme = str.match(/\w+/ig);
+				document.getElementById('name').value = scheme.shift();
+				document.getElementById('name').style.backgroundColor = "white";
+				document.getElementById('boilTime').value = scheme.shift();
+				document.getElementById('boilTime').style.backgroundColor = "white";
+				document.getElementById('list').innerHTML = "";
+				document.getElementById('list').style.display = "none";
+				for(var i = 0; i < (scheme.length)/2; i++){
+					addStep(scheme[i], scheme[i+((scheme.length)/2)]);
+				}
+			}
+		}
+		XHR.open("GET", "kokschema.php?type=getSchedule&name="+name, true);
+		XHR.send();
+	}
+
+	addEvent(document.getElementById('upLoadScheme'), 'click', function(e){		//Event som lyssnar på "ladda upp"-knappen och skickar namnet och
+		var XHR = new XMLHttpRequest();											//alla steg till php.
+		if(document.getElementById('name').value != "" && (/^[a-zA-ZåäöÅÄÖ0-9]+$/.test(document.getElementById('name').value))){
+			if(steps){
+				if(validateTotalTime(document.getElementById('boilTime'))){
+					XHR.onreadystatechange = function(){
+						if(XHR.readyState == 4 && XHR.status == 200){
+							//getRespond();
+							alert(XHR.responseText);
+						}
+					}
+					XHR.open("GET", "kokschema.php?type=upLoad&name="+document.getElementById('name').value+"&array="+JSON.stringify(steps)+"&total="+document.getElementById('boilTime').value, true);
+					XHR.send();
+				}
+				else{
+					alert("Otillåten tid");
+				}
+			}
+			else{
+				alert("Inga steg");
+			}
+		}
+		else{
+			alert("Otillåtet namn");
+		}
+	});
 
 
 	addEvent(document.getElementById('mainMenu'), 'click', function(e){

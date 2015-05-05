@@ -93,7 +93,7 @@ loadEvent(function(){							//Alla funktioner innanför här laddas in samtidigt
 		                alert(XHR.responseText);
 		            }
 		        }
-		        XHR.open("GET", "sqlfunctions.php?type=saveSchedule&name="+document.getElementById('name').value+"&array="+JSON.stringify(steps), true);
+		        XHR.open("GET", "maskschema.php?type=saveSchedule&name="+document.getElementById('name').value+"&array="+JSON.stringify(steps), true);
 		        XHR.send();
 	    	}
 		}
@@ -119,7 +119,7 @@ loadEvent(function(){							//Alla funktioner innanför här laddas in samtidigt
 				checkName("success");
 			}
 		}
-		XHR.open("GET", "sqlfunctions.php?type=delete&name="+document.getElementById('name').value, true);
+		XHR.open("GET", "maskschema.php?type=delete&name="+document.getElementById('name').value, true);
 		XHR.send();
 	});
 
@@ -137,7 +137,7 @@ loadEvent(function(){							//Alla funktioner innanför här laddas in samtidigt
 					checkName(XHR.responseText);
 				}
 			};
-			XHR.open("GET", "sqlfunctions.php?type=checkName&name="+name.value, true);
+			XHR.open("GET", "maskschema.php?type=checkName&name="+name.value, true);
 			XHR.send();
 		}
 		else{
@@ -249,7 +249,7 @@ loadEvent(function(){							//Alla funktioner innanför här laddas in samtidigt
 				}
             }
         }
-        XHR.open("GET", "sqlfunctions.php?type=getList", true);
+        XHR.open("GET", "maskschema.php?type=getList", true);
         XHR.send();
 	});
 
@@ -260,7 +260,7 @@ loadEvent(function(){							//Alla funktioner innanför här laddas in samtidigt
 				alert(XHR.responseText);
 			}
 		}
-		XHR.open("GET", "sqlfunctions.php?type=delete&name="+name, true);
+		XHR.open("GET", "maskschema.php?type=delete&name="+name, true);
 		XHR.send();
 	}
 
@@ -281,7 +281,7 @@ loadEvent(function(){							//Alla funktioner innanför här laddas in samtidigt
 				}
 			}
 		}
-		XHR.open("GET", "sqlfunctions.php?type=getSchedule&name="+name, true);
+		XHR.open("GET", "maskschema.php?type=getSchedule&name="+name, true);
 		XHR.send();
 	}
 
@@ -295,7 +295,7 @@ loadEvent(function(){							//Alla funktioner innanför här laddas in samtidigt
 						alert(XHR.responseText);
 					}
 				}
-				XHR.open("GET", "sqlfunctions.php?type=upLoad&name="+document.getElementById('name').value+"&array="+JSON.stringify(steps), true);
+				XHR.open("GET", "maskschema.php?type=upLoad&name="+document.getElementById('name').value+"&array="+JSON.stringify(steps), true);
 				XHR.send();
 			}
 			else{
@@ -314,7 +314,7 @@ loadEvent(function(){							//Alla funktioner innanför här laddas in samtidigt
 				alert(XHR.responseText);
 			}
 		}
-		XHR.open("GET", "sqlfunctions.php?type=response", true);
+		XHR.open("GET", "maskschema.php?type=response", true);
 		XHR.send();
 	}
 
