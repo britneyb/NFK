@@ -5,6 +5,7 @@
 #include "Arduino.h"
 #include "MashSchedule.h"
 
+
 void MashSchedule::Default()
 {
 	 //  _temp = 0; //temporary variable for the temperature
@@ -12,6 +13,8 @@ void MashSchedule::Default()
 		// //_steps = arrSize/2;
 		// difTime = 0;
 		// curStarted = false;
+		
+	
 	sensors.begin();
 	pinMode(RELAY1, OUTPUT);
 	pinMode(RELAY2, OUTPUT);
@@ -23,11 +26,11 @@ void MashSchedule::Default()
 	//CurrentTemp = sensors.getTempCByIndex(0);
 
 	pinMode(stopButton, INPUT);
-	pinMode(SWITCH1, OUTPUT);
-	pinMode(SWITCH2, OUTPUT);
-	pinMode(SWITCH3, OUTPUT);
-	pinMode(SWITCH4, OUTPUT);
-	pinMode(SWITCH5, OUTPUT);
+	pinMode(SWITCH1, INPUT);
+	pinMode(SWITCH2, INPUT);
+	pinMode(SWITCH3, INPUT);
+	pinMode(SWITCH4, INPUT);
+	pinMode(SWITCH5, INPUT);
 	pinMode(startButton,INPUT);
     //pinMode(led, OUTPUT);
     
@@ -45,7 +48,7 @@ void MashSchedule::Receive()
 		content = Serial.readString();
 	}*/
 	content = serialStr.Read();
-
+	
 	if(content != "")
 	{
 		int data[maxStep]; //The results will be stored here
@@ -130,7 +133,7 @@ void MashSchedule::Receive()
 		while(loaded)
 		{
 			if(digitalRead(stopButton))
-			{
+			{	
 			    running = false;
 			    digitalWrite(PUMP, LOW);
 				digitalWrite(RELAY1, LOW);
@@ -138,10 +141,11 @@ void MashSchedule::Receive()
 				digitalWrite(RELAY3, LOW);
 				digitalWrite(RELAY4, LOW);
 				lcd.Print("Paused              ",3);
+			
 			}
 
 			if(running)
-			{
+			{	someFlag_3=true;
 				Start();
 			}
 			else
@@ -149,6 +153,7 @@ void MashSchedule::Receive()
 				if(!digitalRead((stopButton)))
 				{
 					Pause();
+					
 				}
 			}
 		}
@@ -200,6 +205,7 @@ void MashSchedule::Start()
 	if(_step < _steps)
 	{
 		lcd.step(3, _step+1, arr[_temp+2], arr[_time+2]);
+		
 		// lcd.Print("Steg ", 3);
 		// lcd.Print(String(_step+1), 3, 5);
 		// lcd.Print(": ",3,6);
@@ -208,6 +214,17 @@ void MashSchedule::Start()
 		// lcd.Print(String(arr[_time+2]),3,12);
 		// lcd.Print(" min",3,14);
 	}
+	if(minute(curTime) >= arr[_time] && (_steps) == _step && curStarted)
+	{	
+		digitalWrite(PUMP,LOW);
+		TurnOff();
+		loaded=false;
+		someFlag_3=false;
+		ProgramFinshed();
+		
+	}
+
+	
 
 	// if (minute(curTime) <= 0 && curStarted) //Changing between min and sec on the current step
 	// {
@@ -225,17 +242,17 @@ void MashSchedule::Start()
 	{	
 		TurnOff();
 	}
-	else if(CurrentTemp < arr[_temp] && curStarted)
+	else if(CurrentTemp < arr[_temp] && curStarted && someFlag_3)
 	{
 		Random();
 	}
 
-	else
+	else if(someFlag_3)
 	{
 		AllOn();
 	}
 
-	if(digitalRead(SWITCH5))
+	if(digitalRead(SWITCH5) && someFlag_3)
 	{
 		digitalWrite(PUMP, HIGH);
 	}
@@ -255,7 +272,8 @@ void MashSchedule::Start()
 
 		lcd.Print("                    ",1);
 		lcd.Print("                    ",3);
-	}	
+	}
+
 }
 
 void MashSchedule::Pause()
@@ -264,6 +282,7 @@ void MashSchedule::Pause()
 	// lcd.Print(String(CurrentTemp), 1, 9);
 	// lcd.Print(String(degree), 1, 11);
 	// lcd.Print("C ", 1, 12);
+	
 	lcd.getTemp(1, CurrentTemp);
 	if(second() % 2 == 0) //Updates the temp every two seconds
 	{
@@ -271,10 +290,21 @@ void MashSchedule::Pause()
 		CurrentTemp = sensors.getTempCByIndex(0) + Calibrator;
 	}
 	if(digitalRead(startButton))
-	{
+	{	lcd.Print("           ",3,0);
 	    running = true;
 	    setTime(totTime);
 	}
+	else if (digitalRead(stopButton))
+	{ digitalWrite(PUMP,LOW);
+		TurnOff();
+		loaded=false;
+		
+		someFlag_3=false;
+		ProgramFinshed();
+		
+	}
+	
+	
 }
 
 void MashSchedule::AllOn()
@@ -409,4 +439,19 @@ void MashSchedule::TurnOff()
 	digitalWrite(RELAY2,LOW);
 	digitalWrite(RELAY3,LOW);
 	digitalWrite(RELAY4,LOW);
+}
+
+
+void MashSchedule::ProgramFinshed()
+{	
+	lcd.Print("                    ", 0); //Just temporary, will instead implement a function clear() on the display class
+	lcd.Print("                    ", 2);
+	lcd.Print("                    ", 1);
+	lcd.Print("                    ", 3);
+	
+	lcd.Print("Whaiting for program",0,0);
+	lcd.getTemp(2,_temp);
+	
+	
+	
 }

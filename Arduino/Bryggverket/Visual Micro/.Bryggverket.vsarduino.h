@@ -26,5 +26,6 @@ extern "C" void __cxa_pure_virtual() {;}
 #include <Display.h>
 #include <MashSchedule.cpp>
 #include <MashSchedule.h>
+#include <Pins.h>
 #include <SerialString.cpp>
 #include <SerialString.h>

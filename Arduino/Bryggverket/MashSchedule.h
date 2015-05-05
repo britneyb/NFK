@@ -7,6 +7,7 @@
 #ifndef MashSchedule_h
 #define MashSchedule_h
 
+
 #include "Arduino.h"
 #include <Time.h>
 #include <Wire.h>
@@ -34,19 +35,23 @@
 class MashSchedule
 {
   public:
+  
+	static int Stepfinished;
     void Default();
     void Receive();
-    void Start();
+    void Start(); 
     void Pause();
     void AllOn();
     int Uniqe();
     void Random();
     void TurnOff();
+	void ProgramFinshed();
+	
+	
   private:
 
   	Display lcd; //Our display functions
   	SerialString serialStr; //Our Serial functions
-
   	OneWire oneWire = OneWire(ONE_WIRE_BUS);
 
   	DallasTemperature sensors = DallasTemperature(&oneWire); //Pass our oneWire reference to Dallas Temperature.
@@ -77,12 +82,16 @@ class MashSchedule
 	time_t difTime; //The total time when the current step started
 	boolean someFlag=true;
 	boolean someFlag_2=true;
+	boolean someFlag_3=true;
+	boolean stopProgram_Flag=true;
 	boolean running;
 	boolean curStarted; //A flag to check whether the current step has started
 	int _temp; //temporary variable for the temperature
 	int _time;
 	int _step;
 	int _steps;
+	
+	
 };
 
 #endif

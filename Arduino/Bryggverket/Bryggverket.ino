@@ -8,17 +8,20 @@
 #include "SerialString.h"
 #include "Pins.h"
 
+
+boolean some;
+
 MashSchedule test1;
 
 void setup()
 {
-  
+	
   	Serial.begin(9600);
 	test1.Default();
 }
 
 void loop()
-{
+{		
   	test1.Receive(); 
-
+	
 }

@@ -259,6 +259,9 @@
     <Compile Include="MashSchedule.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="Pins.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="SerialString.cpp">
       <SubType>compile</SubType>
     </Compile>

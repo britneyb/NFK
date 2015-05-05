@@ -21,4 +21,5 @@ C:\Users\Sevag\AppData\Local\V.Micro\Arduino\Builds\Bryggverket\uno\Bryggverket.
  C:\Users\Sevag\Documents\Arduino\libraries\dallas-temperature-control/DallasTemperature.h \
  C:\Users\Sevag\AppData\Local\V.Micro\Arduino\Builds\Bryggverket\uno\Display.h \
  C:\Users\Sevag\AppData\Local\V.Micro\Arduino\Builds\Bryggverket\uno\SerialString.h \
+ C:\Users\Sevag\AppData\Local\V.Micro\Arduino\Builds\Bryggverket\uno\Pins.h \
  C:\Program\ Files\ (x86)\Arduino\hardware\arduino\avr\cores\arduino/arduino.h
