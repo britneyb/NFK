@@ -31,7 +31,7 @@
 		<div id="nextStep">
 			<form id="newStep">
 				<p style="font-weight:bold">Nästa steg</p>
-				<p>Humle/Krydda: <input id="hops" type="text" required /></p>
+				<p>Humle/Krydda: <input id="hops" type="text" pattern="[a-zA-ZåäöÅÄÖ0-9]+" required /></p>
 				<p>Minuter från slutet: <input id="time" type="number" min="0" required /> Min</p>
 				<input type="submit" id="addStep" value="Lägg till steg">
 			</form>

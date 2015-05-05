@@ -53,7 +53,116 @@ function normaliseEvent(event) {				//Funktion som normaliserar events.
 
 loadEvent(function(){							//Alla funktioner innanför här laddas in samtidigt som sidan.
 	
+	var steps = [];
+	var open = false;
+
+	function addStep(hops, time){				//Funktion som lägger till mäsksteg i arrayen och i listan.
+		steps.push([hops,time]);
+		updateSteps();
+	}
+
+	function updateSteps(){						//Funktion som skriver ut alla steg som finns i arrayen i en lista med ett kryss efter..
+		document.getElementById('steps').innerHTML = "";
+		for(var i = 0; i < steps.length; i++){
+			var newParagraph = document.createElement('p');
+			newParagraph.textContent = "Steg " + (i+1) + " " + steps[i][0] + "  Läggs i " + steps[i][1] + " min innan slut";
+			var spanDelete = document.createElement("span");
+		    spanDelete.id = i;
+		    spanDelete.className = "delete";
+		    spanDelete.innerHTML = "&nbsp;&#10007;&nbsp;";
+		    spanDelete.onclick = function(){
+		    	deleteStep(this.id);
+		    }
+		    newParagraph.appendChild(spanDelete);
+			document.getElementById('steps').appendChild(newParagraph);
+		}
+	}
+
+	function deleteStep(id){					//Funktion som tar bort ett värde i arrayen och sedan kallar på en funktion som skriver ut arrayen igen.
+		steps.splice(id,1);
+		updateSteps();
+	}
+
+	function validateTotalTime(totalTime){				//Funktion som kollar så tiden är en siffra över 0.
+		if(totalTime.value != ""){
+			if(/^\d+$/.test(totalTime.value) && totalTime.value > 0){
+				totalTime.style.backgroundColor = "white";
+				return true;
+			}
+			else{
+				totalTime.focus();
+				totalTime.style.backgroundColor = "#FF4D4D";
+				return false;
+			}
+		}
+		else{
+			totalTime.focus();
+			totalTime.style.backgroundColor = "#FF4D4D";
+			return false;
+		}
+	}
+
+	function validateHops(hops){				//Funktion som kollar så temperaturen är en siffra mellan 0 och 100.
+		hops.setCustomValidity("");
+		if(hops.value != "" && /^[a-zA-ZåäöÅÄÖ0-9]+$/.test(hops.value)){
+			hops.style.backgroundColor = "white";
+			return true;
+		}
+		else{
+			hops.focus();
+			hops.setCustomValidity("Inga mellanslag");
+			hops.style.backgroundColor = "#FF4D4D";
+			return false;
+		}
+	}
 	
+	function validateTime(time){				//Funktion som kollar så tiden är en siffra över 0.
+		if(time.value != ""){
+			if(/^\d+$/.test(time.value) && time.value > 0 && parseInt(time.value) <= parseInt(document.getElementById('boilTime').value)){
+				time.style.backgroundColor = "white";
+				return true;
+			}
+			else{
+				time.focus();
+				time.style.backgroundColor = "#FF4D4D";
+				return false;
+			}
+		}
+		else{
+			time.focus();
+			time.style.backgroundColor = "#FF4D4D";
+			return false;
+		}
+	}
+
+	addEvent(document.getElementById('boilTime'), 'keypress', function(e){		//Event som skickar användaren vidare till time-fältet
+		if(e.keyCode == 13){												//när man är i temp-fältet och trycker Enter.
+			document.getElementById('hops').focus();
+		}
+	});
+
+	addEvent(document.getElementById('hops'), 'keypress', function(e){		//Event som skickar användaren vidare till time-fältet
+		if(e.keyCode == 13){												//när man är i temp-fältet och trycker Enter.
+			e.preventDefault();
+			document.getElementById('time').focus();
+		}
+	});
+
+	addEvent(document.getElementById('newStep'),'submit',function(e){	//Event som lyssnar på submitknappen och gör alla checkar för att sedan
+		e.preventDefault();
+		if (validateTotalTime(document.getElementById('boilTime'))){
+			if(validateHops(document.getElementById('hops'))){				//lägga till steget i listan.
+				if(validateTime(document.getElementById('time'))){
+					addStep(document.getElementById('hops').value, document.getElementById('time').value);
+					document.getElementById('hops').value = "";
+					document.getElementById('hops').focus();
+					document.getElementById('time').value = "";
+				}
+			}
+		}
+	});
+
+
 
 	addEvent(document.getElementById('mainMenu'), 'click', function(e){
 		window.location.href = "index.html";
