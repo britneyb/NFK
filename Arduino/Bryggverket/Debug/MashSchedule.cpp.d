@@ -20,5 +20,4 @@ C:\Users\Sevag\AppData\Local\V.Micro\Arduino\Builds\Bryggverket\uno\MashSchedule
  C:\Program\ Files\ (x86)\Arduino\libraries\OneWire/OneWire.h \
  C:\Users\Sevag\Documents\Arduino\libraries\dallas-temperature-control/DallasTemperature.h \
  C:\Users\Sevag\AppData\Local\V.Micro\Arduino\Builds\Bryggverket\uno\Display.h \
- C:\Users\Sevag\AppData\Local\V.Micro\Arduino\Builds\Bryggverket\uno\SerialString.h \
- C:\Users\Sevag\AppData\Local\V.Micro\Arduino\Builds\Bryggverket\uno\Pins.h
+ C:\Users\Sevag\AppData\Local\V.Micro\Arduino\Builds\Bryggverket\uno\SerialString.h

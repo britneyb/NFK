@@ -15,5 +15,4 @@ C:\Users\Sevag\AppData\Local\V.Micro\Arduino\Builds\Bryggverket\uno\Display.cpp.
  C:\Program\ Files\ (x86)\Arduino\hardware\arduino\avr\libraries\Wire/Wire.h \
  C:\Program\ Files\ (x86)\Arduino\hardware\arduino\avr\cores\arduino/Stream.h \
  C:\Users\Sevag\Documents\Arduino\libraries\LiquidCrystal/LiquidCrystal.h \
- C:\Program\ Files\ (x86)\Arduino\hardware\arduino\avr\cores\arduino/Print.h \
- C:\Program\ Files\ (x86)\Arduino\libraries\Time/Time.h
+ C:\Program\ Files\ (x86)\Arduino\hardware\arduino\avr\cores\arduino/Print.h

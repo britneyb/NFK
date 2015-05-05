@@ -23,7 +23,7 @@ Mash::Mash(int* arr, int arrSize)
 
 }
 
-void Mash::Start()
+boolean Mash::Start()
 {	
 	totTime = now();
 	curTime = totTime - difTime;
@@ -88,7 +88,17 @@ void Mash::Start()
 
 		lcd.Print("                    ",1);
 		lcd.Print("                    ",3);
-	}	
+	}
+
+	if(minute(curTime) >= tempTime[_time] && (_steps) == _step && curStarted)
+	{	
+		
+		
+		//someFlag_3=false;
+		ProgramFinshed();
+		return false;
+	}
+	return true;
 }
 
 void Mash::Unpause()
@@ -96,6 +106,19 @@ void Mash::Unpause()
 	Serial.print(String(minute(totTime)));
 	Serial.print(String(second(totTime)));
 	setTime(totTime);
+}
+
+void Mash::ProgramFinshed()
+{
+	digitalWrite(PUMP,LOW);
+	TurnOff();
+	lcd.Print("Waiting for program ",0);
+	lcd.Print("                    ",1);
+	lcd.Print("                    ",2);
+	lcd.Print("                    ",3);
+	
+	
+	
 }
 
 void Mash::AllOn()

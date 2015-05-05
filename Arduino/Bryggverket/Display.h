@@ -11,12 +11,9 @@
 #include "Arduino.h"
 
 class Display
-{	
-	
-	
+{
   public:
     Display();
-	
     void Print(String str, int row = 0, int column = 0);
     void Begin();
     void getTemp(int row, int temp);

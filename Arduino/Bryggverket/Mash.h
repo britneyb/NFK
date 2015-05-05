@@ -20,12 +20,13 @@ class Mash
 {
   public:
     Mash(int* arr, int arrSize);
-    void Start();
+    boolean Start();
     void Unpause();
     void AllOn();
     int Uniqe();
     void Random();
     void TurnOff();
+    void ProgramFinshed();
   private:
 	OneWire oneWire = OneWire(ONE_WIRE_BUS);
   	DallasTemperature sensors = DallasTemperature(&oneWire); //Pass our oneWire reference to Dallas Temperature.

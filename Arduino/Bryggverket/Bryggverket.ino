@@ -1,4 +1,10 @@
-#include "MashSchedule.h"
+#include "Program.h"
+#include "Mash.h"
+#include "Boil.h"
+#include "Cooling.h"
+#include "Button.h"
+#include "Relay.h"
+#include "Switch.h"
 #include <Time.h>
 #include <OneWire.h>
 #include <DallasTemperature.h>
@@ -8,20 +14,17 @@
 #include "SerialString.h"
 #include "Pins.h"
 
-
-boolean some;
-
-MashSchedule test1;
+Program test1;
 
 void setup()
 {
-	
+  
   	Serial.begin(9600);
 	test1.Default();
 }
 
 void loop()
-{		
+{
   	test1.Receive(); 
-	
+
 }

@@ -5,7 +5,6 @@
 #include "Arduino.h"
 #include "Display.h"
 
-
 Display::Display() 
 {
  	
@@ -18,8 +17,7 @@ void Display::Print(String str, int row, int column)
 }
 
 void Display::Begin()
-{	
-	
+{
 	lcd.init(); 
 	lcd.backlight();
 	lcd.setCursor(0, 0); 
@@ -70,7 +68,7 @@ void Display::totalTime(time_t t)
 void Display::currentTemp(int temp, time_t curTime, boolean started)
 {
 	getTemp(1,temp);
-	
+
 	if (minute(curTime) <= 0 && started) //Changing between min and sec on the current step
 	{
 		lcd.setCursor(14,1);
