@@ -16,9 +16,11 @@ class Relay
 public:
 	static void Begin();
 	static void AllLow();
+	static void ElementLow();
+	static void ReadElements();
 
 private:
-
+	
 };
 
 

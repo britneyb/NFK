@@ -5,11 +5,9 @@
 #include "Arduino.h"
 #include "Mash.h"
 
-
 Mash::Mash(int* arr, int arrSize)
 {
 		setTime(0,0,0,0,0,0);
-		//arrSize = i-2;
 		_steps = arrSize/2;
 		tempTime = arr; //new int [arrSize];
 
@@ -20,7 +18,6 @@ Mash::Mash(int* arr, int arrSize)
 	    _step=1;
 
 	    randNum = new int[noRandom];
-
 }
 
 boolean Mash::Start()
@@ -43,20 +40,20 @@ boolean Mash::Start()
 		curStarted = true;
 		someFlag = false;
 	}
+
 	lcd.currentTemp(CurrentTemp, curTime, curStarted);
 
 	lcd.step(2, _step, tempTime[_temp], tempTime[_time]);
-
 
 	if(_step < _steps)
 	{
 		lcd.step(3, _step+1, tempTime[_temp+2], tempTime[_time+2]);
 	}
 
-
 	if(CurrentTemp >= tempTime[_temp] && curStarted) //For the relay
-	{	
-		TurnOff();
+	{
+		someFlag_2 = true;
+		Relay::ElementLow();
 	}
 	else if(CurrentTemp < tempTime[_temp] && curStarted)
 	{
@@ -65,7 +62,7 @@ boolean Mash::Start()
 
 	else
 	{
-		AllOn();
+		Relay::ReadElements();
 	}
 
 	if(digitalRead(SWITCH5))
@@ -92,12 +89,10 @@ boolean Mash::Start()
 
 	if(minute(curTime) >= tempTime[_time] && (_steps) == _step && curStarted)
 	{	
-		
-		
-		//someFlag_3=false;
 		ProgramFinshed();
 		return false;
 	}
+
 	return true;
 }
 
@@ -111,45 +106,21 @@ void Mash::Unpause()
 void Mash::ProgramFinshed()
 {
 	digitalWrite(PUMP,LOW);
-	TurnOff();
+
+	someFlag_2 = true;
+	Relay::ElementLow();
 	lcd.Print("Waiting for program ",0);
 	lcd.Print("                    ",1);
 	lcd.Print("                    ",2);
 	lcd.Print("                    ",3);
-	
-	
-	
-}
-
-void Mash::AllOn()
-{
-	stateRelay1 = digitalRead(SWITCH1);
-	stateRelay2 = digitalRead(SWITCH2);
-	stateRelay3 = digitalRead(SWITCH3);
-	stateRelay4 = digitalRead(SWITCH4);
-	if(stateRelay1 == HIGH)
-		digitalWrite(RELAY1,HIGH);
-	else
-		digitalWrite(RELAY1,LOW);
-	if(stateRelay2 == HIGH)
-		digitalWrite(RELAY2,HIGH);
-	else
-		digitalWrite(RELAY2,LOW);
-	if(stateRelay3 == HIGH)
-		digitalWrite(RELAY3,HIGH);
-	else
-		digitalWrite(RELAY3,LOW);
-	if(stateRelay4 == HIGH)
-		digitalWrite(RELAY4,HIGH);
-	else
-		digitalWrite(RELAY4,LOW);
 }
 
 int Mash::Uniqe()
 {
 	int temp = random(4);
 	int j = 0;
-	boolean uniqe = true;	
+	boolean uniqe = true;
+
 	while(j < noRandom)
 	{
 		if (temp == randNum[j])
@@ -162,6 +133,7 @@ int Mash::Uniqe()
 			j++;
 		}
 	}
+
 	return temp;
 }
 
@@ -183,6 +155,7 @@ void Mash::Random()
 	for (int i = 0; i < noRandom; i++)
 	{
 		boolean relayOn = true;
+
 		while(relayOn)
 		{
 			stateRelay1 = digitalRead((SWITCH1));
@@ -195,7 +168,7 @@ void Mash::Random()
 			{
 				if(randNum[i] == 0)
 				{
-					digitalWrite(RELAY1,LOW);
+					digitalWrite(ELEMENT1,LOW);
 					randNum[i] = Uniqe(); //random(4);
 					relayOn = true;
 				}	
@@ -204,7 +177,7 @@ void Mash::Random()
 			{
 				if(randNum[i] == 1)
 				{
-					digitalWrite(RELAY2,LOW);
+					digitalWrite(ELEMENT2,LOW);
 					randNum[i] = Uniqe(); //random(4);
 					relayOn = true;
 				}	
@@ -213,7 +186,7 @@ void Mash::Random()
 			{
 				if(randNum[i] == 2)
 				{
-					digitalWrite(RELAY3,LOW);
+					digitalWrite(ELEMENT3,LOW);
 					randNum[i] = Uniqe(); //random(4);
 					relayOn = true;
 				}	
@@ -222,35 +195,27 @@ void Mash::Random()
 			{
 				if(randNum[i] == 3)
 				{
-					digitalWrite(RELAY4,LOW);
+					digitalWrite(ELEMENT4,LOW);
 					randNum[i] = Uniqe(); //random(4);
 					relayOn = true;
 				}
 			}
 		}
+
 		switch (randNum[i])
 		{
 			case  0:
-				digitalWrite(RELAY1,HIGH); 
+				digitalWrite(ELEMENT1,HIGH); 
 				break;
 			case 1:
-				digitalWrite(RELAY2,HIGH);           // Turns ON Relays 2				         
+				digitalWrite(ELEMENT2,HIGH);           // Turns ON Relays 2				         
 				break;
 			case 2:
-				digitalWrite(RELAY3,HIGH);           // Turns ON Relays 3
+				digitalWrite(ELEMENT3,HIGH);           // Turns ON Relays 3
 				break;        
 			case 3:
-				digitalWrite(RELAY4,HIGH);           // Turns ON Relays 4
+				digitalWrite(ELEMENT4,HIGH);           // Turns ON Relays 4
 				break;    
 		}
 	}
-}
-
-void Mash::TurnOff()
-{
-	someFlag_2=true;
-	digitalWrite(RELAY1,LOW);
-	digitalWrite(RELAY2,LOW);
-	digitalWrite(RELAY3,LOW);
-	digitalWrite(RELAY4,LOW);
 }
