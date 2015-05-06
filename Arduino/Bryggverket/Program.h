@@ -5,20 +5,19 @@
 #ifndef Program_h
 #define Program_h
 
+#include <OneWire.h>
+#include <DallasTemperature.h>
+
 #include "Arduino.h"
 #include "Mash.h"
 #include "Boil.h"
 #include "Cooling.h"
-
-#include "Button.h"
-#include "Switch.h"
-#include "Relay.h"
-
-#include <OneWire.h>
-#include <DallasTemperature.h>
 #include "Display.h"
 #include "SerialString.h"
 #include "Pins.h"
+#include "Button.h"
+#include "Switch.h"
+#include "Relay.h"
 
 
 class Program

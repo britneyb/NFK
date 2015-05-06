@@ -209,13 +209,13 @@ void Mash::Random()
 				digitalWrite(ELEMENT1,HIGH); 
 				break;
 			case 1:
-				digitalWrite(ELEMENT2,HIGH);           // Turns ON Relays 2				         
+				digitalWrite(ELEMENT2,HIGH);           // Turns ON Element 2				         
 				break;
 			case 2:
-				digitalWrite(ELEMENT3,HIGH);           // Turns ON Relays 3
+				digitalWrite(ELEMENT3,HIGH);           // Turns ON Element 3
 				break;        
 			case 3:
-				digitalWrite(ELEMENT4,HIGH);           // Turns ON Relays 4
+				digitalWrite(ELEMENT4,HIGH);           // Turns ON Element 4
 				break;    
 		}
 	}
