@@ -36,14 +36,25 @@ private:
 
   	Display lcd; //Our display functions
   	SerialString serialStr; //Our Serial functions
-	String name = ""; //The name for the scheme
+	
+  String type;
+  String name;
+  int checkSum;
+  int noSteps;
+  int totalTime;
+  int check;
+//String name = ""; //The name for the scheme
 
-	int* arr; //Array that stores the values of time and temp 
+	//int* arr; //Array that stores the values of time and temp 
 	int arrSize; //Stores the number of steps in the current scheme
 	boolean loaded; //A flag to check if the scheme has been loaded or not 
 	int CurrentTemp; //Stores the current temp
 	int state; //Stores the input if the button is pressed or not
 	boolean running;
+
+  int* tempArr;
+  int* timeArr;
+  String* hopsArr;
 
 };
 

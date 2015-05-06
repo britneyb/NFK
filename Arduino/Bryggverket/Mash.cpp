@@ -5,14 +5,15 @@
 #include "Arduino.h"
 #include "Mash.h"
 
-Mash::Mash(int* arr, int arrSize)
+Mash::Mash(int* tempArr, int* timeArr, int arrSize)
 {
 		setTime(0,0,0,0,0,0);
-		_steps = arrSize/2;
-		tempTime = arr; //new int [arrSize];
+		_steps = arrSize;
+		_tempArr = tempArr; //new int [arrSize];
+		_timeArr = timeArr;
 
-	    _temp = 0; //temporary variable for the temperature
-		_time = 1;
+	    //_temp = 0; //temporary variable for the temperature
+		//_time = 1;
 		difTime = 0;
 		curStarted = false;
 	    _step=1;
@@ -33,7 +34,7 @@ boolean Mash::Start()
 
 	lcd.totalTime(totTime);
 
-	if(!curStarted && CurrentTemp >= tempTime[_temp]) //Starts counting when the current temp is right
+	if(!curStarted && CurrentTemp >= _tempArr[_step-1]) //Starts counting when the current temp is right
 	{		
 		difTime = totTime;
 		curTime = totTime - difTime;
@@ -43,19 +44,19 @@ boolean Mash::Start()
 
 	lcd.currentTemp(CurrentTemp, curTime, curStarted);
 
-	lcd.step(2, _step, tempTime[_temp], tempTime[_time]);
+	lcd.step(2, _step, _tempArr[_step-1], _timeArr[_step-1]);
 
 	if(_step < _steps)
 	{
-		lcd.step(3, _step+1, tempTime[_temp+2], tempTime[_time+2]);
+		lcd.step(3, _step+1, _tempArr[_step], _timeArr[_step]);
 	}
 
-	if(CurrentTemp >= tempTime[_temp] && curStarted) //For the relay
+	if(CurrentTemp >= _tempArr[_step-1] && curStarted) //For the relay
 	{
 		someFlag_2 = true;
 		Relay::ElementLow();
 	}
-	else if(CurrentTemp < tempTime[_temp] && curStarted)
+	else if(CurrentTemp < _tempArr[_step-1] && curStarted)
 	{
 		Random();
 	}
@@ -74,11 +75,11 @@ boolean Mash::Start()
 		digitalWrite(PUMP, LOW);
 	}
 
-	if(minute(curTime) >= tempTime[_time] && (_steps) > _step && curStarted)
+	if(minute(curTime) >= _timeArr[_step-1] && (_steps) > _step && curStarted)
 	{
 		_step += 1;
-		_temp += 2;
-		_time += 2;
+		//_temp += 2;
+		//_time += 2;
 		someFlag=true;
 		curStarted = false;
 		difTime = 0;
@@ -87,7 +88,7 @@ boolean Mash::Start()
 		lcd.Print("                    ",3);
 	}
 
-	if(minute(curTime) >= tempTime[_time] && (_steps) == _step && curStarted)
+	if(minute(curTime) >= _timeArr[_step-1] && (_steps) == _step && curStarted)
 	{	
 		ProgramFinshed();
 		return false;
@@ -158,10 +159,10 @@ void Mash::Random()
 
 		while(relayOn)
 		{
-			stateRelay1 = digitalRead((SWITCH1));
-			stateRelay2 = digitalRead((SWITCH2));
-			stateRelay3 = digitalRead((SWITCH3));
-			stateRelay4 = digitalRead((SWITCH4));
+			int stateRelay1 = digitalRead((SWITCH1));
+			int stateRelay2 = digitalRead((SWITCH2));
+			int stateRelay3 = digitalRead((SWITCH3));
+			int stateRelay4 = digitalRead((SWITCH4));
 			relayOn = false;
 
 			if(stateRelay1 == LOW)

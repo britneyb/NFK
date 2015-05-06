@@ -1,7 +1,10 @@
 /*
  Main class to handle the mashshedule
- Example for a scheme: Dipa2,56,15,65,20,70,10,85,30,356,
- Dipa2,27,1,29,1,31,1,95,
+ 
+Example Mash: mash,Demo,128,4,25,1,27,1,30,2,32,2
+
+Example Boil: boil,Dipa,210,3,60,HumleX,60,HumleY,55,HumleZ,10
+
 */
 
 #ifndef Mash_h
@@ -21,7 +24,7 @@
 class Mash
 {
   public:
-    Mash(int* arr, int arrSize);
+    Mash(int* tempArr, int* timeArr, int arrSize);
     boolean Start();
     void Unpause();
     int Uniqe();
@@ -53,7 +56,8 @@ class Mash
 	int _step;
 	int _steps;
 
-	int* tempTime; //Just temporary
+	int* _tempArr; //Just temporary
+	int* _timeArr;
 };
 
 #endif

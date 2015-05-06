@@ -20,53 +20,71 @@ void Program::Receive()
 	String content = "";
 
 	content = serialStr.Read();
+	//if(Serial.available())
+	//{
+		//content = Serial.readString();
+	//}
+
 
 	if(content != "")
 	{
-		int data[maxStep]; //The results will be stored here
-		int i = 0;
+		type = content.substring(0,content.indexOf(","));
+		content = content.substring(content.indexOf(",")+1); //Remove the number from the string
+		
+		name = content.substring(0,content.indexOf(","));
+		content = content.substring(content.indexOf(",")+1);
+		check = name.length();
+		
+		checkSum = atol(content.substring(0,content.indexOf(",")).c_str());
+		content = content.substring(content.indexOf(",")+1);
+		
+		noSteps = atol(content.substring(0,content.indexOf(",")).c_str());
+		content = content.substring(content.indexOf(",")+1);
 
-		while(content != "")
+		if(type == "boil")
 		{
-			int index = content.indexOf(",");		//We find the next comma
-
-			if(index < 0)
-			{							//När man läst ut allt ur content så ballar index ur, och då breakar vi ur loopen och nollställer content.
-				content = "";
-				break;
-			}
-
-			if(i==0)
-			{
-				name = content.substring(0,index);
-			}
-			else
-			{
-				data[i] = atol(content.substring(0,index).c_str()); //Extract the number
-			}
-
-			content = content.substring(index+1); //Remove the number from the string
-			i++;
+			totalTime = atol(content.substring(0,content.indexOf(",")).c_str());
+			content = content.substring(content.indexOf(",")+1);
+			check += totalTime;
 		}
 
-		arrSize = i-2;
-		arr = new int [arrSize];
-		int check = name.length();
-		int checkSum = data[i-1];
+		check += noSteps;
+		if(type == "mash")
+			tempArr = new int[noSteps];
+		if(type == "boil")
+			hopsArr = new String[noSteps];
 
-		for(int j=0; j < arrSize; j++)
+		timeArr = new int[noSteps];
+		
+		for(int j = 0; j < noSteps; j++)
 		{
-		    arr[j] = data[j+1];
-		    check += arr[j];
+			if(type == "mash")
+			{
+				tempArr[j] = atol(content.substring(0,content.indexOf(",")).c_str());
+				content = content.substring(content.indexOf(",")+1);
+				check += tempArr[j];
+			}
+			else if(type == "boil")
+		    {
+		    	hopsArr[j] = content.substring(0,content.indexOf(","));
+			    content = content.substring(content.indexOf(",")+1);
+			    check += (hopsArr[j]).length();
+		    }
+
+		    timeArr[j] = atol(content.substring(0,content.indexOf(",")).c_str());
+		    content = content.substring(content.indexOf(",")+1);
+		    check += timeArr[j];
 		}
 
 		if(check == checkSum)
 		{
+			Serial.print("Success "+type);
 			lcd.loaded();
 			loaded = true;	
 		}
 		else
 		{
+			Serial.print("Fail");
 			lcd.failed();
 			loaded = false;
 		}
@@ -85,7 +103,7 @@ void Program::Receive()
 		lcd.Print("                    ", 2);
 
 	    running = true;
-	    Mash mSchedule(arr,arrSize);
+	    Mash mSchedule(tempArr,timeArr,noSteps);
 
 		while(loaded)
 		{
@@ -98,7 +116,15 @@ void Program::Receive()
 
 			if(running)
 			{
-				loaded = mSchedule.Start();
+				if(type == "mash")
+				{
+					loaded = mSchedule.Start();
+				}
+				else if(type == "boil")
+				{
+					lcd.Print("Hahahahahahahahahaha",0);
+					lcd.Print("Det trodde du allt!!",1);
+				}
 			}
 			else
 			{
