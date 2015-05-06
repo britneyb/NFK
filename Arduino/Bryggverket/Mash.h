@@ -27,9 +27,8 @@ class Mash
     Mash(int* tempArr, int* timeArr, int arrSize);
     boolean Start();
     void Unpause();
-    int Uniqe();
-    void Random();
     void ProgramFinshed();
+
   private:
 	OneWire oneWire = OneWire(ONE_WIRE_BUS);
   	DallasTemperature sensors = DallasTemperature(&oneWire); //Pass our oneWire reference to Dallas Temperature.
@@ -38,16 +37,14 @@ class Mash
   	long randNumber; 
 
 	Display lcd; //Our display functions
+	Relay relay;
 	
-	int* randNum;
-
 	int statePump;
 	
 	time_t totTime; //The total time
 	time_t curTime; //The time of the current step
 	time_t difTime; //The total time when the current step started
 
-	boolean someFlag=true;
 	boolean someFlag_2=true;
 	boolean curStarted; //A flag to check whether the current step has started
 	

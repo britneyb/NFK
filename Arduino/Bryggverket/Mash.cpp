@@ -17,8 +17,6 @@ Mash::Mash(int* tempArr, int* timeArr, int arrSize)
 		difTime = 0;
 		curStarted = false;
 	    _step=1;
-
-	    randNum = new int[noRandom];
 }
 
 boolean Mash::Start()
@@ -39,7 +37,6 @@ boolean Mash::Start()
 		difTime = totTime;
 		curTime = totTime - difTime;
 		curStarted = true;
-		someFlag = false;
 	}
 
 	lcd.currentTemp(CurrentTemp, curTime, curStarted);
@@ -54,16 +51,16 @@ boolean Mash::Start()
 	if(CurrentTemp >= _tempArr[_step-1] && curStarted) //For the relay
 	{
 		someFlag_2 = true;
-		Relay::ElementLow();
+		relay.ElementLow();
 	}
 	else if(CurrentTemp < _tempArr[_step-1] && curStarted)
 	{
-		Random();
+		relay.Random(someFlag_2);
+		someFlag_2 = false;
 	}
-
 	else
 	{
-		Relay::ReadElements();
+		relay.ReadElements();
 	}
 
 	if(digitalRead(SWITCH5))
@@ -80,7 +77,6 @@ boolean Mash::Start()
 		_step += 1;
 		//_temp += 2;
 		//_time += 2;
-		someFlag=true;
 		curStarted = false;
 		difTime = 0;
 
@@ -108,115 +104,12 @@ void Mash::ProgramFinshed()
 {
 	digitalWrite(PUMP,LOW);
 
-	someFlag_2 = true;
-	Relay::ElementLow();
+	//someFlag_2 = true;
+	relay.ElementLow();
 	lcd.Print("Waiting for program ",0);
 	lcd.Print("                    ",1);
 	lcd.Print("                    ",2);
 	lcd.Print("                    ",3);
 }
 
-int Mash::Uniqe()
-{
-	int temp = random(4);
-	int j = 0;
-	boolean uniqe = true;
 
-	while(j < noRandom)
-	{
-		if (temp == randNum[j])
-		{
-			temp = random(4);
-			j = 0;
-		}
-		else
-		{
-			j++;
-		}
-	}
-
-	return temp;
-}
-
-void Mash::Random()
-{
-	if (someFlag_2)
-	{
-		for (int i = 0; i < noRandom; i++)
-		{
-			if(i > 0)
-				randNum[i] = Uniqe();
-			else
-				randNum[i] = random(4);
-		}
-
-		someFlag_2=false;
-	}
-	
-	for (int i = 0; i < noRandom; i++)
-	{
-		boolean relayOn = true;
-
-		while(relayOn)
-		{
-			int stateRelay1 = digitalRead((SWITCH1));
-			int stateRelay2 = digitalRead((SWITCH2));
-			int stateRelay3 = digitalRead((SWITCH3));
-			int stateRelay4 = digitalRead((SWITCH4));
-			relayOn = false;
-
-			if(stateRelay1 == LOW)
-			{
-				if(randNum[i] == 0)
-				{
-					digitalWrite(ELEMENT1,LOW);
-					randNum[i] = Uniqe(); //random(4);
-					relayOn = true;
-				}	
-			}
-			if(stateRelay2 == LOW)
-			{
-				if(randNum[i] == 1)
-				{
-					digitalWrite(ELEMENT2,LOW);
-					randNum[i] = Uniqe(); //random(4);
-					relayOn = true;
-				}	
-			}
-			if(stateRelay3 == LOW)
-			{
-				if(randNum[i] == 2)
-				{
-					digitalWrite(ELEMENT3,LOW);
-					randNum[i] = Uniqe(); //random(4);
-					relayOn = true;
-				}	
-			}
-			if(stateRelay4 == LOW)
-			{
-				if(randNum[i] == 3)
-				{
-					digitalWrite(ELEMENT4,LOW);
-					randNum[i] = Uniqe(); //random(4);
-					relayOn = true;
-				}
-			}
-		}
-
-		switch (randNum[i])
-		{
-			case  0:
-				digitalWrite(ELEMENT1,HIGH); 
-				break;
-			case 1:
-				digitalWrite(ELEMENT2,HIGH);           // Turns ON Element 2				         
-				break;
-			case 2:
-				digitalWrite(ELEMENT3,HIGH);           // Turns ON Element 3
-				break;        
-			case 3:
-				digitalWrite(ELEMENT4,HIGH);           // Turns ON Element 4
-				break;    
-		}
-	}
-}

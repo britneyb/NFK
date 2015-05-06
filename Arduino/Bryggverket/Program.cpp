@@ -11,7 +11,7 @@ void Program::Default()
 	sensors.begin(); //Should be named like tempSonsor or something like that
 	Switch::Begin();
 	Button::Begin();
-	Relay::Begin();
+	relay.Begin();
 	lcd.Begin();
 }
 
@@ -103,14 +103,17 @@ void Program::Receive()
 		lcd.Print("                    ", 2);
 
 	    running = true;
-	    Mash mSchedule(tempArr,timeArr,noSteps);
+	    
+    	Mash mSchedule(tempArr,timeArr,noSteps); //fyi should be a selection 
+    	Boil bSchedule(hopsArr, timeArr, totalTime, noSteps);
+	
 
 		while(loaded)
 		{
 			if(digitalRead(stopButton))
 			{
 			    running = false;
-			    Relay::AllLow();
+			    relay.AllLow();
 				lcd.Print("Paused              ",3);
 			}
 
@@ -128,7 +131,7 @@ void Program::Receive()
 			}
 			else
 			{
-				if(!digitalRead((stopButton)))
+				if(!digitalRead(stopButton))
 				{
 					Pause(mSchedule);
 				}
@@ -138,7 +141,7 @@ void Program::Receive()
 
 }
 
-void Program::Pause(Mash mash)
+void Program::Pause(Mash mSchedule)
 {
 	lcd.getTemp(1, CurrentTemp);
 
@@ -147,28 +150,18 @@ void Program::Pause(Mash mash)
 		sensors.requestTemperatures();
 		CurrentTemp = sensors.getTempCByIndex(0) + Calibrator;
 	}
+	
 	if(digitalRead(startButton))
 	{
 	    running = true;
-	    mash.Unpause();
+	    mSchedule.Unpause();
 	}
-
 	if (digitalRead(stopButton))
 	{
-		//digitalWrite(PUMP,LOW);
-		//TurnOff();
 		loaded=false;
-		
-		//someFlag_3=false;
-		mash.ProgramFinshed();
-		
+		mSchedule.ProgramFinshed();
 	}
 }
 
-
-void Program::Start()
-{
-
-}
 
 

@@ -26,35 +26,34 @@ class Program
 public:
     void Default();
     void Receive();
-    void Start();
-    void Pause(Mash mash);
+    void Pause(Mash mSchedule);
 
 private:
   	OneWire oneWire = OneWire(ONE_WIRE_BUS);
   	DallasTemperature sensors = DallasTemperature(&oneWire); //Pass our oneWire reference to Dallas Temperature.
 
   	Display lcd; //Our display functions
+    Relay relay; //Our relay functions 
   	SerialString serialStr; //Our Serial functions
 	
-  String type;
-  String name;
-  int checkSum;
-  int noSteps;
-  int totalTime;
-  int check;
-//String name = ""; //The name for the scheme
+    String type;
+    String name;
+    int checkSum;
+    int noSteps;
+    int totalTime;
+    int check;
+    //String name = ""; //The name for the scheme
 
-	//int* arr; //Array that stores the values of time and temp 
-	int arrSize; //Stores the number of steps in the current scheme
-	boolean loaded; //A flag to check if the scheme has been loaded or not 
-	int CurrentTemp; //Stores the current temp
-	int state; //Stores the input if the button is pressed or not
-	boolean running;
+  	//int* arr; //Array that stores the values of time and temp 
+  	int arrSize; //Stores the number of steps in the current scheme
+  	boolean loaded; //A flag to check if the scheme has been loaded or not 
+  	int CurrentTemp; //Stores the current temp
+  	int state; //Stores the input if the button is pressed or not
+  	boolean running;
 
-  int* tempArr;
-  int* timeArr;
-  String* hopsArr;
-
+    int* tempArr;
+    int* timeArr;
+    String* hopsArr;
 };
 
 

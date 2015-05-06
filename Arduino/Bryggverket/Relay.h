@@ -2,7 +2,6 @@
  Class to handle all the relays
 */
 
-
 #ifndef Relay_h
 #define Relay_h
 
@@ -14,12 +13,15 @@ class Relay
 {
 
 public:
-	static void Begin();
-	static void AllLow();
-	static void ElementLow();
-	static void ReadElements();
+	void Begin();
+	void AllLow();
+	void ElementLow();
+	void ReadElements();
+	void Random(boolean firstRun);
+	int Unique();
 
 private:
+	int randNum[noRandom];
 	
 };
 
