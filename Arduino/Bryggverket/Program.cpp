@@ -20,11 +20,6 @@ void Program::Receive()
 	String content = "";
 
 	content = serialStr.Read();
-	//if(Serial.available())
-	//{
-		//content = Serial.readString();
-	//}
-
 
 	if(content != "")
 	{
@@ -78,13 +73,10 @@ void Program::Receive()
 
 		if(check == checkSum)
 		{
-			Serial.print("Success "+type);
-			lcd.loaded();
 			loaded = true;	
 		}
 		else
 		{
-			Serial.print("Fail");
 			lcd.failed();
 			loaded = false;
 		}
@@ -92,29 +84,23 @@ void Program::Receive()
 
 	sensors.requestTemperatures();
 	CurrentTemp = sensors.getTempCByIndex(0) + Calibrator;
-	lcd.getTemp(2,CurrentTemp);
+	lcd.Default(loaded,CurrentTemp,type);
 
 	state = digitalRead(startButton);
 
 	if(loaded && state == HIGH)
 	{
-		lcd.Print("                    ", 0); //Just temporary, will instead implement a function clear() on the display class
-		lcd.Print("                    ", 1);
-		lcd.Print("                    ", 2);
-
 	    running = true;
 	    
     	Mash mSchedule(tempArr,timeArr,noSteps); //fyi should be a selection 
     	Boil bSchedule(hopsArr, timeArr, totalTime, noSteps);
 	
-
 		while(loaded)
 		{
 			if(digitalRead(stopButton))
 			{
 			    running = false;
 			    relay.AllLow();
-				lcd.Print("Paused              ",3);
 			}
 
 			if(running)
@@ -143,8 +129,7 @@ void Program::Receive()
 
 void Program::Pause(Mash mSchedule)
 {
-	lcd.getTemp(1, CurrentTemp);
-
+	lcd.paused(CurrentTemp);
 	if(second() % 2 == 0) //Updates the temp every two seconds
 	{
 		sensors.requestTemperatures();

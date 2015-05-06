@@ -68,8 +68,6 @@ void Relay::Random(boolean firstRun)
 				randNum[i] = Unique();
 			else
 				randNum[i] = random(4);
-
-			Serial.print(String(randNum[i]));
 		}
 	}
 

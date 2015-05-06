@@ -22,10 +22,33 @@ void Display::Begin()
 	lcd.backlight();
 	lcd.setCursor(0, 0); 
 	lcd.clear(); 
-	lcd.print("Waiting for program");
 }
 
-void Display::getTemp(int row, int temp)
+void Display::Default(boolean loaded, int temp, String type)
+{
+	if(loaded)
+	{
+		lcd.setCursor(0,0);
+		lcd.print("Paused              ");
+		lcd.setCursor(0,1);
+		if(type == "mash")
+			lcd.print("Mashschemed uploaded");
+		else if(type == "boil")
+			lcd.print("Boilschemed uploaded");
+	}
+	else
+	{
+		lcd.setCursor(0,0);
+		lcd.print("Waiting for program ");
+		lcd.setCursor(0,1);
+		lcd.print("                    ");
+	}
+	lcd.setCursor(0,3);
+	lcd.print("                    ");
+	getTemp(2,temp,true);
+}
+
+void Display::getTemp(int row, int temp, boolean clear)
 {
 	lcd.setCursor(0,row);
 	lcd.print("Current: ");
@@ -35,20 +58,24 @@ void Display::getTemp(int row, int temp)
 	lcd.print(String(char(223)));//String(degree), 2, 16);
 	lcd.setCursor(12,row);
 	lcd.print("C");
-}
-
-void Display::loaded()
-{
-	lcd.setCursor(0,0);
-	lcd.print("Paused              ");
-	lcd.setCursor(0,1);
-	lcd.print("Mashschemed uploaded");
+	if(clear)
+	{
+		lcd.setCursor(13,row);
+		lcd.print("       ");
+	}
 }
 
 void Display::failed()
 {
 	lcd.setCursor(0,1);
 	lcd.print("Fail                ");
+}
+
+void Display::paused(int temp)
+{
+	getTemp(1,temp);
+	lcd.setCursor(0,3);
+	lcd.print("Paused              ");
 }
 
 void Display::totalTime(time_t t)
@@ -67,7 +94,7 @@ void Display::totalTime(time_t t)
 
 void Display::currentTemp(int temp, time_t curTime, boolean started)
 {
-	getTemp(1,temp);
+	getTemp(1,temp,true);
 
 	if (minute(curTime) <= 0 && started) //Changing between min and sec on the current step
 	{
@@ -87,7 +114,7 @@ void Display::currentTemp(int temp, time_t curTime, boolean started)
 	}
 }
 
-void Display::step(int row, int cStep, int cTemp, int cTime)
+void Display::step(int row, int cStep, int cTemp, int cTime, int steps)
 {
 	lcd.setCursor(0,row);
 	lcd.print("Step ");
@@ -105,4 +132,9 @@ void Display::step(int row, int cStep, int cTemp, int cTime)
 	lcd.print(String(cTime));
 	lcd.setCursor(15,row);
 	lcd.print(" min");
+	if(cStep == steps)
+	{
+		lcd.setCursor(0,3);
+		lcd.print("                    ");
+	}
 }
