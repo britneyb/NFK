@@ -6,6 +6,7 @@ mash,Demo,60,2,25,1,27,1
 
 Example Boil: boil,Dipa,210,3,60,HumleX,60,HumleY,55,HumleZ,10
 boil,Dipa,208,3,59,HumleX,59,HumleY,55,HumleZ,10
+boil,Test,241,3,60,bu1,57,bu2,55,bu3,53
 
 */
 

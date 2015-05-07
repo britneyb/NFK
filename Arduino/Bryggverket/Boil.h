@@ -28,7 +28,7 @@ private:
 	Relay relay;
 
 	String* _hopsArr;
-	int* _timeArr;
+	time_t* _timeArr;
 	time_t _totalTime;
 	int _steps;
 

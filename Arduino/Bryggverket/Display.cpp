@@ -122,16 +122,26 @@ void Display::step(int row, int cStep, int cTemp, int cTime, int steps)
 	lcd.print(String(cStep));
 	lcd.setCursor(6,row);
 	lcd.print(": ");
-	lcd.setCursor(8,row);
-	lcd.print(String(cTemp));
-	lcd.setCursor(10,row);
-	lcd.print(String(char(223)));
-	lcd.setCursor(11,row);
-	lcd.print("C ");
-	lcd.setCursor(13,row);
-	lcd.print(String(cTime));
-	lcd.setCursor(15,row);
-	lcd.print(" min");
+	if(cTemp != 0)
+	{
+		lcd.setCursor(8,row);
+		lcd.print(String(cTemp));
+		lcd.setCursor(10,row);
+		lcd.print(String(char(223)));
+		lcd.setCursor(11,row);
+		lcd.print("C ");
+		lcd.setCursor(13,row);
+		lcd.print(String(cTime));
+		lcd.setCursor(15,row);
+		lcd.print(" min");
+	}
+	else
+	{
+		lcd.setCursor(8,row);
+		lcd.print(String(cTime));
+		lcd.setCursor(10,row);
+		lcd.print(" min");
+	}
 	if(cStep == steps)
 	{
 		lcd.setCursor(0,3);
