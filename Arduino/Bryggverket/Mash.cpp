@@ -82,7 +82,8 @@ boolean Mash::Start()
 
 	if(minute(curTime) >= _timeArr[_step-1] && (_steps) == _step && curStarted)
 	{	
-		ProgramFinshed();
+		//ProgramFinshed();
+		relay.AllLow();
 		return false;
 	}
 

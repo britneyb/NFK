@@ -111,8 +111,9 @@ void Program::Receive()
 				}
 				else if(type == "boil")
 				{
-					lcd.Print("Hahahahahahahahahaha",0);
-					lcd.Print("Det trodde du allt!!",1);
+					bSchedule.Start();
+					//lcd.Print("Hahahahahahahahahaha",0);
+					//lcd.Print("Det trodde du allt!!",1);
 				}
 			}
 			else
@@ -144,7 +145,8 @@ void Program::Pause(Mash mSchedule)
 	if (digitalRead(stopButton))
 	{
 		loaded=false;
-		mSchedule.ProgramFinshed();
+		relay.AllLow();
+		//mSchedule.ProgramFinshed();
 	}
 }
 

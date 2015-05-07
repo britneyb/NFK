@@ -5,6 +5,7 @@ Example Mash: mash,Demo,128,4,25,1,27,1,30,2,32,2
 mash,Demo,60,2,25,1,27,1
 
 Example Boil: boil,Dipa,210,3,60,HumleX,60,HumleY,55,HumleZ,10
+boil,Dipa,208,3,59,HumleX,59,HumleY,55,HumleZ,10
 
 */
 
@@ -35,7 +36,7 @@ class Mash
   	DallasTemperature sensors = DallasTemperature(&oneWire); //Pass our oneWire reference to Dallas Temperature.
   	
 	int CurrentTemp; //Stores the current temp
-  	long randNumber; 
+  	long randNumber;
 
 	Display lcd; //Our display functions
 	Relay relay;
