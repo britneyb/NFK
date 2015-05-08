@@ -19,6 +19,7 @@ class Boil
 public:
 Boil(String* hopsArr, int* timeArr, int totalTime, int steps);
 boolean Start();
+void Unpause();
 
 private:
 	OneWire oneWire = OneWire(ONE_WIRE_BUS);
@@ -32,10 +33,13 @@ private:
 	time_t _totalTime;
 	int _steps;
 
+	time_t _now;
 	time_t totTime; //The total time
 	time_t curTime; //The time of the current step
 	time_t difTime; //The total time when the current step started
 	boolean curStarted;
+	boolean randomOnce;
+	boolean moreSteps;
     int _step;
 
 };

@@ -116,35 +116,45 @@ void Display::currentTemp(int temp, time_t curTime, boolean started)
 
 void Display::step(int row, int cStep, int cTemp, int cTime, int steps)
 {
-	lcd.setCursor(0,row);
-	lcd.print("Step ");
-	lcd.setCursor(5,row);
-	lcd.print(String(cStep));
-	lcd.setCursor(6,row);
-	lcd.print(": ");
-	if(cTemp != 0)
+	if(cTemp == 0 && cStep > steps)
 	{
-		lcd.setCursor(8,row);
-		lcd.print(String(cTemp));
-		lcd.setCursor(10,row);
-		lcd.print(String(char(223)));
-		lcd.setCursor(11,row);
-		lcd.print("C ");
-		lcd.setCursor(13,row);
-		lcd.print(String(cTime));
-		lcd.setCursor(15,row);
-		lcd.print(" min");
+		lcd.setCursor(0,2);
+		lcd.print("                    ");
+		lcd.setCursor(0,3);
+		lcd.print("                    ");
 	}
 	else
 	{
-		lcd.setCursor(8,row);
-		lcd.print(String(cTime));
-		lcd.setCursor(10,row);
-		lcd.print(" min");
-	}
-	if(cStep == steps)
-	{
-		lcd.setCursor(0,3);
-		lcd.print("                    ");
+		lcd.setCursor(0,row);
+		lcd.print("Step ");
+		lcd.setCursor(5,row);
+		lcd.print(String(cStep));
+		lcd.setCursor(6,row);
+		lcd.print(": ");
+		if(cTemp != 0)
+		{
+			lcd.setCursor(8,row);
+			lcd.print(String(cTemp));
+			lcd.setCursor(10,row);
+			lcd.print(String(char(223)));
+			lcd.setCursor(11,row);
+			lcd.print("C ");
+			lcd.setCursor(13,row);
+			lcd.print(String(cTime));
+			lcd.setCursor(15,row);
+			lcd.print(" min");
+		}
+		else
+		{
+			lcd.setCursor(8,row);
+			lcd.print(String(cTime));
+			lcd.setCursor(10,row);
+			lcd.print(" min");
+		}
+		if(cStep == steps && row == 2)
+		{
+			lcd.setCursor(0,3);
+			lcd.print("                    ");
+		}
 	}
 }

@@ -26,7 +26,7 @@ class Program
 public:
     void Default();
     void Receive();
-    void Pause(Mash mSchedule);
+    void Pause(Mash mSchedule, Boil bSchedule);
 
 private:
   	OneWire oneWire = OneWire(ONE_WIRE_BUS);
@@ -36,6 +36,9 @@ private:
     Relay relay; //Our relay functions 
   	SerialString serialStr; //Our Serial functions
 	
+    Mash mSchedule;
+    Boil bSchedule;
+
     String type;
     String name;
     int checkSum;

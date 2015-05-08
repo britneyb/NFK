@@ -111,16 +111,14 @@ void Program::Receive()
 				}
 				else if(type == "boil")
 				{
-					bSchedule.Start();
-					//lcd.Print("Hahahahahahahahahaha",0);
-					//lcd.Print("Det trodde du allt!!",1);
+					loaded = bSchedule.Start();
 				}
 			}
 			else
 			{
 				if(!digitalRead(stopButton))
 				{
-					Pause(mSchedule);
+					Pause(mSchedule, bSchedule);
 				}
 			}
 		}
@@ -128,7 +126,7 @@ void Program::Receive()
 
 }
 
-void Program::Pause(Mash mSchedule)
+void Program::Pause(Mash mSchedule, Boil bSchedule)
 {
 	lcd.paused(CurrentTemp);
 	if(second() % 2 == 0) //Updates the temp every two seconds
@@ -140,13 +138,15 @@ void Program::Pause(Mash mSchedule)
 	if(digitalRead(startButton))
 	{
 	    running = true;
-	    mSchedule.Unpause();
+	    if(type == "mash")
+	    	mSchedule.Unpause();
+	    else if(type == "boil")
+	    	bSchedule.Unpause();
 	}
 	if (digitalRead(stopButton))
 	{
 		loaded=false;
 		relay.AllLow();
-		//mSchedule.ProgramFinshed();
 	}
 }
 
