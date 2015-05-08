@@ -91,9 +91,9 @@ void Program::Receive()
 	if(loaded && state == HIGH)
 	{
 	    running = true;
-	    
+	    Boil bSchedule(hopsArr, timeArr, totalTime, noSteps);
     	Mash mSchedule(tempArr,timeArr,noSteps); //fyi should be a selection 
-    	Boil bSchedule(hopsArr, timeArr, totalTime, noSteps);
+    	
 	
 		while(loaded)
 		{

@@ -35,7 +35,7 @@ private:
   	Display lcd; //Our display functions
     Relay relay; //Our relay functions 
   	SerialString serialStr; //Our Serial functions
-	
+
     Mash mSchedule;
     Boil bSchedule;
 
