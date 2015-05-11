@@ -26,65 +26,74 @@ void Program::Receive()
 		type = content.substring(0,content.indexOf(","));
 		content = content.substring(content.indexOf(",")+1); //Remove the number from the string
 		
-		name = content.substring(0,content.indexOf(","));
-		content = content.substring(content.indexOf(",")+1);
-		check = name.length();
-		
-		checkSum = atol(content.substring(0,content.indexOf(",")).c_str());
-		content = content.substring(content.indexOf(",")+1);
-		
-		noSteps = atol(content.substring(0,content.indexOf(",")).c_str());
-		content = content.substring(content.indexOf(",")+1);
-
-		if(type == "boil")
+		if(type == "ip")
 		{
-			totalTime = atol(content.substring(0,content.indexOf(",")).c_str());
-			content = content.substring(content.indexOf(",")+1);
-			check += totalTime;
-		}
-
-		check += noSteps;
-		if(type == "mash")
-			tempArr = new int[noSteps];
-		if(type == "boil")
-			hopsArr = new String[noSteps];
-
-		timeArr = new int[noSteps];
-		
-		for(int j = 0; j < noSteps; j++)
-		{
-			if(type == "mash")
-			{
-				tempArr[j] = atol(content.substring(0,content.indexOf(",")).c_str());
-				content = content.substring(content.indexOf(",")+1);
-				check += tempArr[j];
-			}
-			else if(type == "boil")
-		    {
-		    	hopsArr[j] = content.substring(0,content.indexOf(","));
-			    content = content.substring(content.indexOf(",")+1);
-			    check += (hopsArr[j]).length();
-		    }
-
-		    timeArr[j] = atol(content.substring(0,content.indexOf(",")).c_str());
-		    content = content.substring(content.indexOf(",")+1);
-		    check += timeArr[j];
-		}
-
-		if(check == checkSum)
-		{
-			loaded = true;	
+			ip = content.substring(0,content.indexOf(","));
+			content = "";
 		}
 		else
 		{
-			lcd.failed();
-			loaded = false;
+
+			name = content.substring(0,content.indexOf(","));
+			content = content.substring(content.indexOf(",")+1);
+			check = name.length();
+			
+			checkSum = atol(content.substring(0,content.indexOf(",")).c_str());
+			content = content.substring(content.indexOf(",")+1);
+			
+			noSteps = atol(content.substring(0,content.indexOf(",")).c_str());
+			content = content.substring(content.indexOf(",")+1);
+
+			if(type == "boil")
+			{
+				totalTime = atol(content.substring(0,content.indexOf(",")).c_str());
+				content = content.substring(content.indexOf(",")+1);
+				check += totalTime;
+			}
+
+			check += noSteps;
+			if(type == "mash")
+				tempArr = new int[noSteps];
+			if(type == "boil")
+				hopsArr = new String[noSteps];
+
+			timeArr = new int[noSteps];
+			
+			for(int j = 0; j < noSteps; j++)
+			{
+				if(type == "mash")
+				{
+					tempArr[j] = atol(content.substring(0,content.indexOf(",")).c_str());
+					content = content.substring(content.indexOf(",")+1);
+					check += tempArr[j];
+				}
+				else if(type == "boil")
+			    {
+			    	hopsArr[j] = content.substring(0,content.indexOf(","));
+				    content = content.substring(content.indexOf(",")+1);
+				    check += (hopsArr[j]).length();
+			    }
+
+			    timeArr[j] = atol(content.substring(0,content.indexOf(",")).c_str());
+			    content = content.substring(content.indexOf(",")+1);
+			    check += timeArr[j];
+			}
+
+			if(check == checkSum)
+			{
+				loaded = true;	
+			}
+			else
+			{
+				lcd.failed();
+				loaded = false;
+			}
 		}
 	}
 
 	sensors.requestTemperatures();
 	CurrentTemp = sensors.getTempCByIndex(0) + Calibrator;
-	lcd.Default(loaded,CurrentTemp,type);
+	lcd.Default(loaded,CurrentTemp,type,ip);
 
 	state = digitalRead(startButton);
 

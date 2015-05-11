@@ -36,8 +36,8 @@ private:
     Relay relay; //Our relay functions 
   	SerialString serialStr; //Our Serial functions
 
-    Mash mSchedule;
-    Boil bSchedule;
+    //Mash mSchedule;
+    //Boil bSchedule;
 
     String type;
     String name;
@@ -45,6 +45,7 @@ private:
     int noSteps;
     int totalTime;
     int check;
+    String ip;
     //String name = ""; //The name for the scheme
 
   	//int* arr; //Array that stores the values of time and temp 

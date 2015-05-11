@@ -24,7 +24,7 @@ void Display::Begin()
 	lcd.clear(); 
 }
 
-void Display::Default(boolean loaded, int temp, String type)
+void Display::Default(boolean loaded, int temp, String type, String ip)
 {
 	if(loaded)
 	{
@@ -44,7 +44,7 @@ void Display::Default(boolean loaded, int temp, String type)
 		lcd.print("                    ");
 	}
 	lcd.setCursor(0,3);
-	lcd.print("                    ");
+	lcd.print(ip);
 	getTemp(2,temp,true);
 }
 

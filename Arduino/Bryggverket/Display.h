@@ -16,7 +16,7 @@ class Display
     Display();
     void Print(String str, int row = 0, int column = 0);
     void Begin();
-    void Default(boolean loaded, int temp, String type);
+    void Default(boolean loaded, int temp, String type, String ip);
     void getTemp(int row, int temp, boolean clear = false);
     void failed();
     void paused(int temp);
