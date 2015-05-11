@@ -87,21 +87,23 @@ boolean Boil::Start()
 	if(hour(totTime) <= 0 && minute(totTime) < _timeArr[_step-1] && _step < _steps && curStarted)
 	{
 	    _step++;
-	    time_t temp = now();
+	    //time_t temp = now();
 	    setTime(0,_timeArr[_step-1],0,0,0,0);
+	    Serial.print(_timeArr[_step-1]);
 	    _currStep = now();
+	    Serial.print(minute(_currStep));
 	    setTime(0,0,0,0,0,0);
 	    difTime = _currStep - now();
-	    setTime(temp);
+	    setTime(_now);
 	}
 
-	if(hour(totTime) <= hour(_timeArr[_step-1]) && minute(totTime) < minute(_timeArr[_step-1]) && curStarted && _steps == _step)
+	if(hour(totTime) <= 0 && minute(totTime) < _timeArr[_step-1] && curStarted && _steps == _step)
 	{
 		_step++;
 		moreSteps = false;
 	}
 
-	if(hour(totTime) <= 0 && minute(totTime) <= 0 && second(totTime) <= 0)
+	if(hour(totTime) <= 0 && minute(totTime) <= 0 && second(totTime) <= 0 && !moreSteps)
 	{
 		relay.AllLow();
 	    return false;
