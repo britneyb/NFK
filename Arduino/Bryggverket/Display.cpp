@@ -44,7 +44,10 @@ void Display::Default(boolean loaded, int temp, String type, String ip)
 		lcd.print("                    ");
 	}
 	lcd.setCursor(0,3);
-	lcd.print(ip);
+	if(ip != "")
+		lcd.print(ip);
+	else
+		lcd.print("                    ");
 	getTemp(2,temp,true);
 }
 
