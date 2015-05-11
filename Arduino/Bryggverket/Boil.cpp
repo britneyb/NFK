@@ -10,20 +10,22 @@
 Boil::Boil(String* hopsArr, int* timeArr, int totalTime, int steps)
 {
 	_hopsArr = hopsArr;
-	//_timeArr = timeArr;
+	_timeArr = timeArr;
 
 	setTime(0,totalTime,0,0,0,0);
 	_totalTime = now();
 	_steps = steps;
 
-	for(int i = 0; i < steps; i++)
-	{
-	    setTime(0,timeArr[i],0,0,0,0);
-	    _timeArr[i] = now();
-	}
+	//for(int i = 0; i < steps; i++)
+	//{
+	    //setTime(0,timeArr[i],0,0,0,0);
+	    //_timeArr[i] = now();
+	//}
 
+	setTime(0,_timeArr[0],0,0,0,0);
+	_currStep = now();
 	totTime = _totalTime;
-	curTime = totTime - _timeArr[0];
+	curTime = totTime - _currStep;
 	curStarted = false;
 	moreSteps = true;
     _step=1;
@@ -51,7 +53,7 @@ boolean Boil::Start()
 	if(CurrentTemp >= boilingPoint && !curStarted)
 	{
 		setTime(0,0,0,0,0,0);
-		difTime = _timeArr[_step-1] - now();
+		difTime = _currStep - now();
 		randomOnce = true;
 		curStarted = true;
 	}
@@ -60,11 +62,11 @@ boolean Boil::Start()
 	lcd.currentTemp(CurrentTemp, curTime, moreSteps);
 
 	
-	lcd.step(2, _step, 0, minute(_timeArr[_step-1]),_steps);
+	lcd.step(2, _step, 0, _timeArr[_step-1],_steps);
 
 	if(_step < _steps)
 	{
-		lcd.step(3, _step+1, 0, minute(_timeArr[_step]),_steps);
+		lcd.step(3, _step+1, 0, _timeArr[_step],_steps);
 	}
 
 	if(CurrentTemp < boilingPoint && curStarted)
@@ -82,12 +84,14 @@ boolean Boil::Start()
 		randomOnce = true;
 	}
 
-	if(hour(totTime) <= hour(_timeArr[_step-1]) && minute(totTime) < minute(_timeArr[_step-1]) && _step < _steps && curStarted)
+	if(hour(totTime) <= 0 && minute(totTime) < _timeArr[_step-1] && _step < _steps && curStarted)
 	{
 	    _step++;
 	    time_t temp = now();
+	    setTime(0,_timeArr[_step-1],0,0,0,0);
+	    _currStep = now();
 	    setTime(0,0,0,0,0,0);
-	    difTime = _timeArr[_step-1] - now();
+	    difTime = _currStep - now();
 	    setTime(temp);
 	}
 
