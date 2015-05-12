@@ -4,7 +4,7 @@
 #define ELEMENT1 A1//the pin where the relay is connected
 #define ELEMENT2 A2//the pin where the relay is connected
 #define ELEMENT3 A3//the pin where the relay is connected
-#define ELEMENT4 10//the pin where the relay is connected
+#define ELEMENT4 9//the pin where the relay is connected
 
 #define buzzer A1
 
@@ -16,9 +16,9 @@
 #define SWITCH2 6
 #define SWITCH3 7
 #define SWITCH4 8
-#define SWITCH5 9
-#define PUMP 11
-#define COOLINGPUMP 12 //Not yet implemented
+//#define SWITCH5 9
+#define PUMP 10
+#define COOLINGPUMP 11 //Not yet implemented
 
 #define BUZZER 12
 
