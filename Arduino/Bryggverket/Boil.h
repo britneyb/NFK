@@ -34,6 +34,7 @@ private:
 	time_t _currStep;
 	int _steps;
 
+	time_t _zero;
 	time_t _now;
 	time_t totTime; //The total time
 	time_t curTime; //The time of the current step

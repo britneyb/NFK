@@ -6,6 +6,8 @@
 #define ELEMENT3 A3//the pin where the relay is connected
 #define ELEMENT4 10//the pin where the relay is connected
 
+#define buzzer A1
+
 #define startButton 2 //The pin where the button is connected
 #define stopButton 3
 

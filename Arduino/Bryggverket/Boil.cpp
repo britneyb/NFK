@@ -16,20 +16,18 @@ Boil::Boil(String* hopsArr, int* timeArr, int totalTime, int steps)
 	_totalTime = now();
 	_steps = steps;
 
-	//for(int i = 0; i < steps; i++)
-	//{
-	    //setTime(0,timeArr[i],0,0,0,0);
-	    //_timeArr[i] = now();
-	//}
-
 	setTime(0,_timeArr[0],0,0,0,0);
 	_currStep = now();
 	totTime = _totalTime;
 	curTime = totTime - _currStep;
+
+	setTime(0,0,0,0,0,0);
+	_zero = now();
 	curStarted = false;
 	moreSteps = true;
     _step=1;
 
+    pinMode(buzzer, OUTPUT);
     lcd.Begin();
     sensors.requestTemperatures();
 	CurrentTemp = sensors.getTempCByIndex(0) + Calibrator;
@@ -40,7 +38,7 @@ boolean Boil::Start()
 	if (curStarted)
 	{
 		_now = now();
-		totTime = _totalTime - now();
+		totTime = _totalTime - _now;
 		curTime = totTime - difTime;
 	}
 	
@@ -52,8 +50,8 @@ boolean Boil::Start()
 
 	if(CurrentTemp >= boilingPoint && !curStarted)
 	{
-		setTime(0,0,0,0,0,0);
-		difTime = _currStep - now();
+		setTime(_zero);
+		difTime = _currStep - _zero;
 		randomOnce = true;
 		curStarted = true;
 	}
@@ -87,20 +85,23 @@ boolean Boil::Start()
 	if(hour(totTime) <= 0 && minute(totTime) < _timeArr[_step-1] && _step < _steps && curStarted)
 	{
 	    _step++;
-	    //time_t temp = now();
 	    setTime(0,_timeArr[_step-1],0,0,0,0);
-	    Serial.print(_timeArr[_step-1]);
 	    _currStep = now();
-	    Serial.print(minute(_currStep));
-	    setTime(0,0,0,0,0,0);
-	    difTime = _currStep - now();
+	    difTime = _currStep - _zero;
 	    setTime(_now);
+	    lcd.currentTemp(CurrentTemp, curTime, false);
+	    digitalWrite(buzzer, HIGH);
+	    delay(1000);
+	    digitalWrite(buzzer, LOW);
 	}
 
 	if(hour(totTime) <= 0 && minute(totTime) < _timeArr[_step-1] && curStarted && _steps == _step)
 	{
 		_step++;
 		moreSteps = false;
+		digitalWrite(buzzer, HIGH);
+	    delay(1000);
+	    digitalWrite(buzzer, LOW);
 	}
 
 	if(hour(totTime) <= 0 && minute(totTime) <= 0 && second(totTime) <= 0 && !moreSteps)
