@@ -13,4 +13,5 @@ void Switch::Begin()
 	pinMode(SWITCH3, INPUT);
 	pinMode(SWITCH4, INPUT);
 	pinMode(SWITCH5, INPUT);
+	pinMode(SWITCHMODE, INPUT);
 }

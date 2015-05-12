@@ -17,122 +17,128 @@ void Program::Default()
 
 void Program::Receive()
 {
-	String content = "";
+	//if(digitalRead(SWITCHMODE))
+	//{
+		String content = "";
 
-	content = serialStr.Read();
+		content = serialStr.Read();
 
-	if(content != "")
-	{
-		type = content.substring(0,content.indexOf(","));
-		content = content.substring(content.indexOf(",")+1); //Remove the number from the string
-		
-		if(type == "ip")
+		if(content != "")
 		{
-			ip = content.substring(0,content.indexOf(","));
-			content = "";
-		}
-		else
-		{
-
-			name = content.substring(0,content.indexOf(","));
-			content = content.substring(content.indexOf(",")+1);
-			check = name.length();
+			type = content.substring(0,content.indexOf(","));
+			content = content.substring(content.indexOf(",")+1); //Remove the number from the string
 			
-			checkSum = atol(content.substring(0,content.indexOf(",")).c_str());
-			content = content.substring(content.indexOf(",")+1);
-			
-			noSteps = atol(content.substring(0,content.indexOf(",")).c_str());
-			content = content.substring(content.indexOf(",")+1);
-
-			if(type == "boil")
+			if(type == "ip")
 			{
-				totalTime = atol(content.substring(0,content.indexOf(",")).c_str());
+				ip = content.substring(0,content.indexOf(","));
+				content = "";
+			}
+			else
+			{
+
+				name = content.substring(0,content.indexOf(","));
 				content = content.substring(content.indexOf(",")+1);
-				check += totalTime;
-			}
+				check = name.length();
+				
+				checkSum = atol(content.substring(0,content.indexOf(",")).c_str());
+				content = content.substring(content.indexOf(",")+1);
+				
+				noSteps = atol(content.substring(0,content.indexOf(",")).c_str());
+				content = content.substring(content.indexOf(",")+1);
 
-			check += noSteps;
-			if(type == "mash")
-				tempArr = new int[noSteps];
-			if(type == "boil")
-				hopsArr = new String[noSteps];
-
-			timeArr = new int[noSteps];
-			
-			for(int j = 0; j < noSteps; j++)
-			{
-				if(type == "mash")
+				if(type == "boil")
 				{
-					tempArr[j] = atol(content.substring(0,content.indexOf(",")).c_str());
+					totalTime = atol(content.substring(0,content.indexOf(",")).c_str());
 					content = content.substring(content.indexOf(",")+1);
-					check += tempArr[j];
+					check += totalTime;
 				}
-				else if(type == "boil")
-			    {
-			    	hopsArr[j] = content.substring(0,content.indexOf(","));
-				    content = content.substring(content.indexOf(",")+1);
-				    check += (hopsArr[j]).length();
-			    }
 
-			    timeArr[j] = atol(content.substring(0,content.indexOf(",")).c_str());
-			    content = content.substring(content.indexOf(",")+1);
-			    check += timeArr[j];
-			}
-
-			if(check == checkSum)
-			{
-				loaded = true;	
-			}
-			else
-			{
-				lcd.failed();
-				loaded = false;
-			}
-		}
-	}
-
-	sensors.requestTemperatures();
-	CurrentTemp = sensors.getTempCByIndex(0) + Calibrator;
-	lcd.Default(loaded,CurrentTemp,type,ip);
-
-	state = digitalRead(startButton);
-
-	if(loaded && state == HIGH)
-	{
-	    running = true;
-	    Boil bSchedule(hopsArr, timeArr, totalTime, noSteps);
-    	Mash mSchedule(tempArr,timeArr,noSteps); //fyi should be a selection 
-    	
-	
-		while(loaded)
-		{
-			if(digitalRead(stopButton))
-			{
-			    running = false;
-			    relay.AllLow();
-			}
-
-			if(running)
-			{
+				check += noSteps;
 				if(type == "mash")
+					tempArr = new int[noSteps];
+				if(type == "boil")
+					hopsArr = new String[noSteps];
+
+				timeArr = new int[noSteps];
+				
+				for(int j = 0; j < noSteps; j++)
 				{
-					loaded = mSchedule.Start();
+					if(type == "mash")
+					{
+						tempArr[j] = atol(content.substring(0,content.indexOf(",")).c_str());
+						content = content.substring(content.indexOf(",")+1);
+						check += tempArr[j];
+					}
+					else if(type == "boil")
+				    {
+				    	hopsArr[j] = content.substring(0,content.indexOf(","));
+					    content = content.substring(content.indexOf(",")+1);
+					    check += (hopsArr[j]).length();
+				    }
+
+				    timeArr[j] = atol(content.substring(0,content.indexOf(",")).c_str());
+				    content = content.substring(content.indexOf(",")+1);
+				    check += timeArr[j];
 				}
-				else if(type == "boil")
+
+				if(check == checkSum)
 				{
-					loaded = bSchedule.Start();
+					loaded = true;	
 				}
-			}
-			else
-			{
-				if(!digitalRead(stopButton))
+				else
 				{
-					Pause(mSchedule, bSchedule);
+					lcd.failed();
+					loaded = false;
 				}
 			}
 		}
-	}
 
+		sensors.requestTemperatures();
+		CurrentTemp = sensors.getTempCByIndex(0) + Calibrator;
+		lcd.Default(loaded,CurrentTemp,type,ip);
+
+		state = digitalRead(startButton);
+
+		if(loaded && state == HIGH)
+		{
+		    running = true;
+		    Boil bSchedule(hopsArr, timeArr, totalTime, noSteps);
+	    	Mash mSchedule(tempArr,timeArr,noSteps); //fyi should be a selection 
+	    	
+		
+			while(loaded)
+			{
+				if(digitalRead(stopButton))
+				{
+				    running = false;
+				    relay.AllLow();
+				}
+
+				if(running)
+				{
+					if(type == "mash")
+					{
+						loaded = mSchedule.Start();
+					}
+					else if(type == "boil")
+					{
+						loaded = bSchedule.Start();
+					}
+				}
+				else
+				{
+					if(!digitalRead(stopButton))
+					{
+						Pause(mSchedule, bSchedule);
+					}
+				}
+			}
+		}
+	//}
+	//else
+	//{
+	//	lcd.Print("Manual Activated");
+	//}
 }
 
 void Program::Pause(Mash mSchedule, Boil bSchedule)
