@@ -17,128 +17,139 @@ void Program::Default()
 
 void Program::Receive()
 {
-	//if(digitalRead(SWITCHMODE))
-	//{
-		String content = "";
+	String content = "";
 
-		content = serialStr.Read();
+	content = serialStr.Read();
 
-		if(content != "")
+	if(content != "")
+	{
+		type = content.substring(0,content.indexOf(","));
+		content = content.substring(content.indexOf(",")+1); //Remove the number from the string
+		
+		if(type == "ip")
 		{
-			type = content.substring(0,content.indexOf(","));
-			content = content.substring(content.indexOf(",")+1); //Remove the number from the string
+			ip = content.substring(0,content.indexOf(","));
+			content = "";
+		}
+		else
+		{
+
+			name = content.substring(0,content.indexOf(","));
+			content = content.substring(content.indexOf(",")+1);
+			check = name.length();
 			
-			if(type == "ip")
+			checkSum = atol(content.substring(0,content.indexOf(",")).c_str());
+			content = content.substring(content.indexOf(",")+1);
+			
+			noSteps = atol(content.substring(0,content.indexOf(",")).c_str());
+			content = content.substring(content.indexOf(",")+1);
+
+			if(type == "boil")
 			{
-				ip = content.substring(0,content.indexOf(","));
-				content = "";
+				totalTime = atol(content.substring(0,content.indexOf(",")).c_str());
+				content = content.substring(content.indexOf(",")+1);
+				check += totalTime;
+			}
+
+			check += noSteps;
+			if(type == "mash")
+				tempArr = new int[noSteps];
+			if(type == "boil")
+				hopsArr = new String[noSteps];
+
+			timeArr = new int[noSteps];
+			
+			for(int j = 0; j < noSteps; j++)
+			{
+				if(type == "mash")
+				{
+					tempArr[j] = atol(content.substring(0,content.indexOf(",")).c_str());
+					content = content.substring(content.indexOf(",")+1);
+					check += tempArr[j];
+				}
+				else if(type == "boil")
+			    {
+			    	hopsArr[j] = content.substring(0,content.indexOf(","));
+				    content = content.substring(content.indexOf(",")+1);
+				    check += (hopsArr[j]).length();
+			    }
+
+			    timeArr[j] = atol(content.substring(0,content.indexOf(",")).c_str());
+			    content = content.substring(content.indexOf(",")+1);
+			    check += timeArr[j];
+			}
+
+			if(check == checkSum)
+			{
+				loaded = true;	
 			}
 			else
 			{
-
-				name = content.substring(0,content.indexOf(","));
-				content = content.substring(content.indexOf(",")+1);
-				check = name.length();
-				
-				checkSum = atol(content.substring(0,content.indexOf(",")).c_str());
-				content = content.substring(content.indexOf(",")+1);
-				
-				noSteps = atol(content.substring(0,content.indexOf(",")).c_str());
-				content = content.substring(content.indexOf(",")+1);
-
-				if(type == "boil")
-				{
-					totalTime = atol(content.substring(0,content.indexOf(",")).c_str());
-					content = content.substring(content.indexOf(",")+1);
-					check += totalTime;
-				}
-
-				check += noSteps;
-				if(type == "mash")
-					tempArr = new int[noSteps];
-				if(type == "boil")
-					hopsArr = new String[noSteps];
-
-				timeArr = new int[noSteps];
-				
-				for(int j = 0; j < noSteps; j++)
-				{
-					if(type == "mash")
-					{
-						tempArr[j] = atol(content.substring(0,content.indexOf(",")).c_str());
-						content = content.substring(content.indexOf(",")+1);
-						check += tempArr[j];
-					}
-					else if(type == "boil")
-				    {
-				    	hopsArr[j] = content.substring(0,content.indexOf(","));
-					    content = content.substring(content.indexOf(",")+1);
-					    check += (hopsArr[j]).length();
-				    }
-
-				    timeArr[j] = atol(content.substring(0,content.indexOf(",")).c_str());
-				    content = content.substring(content.indexOf(",")+1);
-				    check += timeArr[j];
-				}
-
-				if(check == checkSum)
-				{
-					loaded = true;	
-				}
-				else
-				{
-					lcd.failed();
-					loaded = false;
-				}
+				lcd.failed();
+				loaded = false;
 			}
 		}
+	}
 
-		sensors.requestTemperatures();
-		CurrentTemp = sensors.getTempCByIndex(0) + Calibrator;
-		lcd.Default(loaded,CurrentTemp,type,ip);
+	Serial.print(digitalRead(SWITCHMODE));
+	if(digitalRead(SWITCHMODE))
+	{
+		relay.ReadElements();
+		digitalWrite(PUMP, HIGH);
+		//digitalWrite(BUZZER, HIGH);
+	}
+	else
+	{
+		relay.AllLow();
+		//digitalWrite(BUZZER, LOW);
+	}
 
-		state = digitalRead(startButton);
+	sensors.requestTemperatures();
+	CurrentTemp = sensors.getTempCByIndex(0) + Calibrator;
+	lcd.Default(loaded,CurrentTemp,type,ip);
 
-		if(loaded && state == HIGH)
+	state = digitalRead(startButton);
+
+	if(loaded && state == HIGH && !digitalRead(SWITCHMODE))
+	{
+	    running = true;
+	    Boil bSchedule(hopsArr, timeArr, totalTime, noSteps);
+    	Mash mSchedule(tempArr,timeArr,noSteps); //fyi should be a selection 
+    	
+	
+		while(loaded)
 		{
-		    running = true;
-		    Boil bSchedule(hopsArr, timeArr, totalTime, noSteps);
-	    	Mash mSchedule(tempArr,timeArr,noSteps); //fyi should be a selection 
-	    	
-		
-			while(loaded)
+			if(digitalRead(stopButton))
 			{
-				if(digitalRead(stopButton))
-				{
-				    running = false;
-				    relay.AllLow();
-				}
+			    running = false;
+			    relay.AllLow();
+			}
 
-				if(running)
+			if(digitalRead(SWITCHMODE))
+			{
+				running = false;
+			}
+
+			if(running)
+			{
+				if(type == "mash")
 				{
-					if(type == "mash")
-					{
-						loaded = mSchedule.Start();
-					}
-					else if(type == "boil")
-					{
-						loaded = bSchedule.Start();
-					}
+					loaded = mSchedule.Start();
 				}
-				else
+				else if(type == "boil")
 				{
-					if(!digitalRead(stopButton))
-					{
-						Pause(mSchedule, bSchedule);
-					}
+					loaded = bSchedule.Start();
+				}
+			}
+			else
+			{
+				if(!digitalRead(stopButton))
+				{
+					Pause(mSchedule, bSchedule);
 				}
 			}
 		}
-	//}
-	//else
-	//{
-	//	lcd.Print("Manual Activated");
-	//}
+	}
 }
 
 void Program::Pause(Mash mSchedule, Boil bSchedule)
@@ -150,7 +161,19 @@ void Program::Pause(Mash mSchedule, Boil bSchedule)
 		CurrentTemp = sensors.getTempCByIndex(0) + Calibrator;
 	}
 	
-	if(digitalRead(startButton))
+	if(digitalRead(SWITCHMODE))
+	{
+		relay.ReadElements();
+		digitalWrite(PUMP, HIGH);
+		//digitalWrite(BUZZER, HIGH);
+	}
+	else
+	{
+		relay.AllLow();
+		//digitalWrite(BUZZER, LOW);
+	}
+
+	if(digitalRead(startButton) && !digitalRead(SWITCHMODE))
 	{
 	    running = true;
 	    if(type == "mash")
