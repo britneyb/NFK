@@ -27,7 +27,7 @@ Boil::Boil(String* hopsArr, int* timeArr, int totalTime, int steps)
 	moreSteps = true;
     _step=1;
 
-    pinMode(buzzer, OUTPUT);
+    pinMode(BUZZER, OUTPUT);
     lcd.Begin();
     sensors.requestTemperatures();
 	CurrentTemp = sensors.getTempCByIndex(0) + Calibrator;
@@ -90,18 +90,18 @@ boolean Boil::Start()
 	    difTime = _currStep - _zero;
 	    setTime(_now);
 	    lcd.currentTemp(CurrentTemp, curTime, false);
-	    digitalWrite(buzzer, HIGH);
-	    delay(1000);
-	    digitalWrite(buzzer, LOW);
+	    digitalWrite(BUZZER, HIGH);
+	    delay(500);
+	    digitalWrite(BUZZER, LOW);
 	}
 
 	if(hour(totTime) <= 0 && minute(totTime) < _timeArr[_step-1] && curStarted && _steps == _step)
 	{
 		_step++;
 		moreSteps = false;
-		digitalWrite(buzzer, HIGH);
-	    delay(1000);
-	    digitalWrite(buzzer, LOW);
+		digitalWrite(BUZZER, HIGH);
+	    delay(500);
+	    digitalWrite(BUZZER, LOW);
 	}
 
 	if(hour(totTime) <= 0 && minute(totTime) <= 0 && second(totTime) <= 0 && !moreSteps)

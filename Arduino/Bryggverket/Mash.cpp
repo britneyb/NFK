@@ -64,14 +64,16 @@ boolean Mash::Start()
 		relay.ReadElements();
 	}
 
-	if(digitalRead(SWITCH5))
+	/*if(digitalRead(SWITCH5))
 	{
 		digitalWrite(PUMP, HIGH);
 	}
 	else
 	{
 		digitalWrite(PUMP, LOW);
-	}
+	}*/
+
+	digitalWrite(PUMP, HIGH);
 
 	if(minute(curTime) >= _timeArr[_step-1] && (_steps) > _step && curStarted)
 	{

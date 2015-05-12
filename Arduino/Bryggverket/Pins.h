@@ -6,8 +6,6 @@
 #define ELEMENT3 A3//the pin where the relay is connected
 #define ELEMENT4 9//the pin where the relay is connected
 
-#define buzzer A1
-
 #define startButton 2 //The pin where the button is connected
 #define stopButton 3
 
@@ -20,7 +18,7 @@
 #define PUMP 10
 #define COOLINGPUMP 11 //Not yet implemented
 
-#define BUZZER 12
+#define BUZZER 13
 
 #define boilingPoint 25
 #define maxStep 32 //The max number of steps that can be received
