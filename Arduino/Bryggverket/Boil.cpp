@@ -99,6 +99,7 @@ boolean Boil::Start()
 	{
 		_step++;
 		moreSteps = false;
+		lcd.currentTemp(CurrentTemp, curTime, false);
 		digitalWrite(BUZZER, HIGH);
 	    delay(500);
 	    digitalWrite(BUZZER, LOW);
