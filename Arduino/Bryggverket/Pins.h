@@ -18,7 +18,7 @@
 #define PUMP 10
 #define COOLINGPUMP 11 //Not yet implemented
 
-#define BUZZER 13
+#define BUZZER 12
 
 #define boilingPoint 25
 #define maxStep 32 //The max number of steps that can be received
