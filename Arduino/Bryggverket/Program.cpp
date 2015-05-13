@@ -20,6 +20,7 @@ void Program::Receive()
 	String content = "";
 
 	content = serialStr.Read();
+	//Serial.print(content);
 
 	if(content != "")
 	{
@@ -37,12 +38,15 @@ void Program::Receive()
 			name = content.substring(0,content.indexOf(","));
 			content = content.substring(content.indexOf(",")+1);
 			check = name.length();
+			//Serial.print(name);
 			
 			checkSum = atol(content.substring(0,content.indexOf(",")).c_str());
 			content = content.substring(content.indexOf(",")+1);
+			//Serial.print(checkSum);
 			
 			noSteps = atol(content.substring(0,content.indexOf(",")).c_str());
 			content = content.substring(content.indexOf(",")+1);
+			//Serial.print(noSteps);
 
 			if(type == "boil")
 			{
@@ -66,6 +70,7 @@ void Program::Receive()
 					tempArr[j] = atol(content.substring(0,content.indexOf(",")).c_str());
 					content = content.substring(content.indexOf(",")+1);
 					check += tempArr[j];
+					//Serial.print(tempArr[j]);
 				}
 				else if(type == "boil")
 			    {
@@ -77,21 +82,25 @@ void Program::Receive()
 			    timeArr[j] = atol(content.substring(0,content.indexOf(",")).c_str());
 			    content = content.substring(content.indexOf(",")+1);
 			    check += timeArr[j];
+			    //Serial.print(timeArr[j]);
 			}
+			//Serial.print(check);
 
 			if(check == checkSum)
 			{
 				loaded = true;	
+				Serial.print("Success");
 			}
 			else
 			{
 				lcd.failed();
 				loaded = false;
+				Serial.print("Fail");
 			}
 		}
 	}
 
-	Serial.print(digitalRead(SWITCHMODE));
+	//Serial.print(digitalRead(SWITCHMODE));
 	if(digitalRead(SWITCHMODE))
 	{
 		relay.ReadElements();

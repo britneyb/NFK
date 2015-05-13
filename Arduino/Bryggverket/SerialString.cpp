@@ -17,16 +17,15 @@ void SerialString::Print(String str)
 
 String SerialString::Read()
 {
-	if(Serial.available())
+	
+	String str = "";
+	while(Serial.available())
 	{
-		delay(100);
-		String str = Serial.readString();
-		return str;
+		//delay(100);
+		str += Serial.readString();
+		
 	}
-	else
-	{
-		return "";
-	}
+	return str;
 
 }
 
