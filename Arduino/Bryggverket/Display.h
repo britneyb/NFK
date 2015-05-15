@@ -22,6 +22,7 @@ class Display
     void paused(int temp);
     void totalTime(time_t time);
     void currentTemp(int temp, time_t curTime, boolean started);
+    void cooling(time_t t, int cTemp, int temp);
     void step(int row, int cStep, int cTemp, int cTime, int steps);
   private:
   	LiquidCrystal lcd = LiquidCrystal(0x27,20,4);

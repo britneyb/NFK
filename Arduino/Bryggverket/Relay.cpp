@@ -12,6 +12,7 @@ void Relay::Begin()
 	pinMode(ELEMENT3, OUTPUT);
 	pinMode(ELEMENT4, OUTPUT);
 	pinMode(PUMP, OUTPUT);
+	pinMode(COOLINGPUMP, OUTPUT);
 	
 	//randNum = new int[noRandom];
 }
@@ -19,6 +20,7 @@ void Relay::Begin()
 void Relay::AllLow()
 {
 	digitalWrite(PUMP, LOW);
+	digitalWrite(COOLINGPUMP,LOW);
 	digitalWrite(ELEMENT1, LOW);
 	digitalWrite(ELEMENT2, LOW);
 	digitalWrite(ELEMENT3, LOW);
@@ -33,39 +35,56 @@ void Relay::ElementLow()
 	digitalWrite(ELEMENT4, LOW);
 }
 
-void Relay::ReadElements()
+void Relay::ReadElements(int noElements)
 {
 	int stateRelay1 = digitalRead(SWITCH1);
 	int stateRelay2 = digitalRead(SWITCH2);
 	int stateRelay3 = digitalRead(SWITCH3);
 	int stateRelay4 = digitalRead(SWITCH4);
-
-	if(stateRelay1 == HIGH)
+	int elementsOn = 0;
+	if(stateRelay1 == HIGH && elementsOn < noElements)
+	{
 		digitalWrite(ELEMENT1,HIGH);
+		elementsOn++;
+	}
 	else
 		digitalWrite(ELEMENT1,LOW);
-	if(stateRelay2 == HIGH)
+	if(stateRelay2 == HIGH && elementsOn < noElements)
+	{
 		digitalWrite(ELEMENT2,HIGH);
+		elementsOn++;
+	}
 	else
 		digitalWrite(ELEMENT2,LOW);
-	if(stateRelay3 == HIGH)
+	if(stateRelay3 == HIGH && elementsOn < noElements)
+	{
 		digitalWrite(ELEMENT3,HIGH);
+		elementsOn++;
+	}
 	else
 		digitalWrite(ELEMENT3,LOW);
-	if(stateRelay4 == HIGH)
+	if(stateRelay4 == HIGH && elementsOn < noElements)
+	{
 		digitalWrite(ELEMENT4,HIGH);
+		elementsOn++;
+	}
 	else
 		digitalWrite(ELEMENT4,LOW);
 }
 
-void Relay::Random(boolean firstRun)
+void Relay::SetRandom(int noRandom)
+{
+	randNum = new int[noRandom];
+}
+
+void Relay::Random(boolean firstRun, int noRandom)
 {
 	if (firstRun)
 	{
 		for (int i = 0; i < noRandom; i++)
 		{
 			if(i > 0)
-				randNum[i] = Unique();
+				randNum[i] = Unique(noRandom);
 			else
 				randNum[i] = random(4);
 		}
@@ -88,7 +107,7 @@ void Relay::Random(boolean firstRun)
 				if(randNum[i] == 0)
 				{
 					digitalWrite(ELEMENT1,LOW);
-					randNum[i] = Unique(); //random(4);
+					randNum[i] = Unique(noRandom); //random(4);
 					relayOn = true;
 				}	
 			}
@@ -97,7 +116,7 @@ void Relay::Random(boolean firstRun)
 				if(randNum[i] == 1)
 				{
 					digitalWrite(ELEMENT2,LOW);
-					randNum[i] = Unique(); //random(4);
+					randNum[i] = Unique(noRandom); //random(4);
 					relayOn = true;
 				}	
 			}
@@ -106,7 +125,7 @@ void Relay::Random(boolean firstRun)
 				if(randNum[i] == 2)
 				{
 					digitalWrite(ELEMENT3,LOW);
-					randNum[i] = Unique(); //random(4);
+					randNum[i] = Unique(noRandom); //random(4);
 					relayOn = true;
 				}	
 			}
@@ -115,7 +134,7 @@ void Relay::Random(boolean firstRun)
 				if(randNum[i] == 3)
 				{
 					digitalWrite(ELEMENT4,LOW);
-					randNum[i] = Unique(); //random(4);
+					randNum[i] = Unique(noRandom); //random(4);
 					relayOn = true;
 				}
 			}
@@ -139,7 +158,7 @@ void Relay::Random(boolean firstRun)
 	}
 }
 
-int Relay::Unique()
+int Relay::Unique(int noRandom)
 {
 	int temp = random(4);
 	int j = 0;

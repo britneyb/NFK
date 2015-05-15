@@ -5,19 +5,23 @@
 #include "Arduino.h"
 #include "Mash.h"
 
-Mash::Mash(int* tempArr, int* timeArr, int arrSize)
+Mash::Mash(int* tempArr, int* timeArr, int arrSize, int elHeating, int elRandom)
 {
-		setTime(0,0,0,0,0,0);
-		_steps = arrSize;
-		_tempArr = tempArr; //new int [arrSize];
-		_timeArr = timeArr;
+	setTime(0,0,0,0,0,0);
+	_steps = arrSize;
+	_tempArr = tempArr; //new int [arrSize];
+	_timeArr = timeArr;
 
-		difTime = 0;
-		curStarted = false;
-	    _step=1;
-	    lcd.Begin();
-	    sensors.requestTemperatures();
-		CurrentTemp = sensors.getTempCByIndex(0) + Calibrator;
+	difTime = 0;
+	curStarted = false;
+    _step=1;
+    lcd.Begin();
+    sensors.requestTemperatures();
+	CurrentTemp = sensors.getTempCByIndex(0) + Calibrator;
+
+	_elHeating = elHeating;
+	_elRandom = elRandom;
+	relay.SetRandom(_elRandom);
 }
 
 boolean Mash::Start()
@@ -56,12 +60,12 @@ boolean Mash::Start()
 	}
 	else if(CurrentTemp < _tempArr[_step-1] && curStarted)
 	{
-		relay.Random(someFlag_2);
+		relay.Random(someFlag_2, _elRandom);
 		someFlag_2 = false;
 	}
 	else
 	{
-		relay.ReadElements();
+		relay.ReadElements(_elHeating);
 	}
 
 	/*if(digitalRead(SWITCH5))

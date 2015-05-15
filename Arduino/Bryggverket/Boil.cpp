@@ -7,7 +7,7 @@
 
 
 
-Boil::Boil(String* hopsArr, int* timeArr, int totalTime, int steps)
+Boil::Boil(String* hopsArr, int* timeArr, int totalTime, int steps, int elHeating, int elRandom)
 {
 	_hopsArr = hopsArr;
 	_timeArr = timeArr;
@@ -31,6 +31,11 @@ Boil::Boil(String* hopsArr, int* timeArr, int totalTime, int steps)
     lcd.Begin();
     sensors.requestTemperatures();
 	CurrentTemp = sensors.getTempCByIndex(0) + Calibrator;
+
+	_elHeating = elHeating;
+    _elRandom = elRandom;
+
+    relay.SetRandom(_elRandom);
 }
 
 boolean Boil::Start()
@@ -69,12 +74,12 @@ boolean Boil::Start()
 
 	if(CurrentTemp < boilingPoint && curStarted)
 	{
-		relay.Random(randomOnce);
+		relay.Random(randomOnce, _elRandom);
 		randomOnce = false;
 	}
 	else if (CurrentTemp < boilingPoint)
 	{
-		relay.ReadElements();
+		relay.ReadElements(_elHeating);
 	}
 	else if(CurrentTemp >= boilingPoint)
 	{

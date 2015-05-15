@@ -26,7 +26,7 @@ class Program
 public:
     void Default();
     void Receive();
-    void Pause(Mash mSchedule, Boil bSchedule);
+    void Pause(Mash mSchedule, Boil bSchedule, Cooling cSchedule);
 
 private:
   	OneWire oneWire = OneWire(ONE_WIRE_BUS);
@@ -46,6 +46,8 @@ private:
     int totalTime;
     int check;
     String ip;
+    int elHeating;
+    int elRandom;
     //String name = ""; //The name for the scheme
 
   	//int* arr; //Array that stores the values of time and temp 
@@ -58,6 +60,7 @@ private:
     int* tempArr;
     int* timeArr;
     String* hopsArr;
+    int coolingTemp;
 };
 
 

@@ -32,9 +32,11 @@ void Display::Default(boolean loaded, int temp, String type, String ip)
 		lcd.print("Paused              ");
 		lcd.setCursor(0,1);
 		if(type == "mash")
-			lcd.print("Mashschemed uploaded");
+			lcd.print("Mashscheme uploaded ");
 		else if(type == "boil")
-			lcd.print("Boilschemed uploaded");
+			lcd.print("Boilscheme uploaded ");
+		else if(type == "cooling")
+			lcd.print("Coolscheme uploaded ");
 	}
 	else
 	{
@@ -86,27 +88,37 @@ void Display::totalTime(time_t t)
 	lcd.setCursor(0,0);
 	lcd.print("Total: ");
 	lcd.setCursor(7,0);
+	lcd.print(String(hour(t)));
+	lcd.setCursor(8,0);
+	lcd.print(":  ");
+	lcd.setCursor(9,0);
 	lcd.print(String(minute(t)));
-	lcd.setCursor(10,0);
-	lcd.print("min   ");
-	lcd.setCursor(14,0);
+	lcd.setCursor(11,0);
+	lcd.print(":  ");
+	lcd.setCursor(12,0);
 	lcd.print(String(second(t)));
-	lcd.setCursor(16,0);
-	lcd.print(" sek");
+	lcd.setCursor(15,0);
+	lcd.print("     ");
 }
 
 void Display::currentTemp(int temp, time_t curTime, boolean started)
 {
 	getTemp(1,temp,true);
 
-	if (minute(curTime) <= 0 && started) //Changing between min and sec on the current step
+	if(hour(curTime) > 0 && started)
 	{
 		lcd.setCursor(14,1);
-		lcd.print(String(second(curTime)));
+		lcd.print(String(hour(curTime)));
+		lcd.setCursor(15,1);
+		lcd.print(":");
+		lcd.setCursor(17,1);
+		lcd.print(" ");
 		lcd.setCursor(16,1);
-		lcd.print(" sek");
+		lcd.print(String(minute(curTime)));
+		lcd.setCursor(18,1);
+		lcd.print("  ");
 	}
-	else if(started)
+	else if(hour(curTime) <= 0 && started) //Changing between min and sec on the current step
 	{
 		lcd.setCursor(15,1);
 		lcd.print(" ");
@@ -115,6 +127,31 @@ void Display::currentTemp(int temp, time_t curTime, boolean started)
 		lcd.setCursor(16,1);
 		lcd.print(" min");
 	}
+	else if(minute(curTime) <= 0 && started)
+	{
+		lcd.setCursor(15,1);
+		lcd.print(" ");
+		lcd.setCursor(14,1);
+		lcd.print(String(second(curTime)));
+		lcd.setCursor(16,1);
+		lcd.print(" sek");
+	}
+}
+
+void Display::cooling(time_t t, int cTemp, int temp)
+{
+	totalTime(t);
+	getTemp(1, cTemp, true);
+	lcd.setCursor(0,2);
+	lcd.print("Target temp: ");
+	lcd.setCursor(13,2);
+	lcd.print(temp);
+	lcd.setCursor(15,2);
+	lcd.print(String(char(223)));//String(degree), 2, 16);
+	lcd.setCursor(16,2);
+	lcd.print("C   ");
+	lcd.setCursor(0,3);
+	lcd.print("                    ");
 }
 
 void Display::step(int row, int cStep, int cTemp, int cTime, int steps)
@@ -144,8 +181,16 @@ void Display::step(int row, int cStep, int cTemp, int cTime, int steps)
 			lcd.print("C ");
 			lcd.setCursor(13,row);
 			lcd.print(String(cTime));
-			lcd.setCursor(15,row);
-			lcd.print(" min");
+			if(cTime <= 99)
+			{
+				lcd.setCursor(15,row);
+				lcd.print(" min ");
+			}
+			else if(cTime > 99)
+			{
+				lcd.setCursor(16,row);
+				lcd.print(" min");
+			}
 		}
 		else
 		{

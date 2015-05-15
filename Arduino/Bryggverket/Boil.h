@@ -17,7 +17,7 @@ class Boil
 {
 
 public:
-Boil(String* hopsArr, int* timeArr, int totalTime, int steps);
+Boil(String* hopsArr, int* timeArr, int totalTime, int steps, int elHeating, int elRandom);
 boolean Start();
 void Unpause();
 
@@ -43,6 +43,9 @@ private:
 	boolean randomOnce;
 	boolean moreSteps;
     int _step;
+
+    int _elHeating;
+    int _elRandom;
 
 };
 

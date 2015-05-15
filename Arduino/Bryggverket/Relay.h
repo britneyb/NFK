@@ -16,12 +16,13 @@ public:
 	void Begin();
 	void AllLow();
 	void ElementLow();
-	void ReadElements();
-	void Random(boolean firstRun);
-	int Unique();
+	void ReadElements(int noElements = 4);
+	void SetRandom(int noRandom);
+	void Random(boolean firstRun, int noRandom);
+	int Unique(int noRandom);
 
 private:
-	int randNum[noRandom];
+	int* randNum;	//[noRandom];
 	
 };
 

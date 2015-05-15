@@ -20,7 +20,6 @@ void Program::Receive()
 	String content = "";
 
 	content = serialStr.Read();
-	//Serial.print(content);
 
 	if(content != "")
 	{
@@ -32,21 +31,50 @@ void Program::Receive()
 			ip = content.substring(0,content.indexOf(","));
 			content = "";
 		}
+		else if(type == "cooling")
+		{
+			name = content.substring(0,content.indexOf(","));
+			content = content.substring(content.indexOf(",")+1);
+			check = name.length();
+
+			checkSum = atol(content.substring(0,content.indexOf(",")).c_str());
+			content = content.substring(content.indexOf(",")+1);
+
+			coolingTemp = atol(content.substring(0,content.indexOf(",")).c_str());
+			content = content.substring(content.indexOf(",")+1);
+			check += coolingTemp;
+
+			if(check == checkSum)
+			{
+				loaded = true;	
+				Serial.print("Success");
+			}
+			else
+			{
+				lcd.failed();
+				loaded = false;
+				Serial.print("Fail");
+			}
+		}
 		else
 		{
 
 			name = content.substring(0,content.indexOf(","));
 			content = content.substring(content.indexOf(",")+1);
 			check = name.length();
-			//Serial.print(name);
+
+			elHeating = atol(content.substring(0,content.indexOf(",")).c_str());
+			content = content.substring(content.indexOf(",")+1);
+
+			elRandom = atol(content.substring(0,content.indexOf(",")).c_str());
+			content = content.substring(content.indexOf(",")+1);
 			
 			checkSum = atol(content.substring(0,content.indexOf(",")).c_str());
 			content = content.substring(content.indexOf(",")+1);
-			//Serial.print(checkSum);
 			
 			noSteps = atol(content.substring(0,content.indexOf(",")).c_str());
 			content = content.substring(content.indexOf(",")+1);
-			//Serial.print(noSteps);
+			check += noSteps;
 
 			if(type == "boil")
 			{
@@ -55,7 +83,6 @@ void Program::Receive()
 				check += totalTime;
 			}
 
-			check += noSteps;
 			if(type == "mash")
 				tempArr = new int[noSteps];
 			if(type == "boil")
@@ -70,7 +97,6 @@ void Program::Receive()
 					tempArr[j] = atol(content.substring(0,content.indexOf(",")).c_str());
 					content = content.substring(content.indexOf(",")+1);
 					check += tempArr[j];
-					//Serial.print(tempArr[j]);
 				}
 				else if(type == "boil")
 			    {
@@ -82,9 +108,7 @@ void Program::Receive()
 			    timeArr[j] = atol(content.substring(0,content.indexOf(",")).c_str());
 			    content = content.substring(content.indexOf(",")+1);
 			    check += timeArr[j];
-			    //Serial.print(timeArr[j]);
 			}
-			//Serial.print(check);
 
 			if(check == checkSum)
 			{
@@ -100,17 +124,15 @@ void Program::Receive()
 		}
 	}
 
-	//Serial.print(digitalRead(SWITCHMODE));
 	if(digitalRead(SWITCHMODE))
 	{
 		relay.ReadElements();
 		digitalWrite(PUMP, HIGH);
-		//digitalWrite(BUZZER, HIGH);
+		digitalWrite(COOLINGPUMP, HIGH);
 	}
 	else
 	{
 		relay.AllLow();
-		//digitalWrite(BUZZER, LOW);
 	}
 
 	sensors.requestTemperatures();
@@ -122,9 +144,9 @@ void Program::Receive()
 	if(loaded && state == HIGH && !digitalRead(SWITCHMODE))
 	{
 	    running = true;
-	    Boil bSchedule(hopsArr, timeArr, totalTime, noSteps);
-    	Mash mSchedule(tempArr,timeArr,noSteps); //fyi should be a selection 
-    	
+	    Boil bSchedule(hopsArr, timeArr, totalTime, noSteps, elHeating, elRandom);
+    	Mash mSchedule(tempArr,timeArr,noSteps, elHeating, elRandom); //fyi should be a selection 
+    	Cooling cSchedule(coolingTemp);
 	
 		while(loaded)
 		{
@@ -149,19 +171,23 @@ void Program::Receive()
 				{
 					loaded = bSchedule.Start();
 				}
+				else if(type == "cooling")
+				{
+					loaded = cSchedule.Start();
+				}
 			}
 			else
 			{
 				if(!digitalRead(stopButton))
 				{
-					Pause(mSchedule, bSchedule);
+					Pause(mSchedule, bSchedule, cSchedule);
 				}
 			}
 		}
 	}
 }
 
-void Program::Pause(Mash mSchedule, Boil bSchedule)
+void Program::Pause(Mash mSchedule, Boil bSchedule, Cooling cSchedule)
 {
 	lcd.paused(CurrentTemp);
 	if(second() % 2 == 0) //Updates the temp every two seconds
@@ -174,6 +200,7 @@ void Program::Pause(Mash mSchedule, Boil bSchedule)
 	{
 		relay.ReadElements();
 		digitalWrite(PUMP, HIGH);
+		digitalWrite(COOLINGPUMP, HIGH);
 		//digitalWrite(BUZZER, HIGH);
 	}
 	else
@@ -189,6 +216,8 @@ void Program::Pause(Mash mSchedule, Boil bSchedule)
 	    	mSchedule.Unpause();
 	    else if(type == "boil")
 	    	bSchedule.Unpause();
+	    else if(type == "cooling")
+	    	cSchedule.Unpause();
 	}
 	if (digitalRead(stopButton))
 	{
