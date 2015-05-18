@@ -27,6 +27,7 @@ public:
     void Default();
     void Receive();
     void Pause(Mash mSchedule, Boil bSchedule, Cooling cSchedule);
+    void ProgramFinished();
 
 private:
   	OneWire oneWire = OneWire(ONE_WIRE_BUS);

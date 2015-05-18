@@ -23,7 +23,7 @@
 
 
 #define boilingPoint 25
-#define maxStep 32 //The max number of steps that can be received
+//#define maxStep 32 //The max number of steps that can be received
 #define degree char(223) //To get the right Celcius-symbol
 
 #define Calibrator 0 //Calibration for the temp-sensor

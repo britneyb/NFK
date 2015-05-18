@@ -87,9 +87,11 @@ boolean Mash::Start()
 	}
 
 	if(minute(curTime) >= _timeArr[_step-1] && (_steps) == _step && curStarted)
-	{	
-		//ProgramFinshed();
+	{
 		relay.AllLow();
+		digitalWrite(BUZZER, HIGH);
+		delay(500);
+		digitalWrite(BUZZER, LOW);
 		return false;
 	}
 

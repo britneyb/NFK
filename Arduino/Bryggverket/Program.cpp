@@ -130,11 +130,9 @@ void Program::Receive()
 		relay.ReadElements();
 		digitalWrite(PUMP, HIGH);
 		digitalWrite(COOLINGPUMP, HIGH);
-		digitalWrite(BUZZER, HIGH);
 	}
 	else
 	{
-		digitalWrite(BUZZER, LOW);
 		relay.AllLow();
 	}
 
@@ -187,6 +185,10 @@ void Program::Receive()
 				}
 			}
 		}
+		if(running)
+		{
+			ProgramFinished();
+		}
 	}
 }
 
@@ -204,12 +206,10 @@ void Program::Pause(Mash mSchedule, Boil bSchedule, Cooling cSchedule)
 		relay.ReadElements();
 		digitalWrite(PUMP, HIGH);
 		digitalWrite(COOLINGPUMP, HIGH);
-		digitalWrite(BUZZER, HIGH);
 	}
 	else
 	{
 		relay.AllLow();
-		digitalWrite(BUZZER, LOW);
 	}
 
 	if(digitalRead(startButton) && !digitalRead(SWITCHMODE))
@@ -226,6 +226,14 @@ void Program::Pause(Mash mSchedule, Boil bSchedule, Cooling cSchedule)
 	{
 		loaded=false;
 		relay.AllLow();
+	}
+}
+
+void Program::ProgramFinished()
+{
+	while(!digitalRead(stopButton))
+	{
+		lcd.programFinished();
 	}
 }
 

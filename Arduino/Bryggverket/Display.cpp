@@ -83,6 +83,16 @@ void Display::paused(int temp)
 	lcd.print("Paused              ");
 }
 
+void Display::programFinished()
+{
+	lcd.setCursor(0,1);
+	lcd.print("Program Finished    ");
+	lcd.setCursor(0,2);
+	lcd.print("                    ");
+	lcd.setCursor(0,3);
+	lcd.print("Paused              ");
+}
+
 void Display::totalTime(time_t t)
 {
 	lcd.setCursor(0,0);

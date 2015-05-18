@@ -32,6 +32,9 @@ boolean Cooling::Start()
 	if(CurrentTemp <= _temp)
 	{
 		relay.AllLow();
+		digitalWrite(BUZZER, HIGH);
+		delay(500);
+		digitalWrite(BUZZER, LOW);
 		return false;
 	}
 

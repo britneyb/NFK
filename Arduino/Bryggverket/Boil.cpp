@@ -113,6 +113,9 @@ boolean Boil::Start()
 	if(hour(totTime) <= 0 && minute(totTime) <= 0 && second(totTime) <= 0 && !moreSteps)
 	{
 		relay.AllLow();
+		digitalWrite(BUZZER, HIGH);
+		delay(500);
+		digitalWrite(BUZZER, LOW);
 	    return false;
 	}
 	return true;

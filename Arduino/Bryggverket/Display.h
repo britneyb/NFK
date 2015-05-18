@@ -20,6 +20,7 @@ class Display
     void getTemp(int row, int temp, boolean clear = false);
     void failed();
     void paused(int temp);
+    void programFinished();
     void totalTime(time_t time);
     void currentTemp(int temp, time_t curTime, boolean started);
     void cooling(time_t t, int cTemp, int temp);
