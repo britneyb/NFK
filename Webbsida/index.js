@@ -63,4 +63,16 @@ loadEvent(function(){							//Alla funktioner innanför här laddas in samtidigt
 	addEvent(document.getElementById('kylSchema'), 'click', function(e){
 		window.location.href = "kylschema.html";
 	});
+
+	addEvent(document.getElementById('shutdown'), 'click', function(e){
+		var XHR = new XMLHttpRequest();
+		XHR.onreadystatechange = function(){
+			if (XHR.readyState == 4 && XHR.status == 200) {
+                alert(XHR.responseText);
+            }
+        }
+        XHR.open("GET", "shutdown.php", true);
+        XHR.send();
+		//window.location.href = "shutdown.php";
+	});
 });

@@ -35,12 +35,34 @@
 				<p>Minuter från slutet: <input id="time" type="number" min="0" required /> Min</p>
 				<input type="submit" id="addStep" value="Lägg till steg">
 			</form>
-			<button id="saveScheme">Spara Mäskschema</button>
+			<button id="saveScheme">Spara Kokschema</button>
+		</div>
+		<div>Antal element för uppvärmning
+			<select id ="warmingUp">
+				<option value="1">1</option>
+  				<option value="2">2</option>
+  				<option value="3">3</option>
+  				<option selected value="4">4</option>
+			</select>
+		</div>
+
+		<div>Antal element för underhållsvärme
+			<select id ="mHeating">
+				<option selected value="1">1</option>
+				<option value="2">2</option>
+				<option value="3">3</option>
+				<option value="4">4</option>
+			</select>
 		</div>
 		<div id="menu">
-			<button id="mainMenu">Huvudmeny</button>
-			<button id="openScheme">Öppna Mäskschema</button>
-			<button id="upLoadScheme">Ladda upp Mäskschema</button>
+			<ul>
+			  <li><a id="mainMenu" href="#">Huvudmeny</a></li>
+			  <li><a id="openScheme" href="#">Öppna Kokschema</a></li>
+			  <li><a id="upLoadScheme" href="#">Ladda upp Kokschema</a></li>
+			</ul>
+			<!-- <button id="mainMenu">Huvudmeny</button>
+			<button id="openScheme">Öppna Kokschema</button>
+			<button id="upLoadScheme">Ladda upp Kokschema</button> -->
 		</div>
 	</body>
 </html>

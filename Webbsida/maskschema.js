@@ -213,7 +213,11 @@ loadEvent(function(){							//Alla funktioner innanför här laddas in samtidigt
 	});
 
 	addEvent(document.getElementById('openScheme'), 'click', function(e){	//Event som lyssnar på "öppna schema"-knappen och skapar sedan en lista
-		var XHR = new XMLHttpRequest();										//av knappar av alla scheman som ligger i databasen.
+		getSchemesList();													//av knappar av alla scheman som ligger i databasen.
+	});
+
+	function getSchemesList(){
+		var XHR = new XMLHttpRequest();
 		XHR.onreadystatechange = function(){
 			if (XHR.readyState == 4 && XHR.status == 200) {
                 str = XHR.responseText;
@@ -251,13 +255,15 @@ loadEvent(function(){							//Alla funktioner innanför här laddas in samtidigt
         }
         XHR.open("GET", "maskschema.php?type=getList", true);
         XHR.send();
-	});
+	}
 
 	function deleteScheme(name){
+
 		var XHR = new XMLHttpRequest();
 		XHR.onreadystatechange = function(){
 			if(XHR.readyState == 4 && XHR.status == 200){
 				alert(XHR.responseText);
+				getSchemesList();
 			}
 		}
 		XHR.open("GET", "maskschema.php?type=delete&name="+name, true);
@@ -292,10 +298,11 @@ loadEvent(function(){							//Alla funktioner innanför här laddas in samtidigt
 				XHR.onreadystatechange = function(){
 					if(XHR.readyState == 4 && XHR.status == 200){
 						//getRespond();
+						//document.getElementById('nextStep').innerHTML = XHR.responseText;
 						alert(XHR.responseText);
 					}
 				}
-				XHR.open("GET", "maskschema.php?type=upLoad&name="+document.getElementById('name').value+"&array="+JSON.stringify(steps), true);
+				XHR.open("GET", "maskschema.php?type=upLoad&name="+document.getElementById('name').value+"&array="+JSON.stringify(steps)+"&wElements="+document.getElementById('warmingUp').value+"&mWarm="+document.getElementById('mHeating').value, true);
 				XHR.send();
 			}
 			else{

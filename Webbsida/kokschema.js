@@ -230,7 +230,11 @@ loadEvent(function(){							//Alla funktioner innanför här laddas in samtidigt
 	});
 
 	addEvent(document.getElementById('openScheme'), 'click', function(e){	//Event som lyssnar på "öppna schema"-knappen och skapar sedan en lista
-		var XHR = new XMLHttpRequest();										//av knappar av alla scheman som ligger i databasen.
+		getSchemes();														//av knappar av alla scheman som ligger i databasen.
+	});
+
+	function getSchemes(){
+		var XHR = new XMLHttpRequest();
 		XHR.onreadystatechange = function(){
 			if (XHR.readyState == 4 && XHR.status == 200) {
                 str = XHR.responseText;
@@ -270,13 +274,14 @@ loadEvent(function(){							//Alla funktioner innanför här laddas in samtidigt
         }
         XHR.open("GET", "kokschema.php?type=getList", true);
         XHR.send();
-	});
+	}
 
 	function deleteScheme(name){
 		var XHR = new XMLHttpRequest();
 		XHR.onreadystatechange = function(){
 			if(XHR.readyState == 4 && XHR.status == 200){
 				alert(XHR.responseText);
+				getSchemes();
 			}
 		}
 		XHR.open("GET", "kokschema.php?type=delete&name="+name, true);
@@ -317,7 +322,7 @@ loadEvent(function(){							//Alla funktioner innanför här laddas in samtidigt
 							alert(XHR.responseText);
 						}
 					}
-					XHR.open("GET", "kokschema.php?type=upLoad&name="+document.getElementById('name').value+"&array="+JSON.stringify(steps)+"&total="+document.getElementById('boilTime').value, true);
+					XHR.open("GET", "kokschema.php?type=upLoad&name="+document.getElementById('name').value+"&array="+JSON.stringify(steps)+"&total="+document.getElementById('boilTime').value+"&wElements="+document.getElementById('warmingUp').value+"&mWarm="+document.getElementById('mHeating').value, true);
 					XHR.send();
 				}
 				else{

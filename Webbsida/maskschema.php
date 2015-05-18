@@ -137,20 +137,28 @@ EOF;
    $db->close();
 }
 
-function upLoad(){                                    //Funktion som skickar en sträng till arduinon.
+function upLoad(){     
+   $wElements = $_REQUEST["wElements"];  
+   $mWarm = $_REQUEST["mWarm"];	                               //Funktion som skickar en sträng till arduinon.
    $name = $_REQUEST["name"];                         //name,temp1,time1,temp2,time2....tempn,timen,checksum
    $array = json_decode($_REQUEST["array"]);          //checksum = strlen(name)+temp1+time1+temp2+...+tempn+timen
    if(preg_match("/[a-zA-ZåäöÅÄÖ0-9]+/", $name)){
       if(!empty($array)){
+         $text = "mash,";
          $check = strlen($name);
-         $text = $name;
+         $text .= $name;
+         $check += count($array);
+         $temp = "";
          for($i = 0; $i < count($array); $i++){
-            $text .= ",".$array[$i][0];
-            $text .= ",".$array[$i][1];
+            $temp .= ",".$array[$i][0];
+            $temp .= ",".$array[$i][1];
             $check += $array[$i][0];
             $check += $array[$i][1];
          }
+         $text .= ",".$wElements.",".$mWarm;	
          $text .= ",".$check.",";
+         $text .= count($array);
+         $text .= $temp.",";
          //echo $text;
          $fp = fopen("/dev/ttyACM0","w");
          if(!$fp){

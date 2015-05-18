@@ -13,6 +13,7 @@ void Program::Default()
 	Button::Begin();
 	relay.Begin();
 	lcd.Begin();
+	pinMode(BUZZER, OUTPUT);
 }
 
 void Program::Receive()
@@ -129,9 +130,11 @@ void Program::Receive()
 		relay.ReadElements();
 		digitalWrite(PUMP, HIGH);
 		digitalWrite(COOLINGPUMP, HIGH);
+		digitalWrite(BUZZER, HIGH);
 	}
 	else
 	{
+		digitalWrite(BUZZER, LOW);
 		relay.AllLow();
 	}
 
@@ -201,12 +204,12 @@ void Program::Pause(Mash mSchedule, Boil bSchedule, Cooling cSchedule)
 		relay.ReadElements();
 		digitalWrite(PUMP, HIGH);
 		digitalWrite(COOLINGPUMP, HIGH);
-		//digitalWrite(BUZZER, HIGH);
+		digitalWrite(BUZZER, HIGH);
 	}
 	else
 	{
 		relay.AllLow();
-		//digitalWrite(BUZZER, LOW);
+		digitalWrite(BUZZER, LOW);
 	}
 
 	if(digitalRead(startButton) && !digitalRead(SWITCHMODE))

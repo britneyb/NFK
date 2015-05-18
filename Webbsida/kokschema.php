@@ -19,7 +19,7 @@ else if ($type == "getSchedule"){            //kokschema.php?type=getSchedule&na
 else if ($type == "getList"){                //kokschema.php?type=getList
    getList();
 }
-else if ($type == "upLoad"){                 //kokschema.php?type=upLoad&name="namnet"&array="arrayen"&total="totalatiden"
+else if ($type == "upLoad"){                 //kokschema.php?type=upLoad&name="namnet"&array="arrayen"&total="totalatiden "
    upLoad();
 }
 else if ($type == "response"){               //kokschema.php?type=response
@@ -143,22 +143,31 @@ EOF;
    $db->close();
 }
 
-function upLoad(){                                    //Funktion som skickar en sträng till arduinon.
-   $name = $_REQUEST["name"];                         //name,temp1,time1,temp2,time2....tempn,timen,checksum
-   $array = json_decode($_REQUEST["array"]);          //checksum = strlen(name)+temp1+time1+temp2+...+tempn+timen
+function upLoad(){  
+   $wElements = $_REQUEST["wElements"];  
+   $mWarm= $_REQUEST["mWarm"];                           //Funktion som skickar en sträng till arduinon.
+   $name = $_REQUEST["name"];                            //name,temp1,time1,temp2,time2....tempn,timen,checksum
+   $array = json_decode($_REQUEST["array"]);             //checksum = strlen(name)+temp1+time1+temp2+...+tempn+timen
    $total = $_REQUEST["total"];
    if(preg_match("/[a-zA-ZåäöÅÄÖ0-9]+/", $name)){
       if (preg_match("/[0-9]+/", $total)){
          if(!empty($array)){
+            $text = "boil,";
             $check = strlen($name);
-            $text = $name;
+            $text .= $name;
+            $check += count($array);
+            $check += $total;
+            $temp = "";
             for($i = 0; $i < count($array); $i++){
-               $text .= ",".$array[$i][0];
-               $text .= ",".$array[$i][1];
-               $check += $array[$i][0];
+               $temp .= ",".$array[$i][0];
+               $temp .= ",".$array[$i][1];
+               $check += strlen($array[$i][0]);
                $check += $array[$i][1];
             }
-            $text .= ",".$check.",";
+            $text .= "," .$wElements.",". $mWarm;
+            $text .= ",".$check.",".count($array).",".$total;
+            $text .= $temp.",";
+            //echo $text;
             $fp = fopen("/dev/ttyACM0","w");
             if(!$fp){
                echo "Can't find /dev/ttyACM0";
