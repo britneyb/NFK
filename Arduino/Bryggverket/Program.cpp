@@ -38,6 +38,9 @@ void Program::Receive()
 			content = content.substring(content.indexOf(",")+1);
 			check = name.length();
 
+			id = atol(content.substring(0,content.indexOf(",")).c_str());
+			content = content.substring(content.indexOf(",")+1);
+
 			checkSum = atol(content.substring(0,content.indexOf(",")).c_str());
 			content = content.substring(content.indexOf(",")+1);
 
@@ -48,13 +51,13 @@ void Program::Receive()
 			if(check == checkSum)
 			{
 				loaded = true;	
-				Serial.print("Success");
+				//Serial.print("Success");
 			}
 			else
 			{
 				lcd.failed();
 				loaded = false;
-				Serial.print("Fail");
+				//Serial.print("Fail");
 			}
 		}
 		else
@@ -63,6 +66,9 @@ void Program::Receive()
 			name = content.substring(0,content.indexOf(","));
 			content = content.substring(content.indexOf(",")+1);
 			check = name.length();
+
+			id = atol(content.substring(0,content.indexOf(",")).c_str());
+			content = content.substring(content.indexOf(",")+1);
 
 			elHeating = atol(content.substring(0,content.indexOf(",")).c_str());
 			content = content.substring(content.indexOf(",")+1);
@@ -79,6 +85,10 @@ void Program::Receive()
 
 			if(type == "boil")
 			{
+				boilTemp = atol(content.substring(0,content.indexOf(",")).c_str());
+				content = content.substring(content.indexOf(",")+1);
+				check += boilTemp;
+
 				totalTime = atol(content.substring(0,content.indexOf(",")).c_str());
 				content = content.substring(content.indexOf(",")+1);
 				check += totalTime;
@@ -113,14 +123,12 @@ void Program::Receive()
 
 			if(check == checkSum)
 			{
-				loaded = true;	
-				Serial.print("Success");
+				loaded = true;
 			}
 			else
 			{
 				lcd.failed();
 				loaded = false;
-				Serial.print("Fail");
 			}
 		}
 	}
@@ -145,9 +153,9 @@ void Program::Receive()
 	if(loaded && state == HIGH && !digitalRead(SWITCHMODE))
 	{
 	    running = true;
-	    Boil bSchedule(hopsArr, timeArr, totalTime, noSteps, elHeating, elRandom);
-    	Mash mSchedule(tempArr,timeArr,noSteps, elHeating, elRandom); //fyi should be a selection 
-    	Cooling cSchedule(coolingTemp);
+	    Boil bSchedule(id, hopsArr, timeArr, boilTemp, totalTime, noSteps, elHeating, elRandom);
+    	Mash mSchedule(id, tempArr,timeArr,noSteps, elHeating, elRandom); //fyi should be a selection 
+    	Cooling cSchedule(id, coolingTemp);
 	
 		while(loaded)
 		{

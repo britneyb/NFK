@@ -129,9 +129,11 @@ function upLoad(){										//Funktion som skickar en sträng till arduinon.
          $text = "cooling,";
          $check = strlen($name);
          $text .= $name;
+         $id = makeRow($name);
+         $text .= ",".$id;
          $check += $temp;
          $text .= ",".$check.",".$temp.",";
-         //echo $text;
+         echo $text;
          $fp = fopen("/dev/ttyACM0","w");
          if(!$fp){
             echo "Can't find /dev/ttyACM0";
@@ -151,6 +153,27 @@ function upLoad(){										//Funktion som skickar en sträng till arduinon.
    else{
       echo "Invalid namn";
    }
+}
+
+function makeRow($name){
+   $date = date('Y/m/d');
+   $db = new MyDB("sqltemptime.db");
+   if(!$db){
+      echo $db->lastErrorMsg();
+   }
+   $sql = <<<EOF
+      INSERT INTO schema (name, type, date)
+      VALUES ('$name', 'cooling', '$date');
+EOF;
+   $ret = $db->exec($sql);
+   if(!$ret){
+      echo $db->lastErrorMsg();
+   } else {
+      echo "Data insertet\n";
+   }
+   $id = $db->lastInsertRowid();
+   $db->close();
+   return $id;
 }
 
 function delete(){

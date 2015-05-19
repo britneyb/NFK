@@ -198,6 +198,25 @@ loadEvent(function(){							//Alla funktioner innanför här laddas in samtidigt
 		}
 	}
 
+	function validateTemp(temp){				//Funktion som kollar så temperaturen är en siffra mellan 0 och 100.
+		if(temp.value != ""){
+			if(/^\d+$/.test(temp.value) && temp.value > 0){
+				temp.style.backgroundColor = "white";
+				return true;
+			}
+			else{
+				temp.focus();
+				temp.style.backgroundColor = "#FF4D4D";
+				return false;
+			}
+		}
+		else{
+			temp.focus();
+			temp.style.backgroundColor = "#FF4D4D";
+			return false;
+		}
+	}
+
 	addEvent(document.getElementById('boilTime'), 'keypress', function(e){		//Event som skickar användaren vidare till time-fältet
 		if(e.keyCode == 13){												//när man är i temp-fältet och trycker Enter.
 			document.getElementById('hops').focus();
@@ -316,14 +335,16 @@ loadEvent(function(){							//Alla funktioner innanför här laddas in samtidigt
 		if(document.getElementById('name').value != "" && (/^[a-zA-ZåäöÅÄÖ0-9]+$/.test(document.getElementById('name').value))){
 			if(steps){
 				if(validateTotalTime(document.getElementById('boilTime'))){
-					XHR.onreadystatechange = function(){
-						if(XHR.readyState == 4 && XHR.status == 200){
-							//getRespond();
-							alert(XHR.responseText);
+					if(validateTemp(document.getElementById('boilTemp'))){
+						XHR.onreadystatechange = function(){
+							if(XHR.readyState == 4 && XHR.status == 200){
+								//getRespond();
+								alert(XHR.responseText);
+							}
 						}
+						XHR.open("GET", "kokschema.php?type=upLoad&name="+document.getElementById('name').value+"&array="+JSON.stringify(steps)+"&temp="+document.getElementById('boilTemp').value+"&total="+document.getElementById('boilTime').value+"&wElements="+document.getElementById('warmingUp').value+"&mWarm="+document.getElementById('mHeating').value, true);
+						XHR.send();
 					}
-					XHR.open("GET", "kokschema.php?type=upLoad&name="+document.getElementById('name').value+"&array="+JSON.stringify(steps)+"&total="+document.getElementById('boilTime').value+"&wElements="+document.getElementById('warmingUp').value+"&mWarm="+document.getElementById('mHeating').value, true);
-					XHR.send();
 				}
 				else{
 					alert("Otillåten tid");

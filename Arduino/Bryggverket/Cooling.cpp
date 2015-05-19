@@ -5,11 +5,11 @@
 #include "Arduino.h"
 #include "Cooling.h"
 
-Cooling::Cooling(int temp)
+Cooling::Cooling(int id, int temp)
 {
 	setTime(0,0,0,0,0,0);
 	_temp = temp;
-
+	_id = id;
     lcd.Begin();
     sensors.requestTemperatures();
 	CurrentTemp = sensors.getTempCByIndex(0) + Calibrator;
@@ -28,6 +28,11 @@ boolean Cooling::Start()
 	lcd.cooling(totTime, CurrentTemp, _temp);
 
 	digitalWrite(COOLINGPUMP,HIGH);
+
+	if(second() == 1)
+	{
+		Serial.print("cooling,"+String(_id)+","+String(minute(totTime)+hour(totTime)*60)+","+CurrentTemp+"/");
+	}
 
 	if(CurrentTemp <= _temp)
 	{

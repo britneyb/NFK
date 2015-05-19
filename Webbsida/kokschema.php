@@ -143,7 +143,8 @@ EOF;
    $db->close();
 }
 
-function upLoad(){  
+function upLoad(){
+   $boilTemp = $_REQUEST["temp"];
    $wElements = $_REQUEST["wElements"];  
    $mWarm= $_REQUEST["mWarm"];                           //Funktion som skickar en sträng till arduinon.
    $name = $_REQUEST["name"];                            //name,temp1,time1,temp2,time2....tempn,timen,checksum
@@ -155,8 +156,11 @@ function upLoad(){
             $text = "boil,";
             $check = strlen($name);
             $text .= $name;
+            $id = makeRow($name, $wElements, $mWarm);
+            $text .= ",".$id;
             $check += count($array);
             $check += $total;
+            $check += $boilTemp;
             $temp = "";
             for($i = 0; $i < count($array); $i++){
                $temp .= ",".$array[$i][0];
@@ -165,9 +169,9 @@ function upLoad(){
                $check += $array[$i][1];
             }
             $text .= "," .$wElements.",". $mWarm;
-            $text .= ",".$check.",".count($array).",".$total;
+            $text .= ",".$check.",".count($array).",".$boilTemp.",".$total;
             $text .= $temp.",";
-            //echo $text;
+            echo $text;
             $fp = fopen("/dev/ttyACM0","w");
             if(!$fp){
                echo "Can't find /dev/ttyACM0";
@@ -191,6 +195,27 @@ function upLoad(){
    else{
       echo "Invalid namn";
    }
+}
+
+function makeRow($name, $elementHeat, $elementKeepWarm){
+   $date = date('Y/m/d');
+   $db = new MyDB("sqltemptime.db");
+   if(!$db){
+      echo $db->lastErrorMsg();
+   }
+   $sql = <<<EOF
+      INSERT INTO schema (name, type, date, elementheating, elementrndheating)
+      VALUES ('$name', 'boil', '$date', '$elementHeat', '$elementKeepWarm');
+EOF;
+   $ret = $db->exec($sql);
+   if(!$ret){
+      echo $db->lastErrorMsg();
+   } else {
+      echo "Data insertet\n";
+   }
+   $id = $db->lastInsertRowid();
+   $db->close();
+   return $id;
 }
 
 function delete(){

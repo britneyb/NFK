@@ -33,7 +33,7 @@ Example Cooling: cooling,Dipa,16,12,
 class Mash
 {
   public:
-    Mash(int* tempArr, int* timeArr, int arrSize, int elHeating, int elRandom);
+    Mash(int id, int* tempArr, int* timeArr, int arrSize, int elHeating, int elRandom);
     boolean Start();
     void Unpause();
     void ProgramFinshed();
@@ -49,7 +49,7 @@ class Mash
 	Relay relay;
 	
 	int statePump;
-	
+	int _id;
 	time_t totTime; //The total time
 	time_t curTime; //The time of the current step
 	time_t difTime; //The total time when the current step started

@@ -49,6 +49,8 @@ private:
     String ip;
     int elHeating;
     int elRandom;
+    int id;
+    int boilTemp;
     //String name = ""; //The name for the scheme
 
   	//int* arr; //Array that stores the values of time and temp 

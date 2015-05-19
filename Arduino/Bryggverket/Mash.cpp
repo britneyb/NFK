@@ -5,13 +5,13 @@
 #include "Arduino.h"
 #include "Mash.h"
 
-Mash::Mash(int* tempArr, int* timeArr, int arrSize, int elHeating, int elRandom)
+Mash::Mash(int id, int* tempArr, int* timeArr, int arrSize, int elHeating, int elRandom)
 {
 	setTime(0,0,0,0,0,0);
 	_steps = arrSize;
 	_tempArr = tempArr; //new int [arrSize];
 	_timeArr = timeArr;
-
+	_id = id;
 	difTime = 0;
 	curStarted = false;
     _step=1;
@@ -78,6 +78,11 @@ boolean Mash::Start()
 	}*/
 
 	digitalWrite(PUMP, HIGH);
+
+	if(second() == 1)
+	{
+		Serial.print("mash,"+String(_id)+","+String(minute(totTime)+hour(totTime)*60)+","+CurrentTemp+"/");
+	}
 
 	if(minute(curTime) >= _timeArr[_step-1] && (_steps) > _step && curStarted)
 	{

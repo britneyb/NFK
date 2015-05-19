@@ -147,6 +147,8 @@ function upLoad(){
          $text = "mash,";
          $check = strlen($name);
          $text .= $name;
+         $id = makeRow($name, $wElements, $mWarm);
+         $text .= ",".$id;
          $check += count($array);
          $temp = "";
          for($i = 0; $i < count($array); $i++){
@@ -159,7 +161,7 @@ function upLoad(){
          $text .= ",".$check.",";
          $text .= count($array);
          $text .= $temp.",";
-         //echo $text;
+         echo $text;
          $fp = fopen("/dev/ttyACM0","w");
          if(!$fp){
             echo "Can't find /dev/ttyACM0";
@@ -179,6 +181,27 @@ function upLoad(){
    else{
       echo "Invalid namn";
    }
+}
+
+function makeRow($name, $elementHeat, $elementKeepWarm){
+   $date = date('Y/m/d');
+   $db = new MyDB("sqltemptime.db");
+   if(!$db){
+      echo $db->lastErrorMsg();
+   }
+   $sql = <<<EOF
+      INSERT INTO schema (name, type, date, elementheating, elementrndheating)
+      VALUES ('$name', 'mash', '$date', '$elementHeat', '$elementKeepWarm');
+EOF;
+   $ret = $db->exec($sql);
+   if(!$ret){
+      echo $db->lastErrorMsg();
+   } else {
+      echo "Data insertet\n";
+   }
+   $id = $db->lastInsertRowid();
+   $db->close();
+   return $id;
 }
 
 function delete(){

@@ -17,7 +17,7 @@ class Cooling
 {
 
 public:
-	Cooling(int temp);
+	Cooling(int id, int temp);
 	boolean Start();
 	void Unpause();
 private:
@@ -26,7 +26,7 @@ private:
   	int CurrentTemp; //Stores the current temp
   	Display lcd; //Our display functions
 	Relay relay;
-
+	int _id;
 	time_t totTime; //The total time
 	time_t curTime; //The time of the current step
 	time_t difTime; //The total time when the current step started
