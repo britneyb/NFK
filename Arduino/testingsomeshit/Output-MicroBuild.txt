@@ -1,5 +1,0 @@
-﻿Compiling 'testingsomeshit' for 'Arduino Uno'
-Binary sketch size: 10,146 bytes (used 31% of a 32,256 byte maximum) (0.20 secs)
-Minimum Memory Usage: 550 bytes (27% of a 2048 byte maximum)
-Uploading to I/O board using 'COM3'
-Done uploading
