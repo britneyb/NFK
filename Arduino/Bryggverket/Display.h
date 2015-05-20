@@ -6,7 +6,7 @@
 #define Display_h
 
 #include <Wire.h> 
-#include <LiquidCrystal.h>
+#include <LiquidCrystal_I2C.h>
 #include <Time.h>
 #include "Arduino.h"
 
@@ -26,7 +26,7 @@ class Display
     void cooling(time_t t, int cTemp, int temp);
     void step(int row, int cStep, int cTemp, int cTime, int steps);
   private:
-  	LiquidCrystal lcd = LiquidCrystal(0x27,20,4);
+  	LiquidCrystal_I2C lcd = LiquidCrystal_I2C(0x27,20,4);
 };
 
 #endif
