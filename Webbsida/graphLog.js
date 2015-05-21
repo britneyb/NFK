@@ -125,13 +125,15 @@ loadEvent(function(){							//Alla funktioner innanför här laddas in samtidigt
 					ylabel: 'Temperature (C)',
 					xlabel: 'Minutes',
 				});
-				document.getElementById('name').innerHTML = "Name: "+scheme[1];
-				document.getElementById('date').innerHTML = "Datetime: "+scheme[2];
-				document.getElementById('type').innerHTML = "Type: "+scheme[3];
-				document.getElementById('elementHeating').innerHTML = "Number of elements: "+scheme[4];
-				document.getElementById('elementKeepWarm').innerHTML = "Number of randomelements: "+scheme[5];
-				document.getElementById('list').innerHTML = "";
-				document.getElementById('list').style.display = "none";
+				document.getElementById('name').innerHTML = "<b>Name:</b> "+scheme[1];
+					document.getElementById('date').innerHTML = " <b>Datetime:</b> "+scheme[2];
+					document.getElementById('type').innerHTML = " <b>Type:</b> "+scheme[3];
+					if(scheme[4] != null)
+						document.getElementById('elementHeating').innerHTML = " <b>Number of elements:</b> "+scheme[4];
+					if(scheme[5] != null)
+						document.getElementById('elementKeepWarm').innerHTML = " <b>Number of randomelements:</b> "+scheme[5];
+					document.getElementById('list').innerHTML = "";
+					document.getElementById('list').style.display = "none";
 			}
 		}
 		XHR.open("GET", "graphLog.php?type=loadLog&date="+date, true);
@@ -156,11 +158,13 @@ loadEvent(function(){							//Alla funktioner innanför här laddas in samtidigt
 						ylabel: 'Temperature (C)',
 						xlabel: 'Minutes',
 					});
-					document.getElementById('name').innerHTML = "Name: "+scheme[1];
-					document.getElementById('date').innerHTML = "Datetime: "+scheme[2];
-					document.getElementById('type').innerHTML = "Type: "+scheme[3];
-					document.getElementById('elementHeating').innerHTML = "Number of elements: "+scheme[4];
-					document.getElementById('elementKeepWarm').innerHTML = "Number of randomelements: "+scheme[5];
+					document.getElementById('name').innerHTML = "<b>Name:</b> "+scheme[1];
+					document.getElementById('date').innerHTML = " <b>Datetime:</b> "+scheme[2];
+					document.getElementById('type').innerHTML = " <b>Type:</b> "+scheme[3];
+					if(scheme[4] != null)
+						document.getElementById('elementHeating').innerHTML = " <b>Number of elements:</b> "+scheme[4];
+					if(scheme[5] != null)
+						document.getElementById('elementKeepWarm').innerHTML = " <b>Number of randomelements:</b> "+scheme[5];
 					document.getElementById('list').innerHTML = "";
 					document.getElementById('list').style.display = "none";
 				}
@@ -188,12 +192,14 @@ loadEvent(function(){							//Alla funktioner innanför här laddas in samtidigt
 						ylabel: 'Temperature (C)',
 						xlabel: 'Minutes',
 					});
-					document.getElementById('name').innerHTML = "Name: "+scheme[1];
-					document.getElementById('date').innerHTML = "Datetime: "+scheme[2];
+					document.getElementById('name').innerHTML = "<b>Name:</b> "+scheme[1];
+					document.getElementById('date').innerHTML = " <b>Datetime:</b> "+scheme[2];
 					loadedScheme = scheme[2];
-					document.getElementById('type').innerHTML = "Type: "+scheme[3];
-					document.getElementById('elementHeating').innerHTML = "Number of elements: "+scheme[4];
-					document.getElementById('elementKeepWarm').innerHTML = "Number of randomelements: "+scheme[5];
+					document.getElementById('type').innerHTML = " <b>Type:</b> "+scheme[3];
+					if(scheme[4] != null)
+						document.getElementById('elementHeating').innerHTML = " <b>Number of elements:</b> "+scheme[4];
+					if(scheme[5] != null)
+						document.getElementById('elementKeepWarm').innerHTML = " <b>Number of randomelements:</b> "+scheme[5];
 					document.getElementById('list').innerHTML = "";
 					document.getElementById('list').style.display = "none";
 				}

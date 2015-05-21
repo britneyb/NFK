@@ -81,7 +81,8 @@ boolean Mash::Start()
 
 	if(second() == 1)
 	{
-		Serial.print("mash,"+String(_id)+",0,"+String(minute(totTime)+hour(totTime)*60)+","+CurrentTemp+"/");
+		int check = _id+minute(totTime)+hour(totTime)*60+CurrentTemp;
+		Serial.print("mash,"+String(_id)+",0,"+String(minute(totTime)+hour(totTime)*60)+","+CurrentTemp+","+String(check)+"/");
 	}
 
 	if(minute(curTime) >= _timeArr[_step-1] && (_steps) > _step && curStarted)
