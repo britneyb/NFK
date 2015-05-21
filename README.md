@@ -1,18 +1,19 @@
 # Control system for home brewery
 
-Ett projekt för att få fram ett system som övervakar och ljusterar temperaturen vid ölbryggning.
+A complete system that monitors and manages the temperature of a home brewery.
 
 ## Installation
-Raspberry Pi
-Raspbian (OS for Raspberry Pi)
+
+###Raspbian 
 First of all you need Raspbian installed on your Raspberry Pi which you can easily do with NOOBS (New Out Of the Box Software).
 
 #### Default user for Raspbian
 User: pi
+
 Password: raspberry
 
 
-## Apache & PHP
+### Apache & PHP
 To install Apache which we are going to use as our webserver we need to write some lines in the terminal:
 
 Installing apache and php:
@@ -24,7 +25,7 @@ sudo service apache2 restart
 Enter the IP-address of your raspberry in your web browser. If it works you should see the text “It works!”. 
 
 
-## SQLite
+### SQLite
 Write the following in the terminal to install sqlite:
 sudo apt-get install sqlite3 libsqlite3-dev
 
@@ -35,7 +36,7 @@ If you write sqlite3 it should be starting the command-line utility and that sho
 
 To quit sqlite press ctrl+d or write “.quit”. 
 
-## Permissions
+### Permissions
 No external user should normally be able to access the usb-ports but in our case we have to make an exception to be able to communicate with the arduino through php. The user which will be used when you browse a website on your server is named www-data. To be able to communicate with the usb we have to add that user to the dialout group. We can easily do that with the following line in the terminal:
 
 usermod -a -G dialout www-data
@@ -57,13 +58,13 @@ www-data ALL = NOPASSWD: /sbin/shutdown
 
 The reason we have to do this is to be able to shutdown the system through the website.
 
-## Adding the website
+### Adding the website
 Next step is to add the website which you can get from our Github under path /website/:
 https://github.com/Sevag1990/home-brewery
 
 The website should be placed under /var/www/
 
-## Script at startup
+### Script at startup
 Copy the python-script serverip.py found on Github to /home/pi
 
 Then edit the rc.local file using this command:
@@ -72,14 +73,14 @@ sudo nano /etc/rc.local
 Then copy this following line at the end of the file:
 python3 /home/pi/serverip.py
 
-## Optional: Sync Time
+### Optional: Sync Time
 If you have a problem getting the right time from the raspberry you could add this lines also in the file rc.local using the same command as above.
 
 time=$(wget http://www.timeapi.org/utc/in+one+hours?format=%25d%20%25b%20%25Y%2$
 echo "Time set to:"
 sudo date -s "`echo $time`"
 
-# Arduino
+### Arduino
 
 To upload the code to the Arduino you will first have to import several libraries in your C:/Users/”user”/Documents/Arduino/libraries folder.
 
