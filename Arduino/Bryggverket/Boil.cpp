@@ -104,7 +104,7 @@ boolean Boil::Start()
 
 	if(second() == 1)
 	{
-		Serial.print("boil,"+String(_id)+","+String(minute(totTime)+hour(totTime)*60)+","+CurrentTemp+"/");
+		Serial.print("boil,"+String(_id)+","+String(minute(_totalTime)+hour(_totalTime)*60)+","+String(minute(totTime)+hour(totTime)*60)+","+CurrentTemp+"/");
 	}
 
 	if(hour(totTime) <= 0 && minute(totTime) < _timeArr[_step-1] && curStarted && _steps == _step)

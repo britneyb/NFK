@@ -173,6 +173,7 @@ function upLoad(){
          fwrite($fp,$text);
          echo "Scheme sent";
          fclose($fp);
+         exec('python3 PythonPi.py');
       }
       else{
          echo "Arrayen tom";
@@ -184,7 +185,7 @@ function upLoad(){
 }
 
 function makeRow($name, $elementHeat, $elementKeepWarm){
-   $date = date('Y/m/d');
+   $date = date('Y/m/d H:i');
    $db = new MyDB("sqltemptime.db");
    if(!$db){
       echo $db->lastErrorMsg();

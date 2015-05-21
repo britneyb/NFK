@@ -228,6 +228,7 @@ loadEvent(function(){							//Alla funktioner innanför här laddas in samtidigt
 					if(XHR.readyState == 4 && XHR.status == 200){
 						//getRespond();
 						//document.getElementById('nextStep').innerHTML = XHR.responseText;
+						//alert("hej");
 						alert(XHR.responseText);
 					}
 				}

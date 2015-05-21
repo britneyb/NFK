@@ -31,7 +31,7 @@ boolean Cooling::Start()
 
 	if(second() == 1)
 	{
-		Serial.print("cooling,"+String(_id)+","+String(minute(totTime)+hour(totTime)*60)+","+CurrentTemp+"/");
+		Serial.print("cooling,"+String(_id)+",0,"+String(minute(totTime)+hour(totTime)*60)+","+CurrentTemp+"/");
 	}
 
 	if(CurrentTemp <= _temp)

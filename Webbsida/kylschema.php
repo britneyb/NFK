@@ -145,6 +145,7 @@ function upLoad(){										//Funktion som skickar en sträng till arduinon.
          fwrite($fp,$text);
          echo "Scheme sent";
          fclose($fp);
+         exec('python3 PythonPi.py');
       }
       else{
          echo "Invalid temp";
@@ -156,7 +157,7 @@ function upLoad(){										//Funktion som skickar en sträng till arduinon.
 }
 
 function makeRow($name){
-   $date = date('Y/m/d');
+   $date = date('Y/m/d H:i');
    $db = new MyDB("sqltemptime.db");
    if(!$db){
       echo $db->lastErrorMsg();

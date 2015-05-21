@@ -64,6 +64,10 @@ loadEvent(function(){							//Alla funktioner innanför här laddas in samtidigt
 		window.location.href = "kylschema.html";
 	});
 
+	addEvent(document.getElementById('graphLog'), 'click', function(e){
+		window.location.href = "graphLog.html";
+	});
+
 	addEvent(document.getElementById('shutdown'), 'click', function(e){
 		var XHR = new XMLHttpRequest();
 		XHR.onreadystatechange = function(){
