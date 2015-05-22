@@ -11,11 +11,8 @@ while ser.isOpen():
 	data = (ser.readline()).decode('utf-8')
 	if data != "":
 		match = re.match(r'\w+,\d+,\d+,\d+,\d+,\d+', data)
-		#print(match)
 		if match:
 			match2 = re.search(r'(\w+),(\d+),(\d+),(\d+),(\d+),(\d+)', match.group(0))
-			#print(match2.group(0))
-			#print(match2.group(4)+":"+match2.group(5)+":"+match2.group(2)+":"+match2.group(3))
 			_check = match2.group(6)
 			_time = match2.group(4)
 			_temp = match2.group(5)
@@ -23,12 +20,7 @@ while ser.isOpen():
 			_checkSum = int(_id)+int(_time)+int(_temp)+int(match2.group(3))
 			if match2.group(1) == "boil":
 				_time = int(match2.group(3))-int(_time)
-			#print(_checkSum)
-			#print(_check)
 			if int(_checkSum) == int(_check):
-				#print("success")
 				c.execute("INSERT INTO timeTemp (time, temp, id) VALUES (?, ?, ?)", ("{}".format(_time), "{}".format(_temp), "{}".format(_id)))
 				con.commit()
-			#print("fail")
-			#print(match2.group(1)+":"+match2.group(2)+":"+match2.group(3)+":"+match2.group(4))
 

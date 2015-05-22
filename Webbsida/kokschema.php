@@ -17,13 +17,11 @@ else if ($type == "getSchedule"){            //kokschema.php?type=getSchedule&na
    getSchedule();
 }
 else if ($type == "getList"){                //kokschema.php?type=getList
+   echo "test";
    getList();
 }
 else if ($type == "upLoad"){                 //kokschema.php?type=upLoad&name="namnet"&array="arrayen"&total="totalatiden "
    upLoad();
-}
-else if ($type == "response"){               //kokschema.php?type=response
-   response();
 }
 else if ($type = "delete"){                  //kokschema.php?type=delete&name="namnet"
    delete();
@@ -171,14 +169,9 @@ function upLoad(){
             $text .= "," .$wElements.",". $mWarm;
             $text .= ",".$check.",".count($array).",".$boilTemp.",".$total;
             $text .= $temp.",";
-            echo $text;
             $fp = fopen("/dev/ttyACM0","w");
             if(!$fp){
                echo "Can't find /dev/ttyACM0";
-               $fp = fopen("/dev/ttyACM1","w");
-               if(!$fp){
-                  echo "Can't find /dev/ttyACM1";
-               }
             }
             fwrite($fp,$text);
             echo "Scheme sent";

@@ -10,7 +10,6 @@
 class SerialString
 {
   public:
-    //SerialString();
     void Print(String str);
     String Read();
 };

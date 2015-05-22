@@ -124,6 +124,8 @@ boolean Boil::Start()
 		digitalWrite(BUZZER, HIGH);
 		delay(500);
 		digitalWrite(BUZZER, LOW);
+		int check = _id+minute(_totalTime)+hour(_totalTime)*60+minute(totTime)+hour(totTime)*60+CurrentTemp;
+		Serial.print("boil,"+String(_id)+","+String(minute(_totalTime)+hour(_totalTime)*60)+","+String(minute(totTime)+hour(totTime)*60)+","+CurrentTemp+","+String(check)+"/");
 	    return false;
 	}
 	return true;

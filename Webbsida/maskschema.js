@@ -297,8 +297,6 @@ loadEvent(function(){							//Alla funktioner innanför här laddas in samtidigt
 			if(steps){
 				XHR.onreadystatechange = function(){
 					if(XHR.readyState == 4 && XHR.status == 200){
-						//getRespond();
-						//document.getElementById('nextStep').innerHTML = XHR.responseText;
 						alert(XHR.responseText);
 					}
 				}
@@ -314,18 +312,8 @@ loadEvent(function(){							//Alla funktioner innanför här laddas in samtidigt
 		}
 	});
 
-	function getRespond(){
-		var XHR = new XMLHttpRequest();
-		XHR.onreadystatechange = function(){
-			if (XHR.readyState == 4 && XHR.status == 200){
-				alert(XHR.responseText);
-			}
-		}
-		XHR.open("GET", "maskschema.php?type=response", true);
-		XHR.send();
-	}
 
 	addEvent(document.getElementById('mainMenu'), 'click', function(e){		//Event för att gå tillbaka till huvudmenyn.
 		window.location.href = "index.html";
 	});
-});
+})

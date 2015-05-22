@@ -55,8 +55,8 @@ loadEvent(function(){							//Alla funktioner innanför här laddas in samtidigt
 	var loadedScheme = "";
     g = new Dygraph(document.getElementById("graphdiv"),"");
 
-	addEvent(document.getElementById('openLog'), 'click', function(e){		//Event som lyssnar på "öppna schema"-knappen och skapar sedan en lista
-		getLogList();													//av knappar av alla scheman som ligger i databasen.
+	addEvent(document.getElementById('openLog'), 'click', function(e){		//Event som lyssnar på "öppna logg"-knappen och skapar sedan en lista
+		getLogList();														//av knappar av alla loggar som ligger i databasen.
 	});
 
 	function getLogList(){
@@ -95,7 +95,6 @@ loadEvent(function(){							//Alla funktioner innanför här laddas in samtidigt
 	function deleteScheme(name){
 		var XHR = new XMLHttpRequest();
 		var date = name.match(/(\d+\/\d+\/\d+ \d+:\d+)/ig);
-		alert(date);
 		XHR.onreadystatechange = function(){
 			if(XHR.readyState == 4 && XHR.status == 200){
 				alert(XHR.responseText);
@@ -106,11 +105,9 @@ loadEvent(function(){							//Alla funktioner innanför här laddas in samtidigt
 		XHR.send();
 	}
 
-	function loadScheme(name){												//Funktion som körs när man tryckt på en knapp till ett schema 
-		open = true;														//som sedan tar bort knapparna och lägger fram shemat på ett snyggt sätt.
-		var XHR = new XMLHttpRequest();
+	function loadScheme(name){												//Funktion som körs när man tryckt på en knapp till en logg 
+		var XHR = new XMLHttpRequest();										//som sedan tar bort knapparna och lägger fram loggen på ett snyggt sätt.
 		var date = name.match(/(\d+\/\d+\/\d+ \d+:\d+)/ig);
-		loadedScheme = date;
 		XHR.onreadystatechange = function(){
 			if(XHR.readyState == 4 && XHR.status == 200){
 				var arr = JSON.parse(XHR.responseText);
@@ -130,8 +127,12 @@ loadEvent(function(){							//Alla funktioner innanför här laddas in samtidigt
 					document.getElementById('type').innerHTML = " <b>Type:</b> "+scheme[3];
 					if(scheme[4] != null)
 						document.getElementById('elementHeating').innerHTML = " <b>Number of elements:</b> "+scheme[4];
+					else
+						document.getElementById('elementHeating').innerHTML = "";
 					if(scheme[5] != null)
 						document.getElementById('elementKeepWarm').innerHTML = " <b>Number of randomelements:</b> "+scheme[5];
+					else
+						document.getElementById('elementKeepWarm').innerHTML = "";
 					document.getElementById('list').innerHTML = "";
 					document.getElementById('list').style.display = "none";
 			}
@@ -141,7 +142,6 @@ loadEvent(function(){							//Alla funktioner innanför här laddas in samtidigt
 	}
 
 	function updateLog(){
-		//alert(loadedScheme);
 		if(loadedScheme != ""){
 			var XHR = new XMLHttpRequest();
 			XHR.onreadystatechange = function(){
@@ -163,10 +163,12 @@ loadEvent(function(){							//Alla funktioner innanför här laddas in samtidigt
 					document.getElementById('type').innerHTML = " <b>Type:</b> "+scheme[3];
 					if(scheme[4] != null)
 						document.getElementById('elementHeating').innerHTML = " <b>Number of elements:</b> "+scheme[4];
+					else
+						document.getElementById('elementHeating').innerHTML = "";
 					if(scheme[5] != null)
 						document.getElementById('elementKeepWarm').innerHTML = " <b>Number of randomelements:</b> "+scheme[5];
-					document.getElementById('list').innerHTML = "";
-					document.getElementById('list').style.display = "none";
+					else
+						document.getElementById('elementKeepWarm').innerHTML = "";
 				}
 			}
 			XHR.open("GET", "graphLog.php?type=loadLog&date="+loadedScheme, true);
@@ -174,7 +176,7 @@ loadEvent(function(){							//Alla funktioner innanför här laddas in samtidigt
 		}
 	}
 
-	setInterval(updateLog, 60*1000);
+	setInterval(updateLog, 1000*60);
 
 	addEvent(document.getElementById('openCurrent'), 'click', function(e){
 		var XHR = new XMLHttpRequest();
@@ -198,8 +200,12 @@ loadEvent(function(){							//Alla funktioner innanför här laddas in samtidigt
 					document.getElementById('type').innerHTML = " <b>Type:</b> "+scheme[3];
 					if(scheme[4] != null)
 						document.getElementById('elementHeating').innerHTML = " <b>Number of elements:</b> "+scheme[4];
+					else
+						document.getElementById('elementHeating').innerHTML = "";
 					if(scheme[5] != null)
 						document.getElementById('elementKeepWarm').innerHTML = " <b>Number of randomelements:</b> "+scheme[5];
+					else
+						document.getElementById('elementKeepWarm').innerHTML = "";
 					document.getElementById('list').innerHTML = "";
 					document.getElementById('list').style.display = "none";
 				}

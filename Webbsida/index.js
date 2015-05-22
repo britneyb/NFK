@@ -77,6 +77,5 @@ loadEvent(function(){							//Alla funktioner innanför här laddas in samtidigt
         }
         XHR.open("GET", "shutdown.php", true);
         XHR.send();
-		//window.location.href = "shutdown.php";
 	});
 });

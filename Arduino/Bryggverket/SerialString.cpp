@@ -5,10 +5,6 @@
 #include "Arduino.h"
 #include "SerialString.h"
 
-// SerialString::SerialString(i) 
-// {
-	
-// }
 
 void SerialString::Print(String str)
 {
@@ -21,9 +17,7 @@ String SerialString::Read()
 	String str = "";
 	while(Serial.available())
 	{
-		//delay(100);
 		str += Serial.readString();
-		
 	}
 	return str;
 

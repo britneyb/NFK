@@ -27,7 +27,6 @@ EOF;
    $array = [];
    while($row=$ret->fetchArray()){
       array_push($array, $row[2]." ".$row[0]." ".$row[1]);
-      //print($row[0].$row[1].$row[2]." : ");
    }
    $db->close();
 
@@ -42,7 +41,6 @@ function loadLog(){
 	}
 
 	$date = $_REQUEST["date"];
-	//echo $date;
 	$logArray = [];
 	$sql = <<<EOF
 		SELECT * FROM schema WHERE date = "$date";
@@ -62,7 +60,6 @@ EOF;
 	while($row=$ret->fetchArray()){
 		array_push($dataArray, [$row[0],$row[1]]);
 	}
-	//print_r($dataArray);
 	echo json_encode([$logArray, $dataArray]);
 	$db->close();
 }
@@ -111,13 +108,6 @@ function loadCurrent(){
 		echo $db->lastErrorMsg();
 	}
 
-	//$id = $db->lastInsertRowid();
-	//$db->close();
-	//return $id;
-
-	//$date = $_REQUEST["date"];
-	//echo $date;
-	//echo $id;
 	$logArray = [];
 	$sql = <<<EOF
 		SELECT * FROM schema WHERE id = (SELECT MAX(id) FROM schema);
@@ -137,7 +127,6 @@ EOF;
 	while($row=$ret->fetchArray()){
 		array_push($dataArray, [$row[0],$row[1]]);
 	}
-	//print_r($dataArray);
 	echo json_encode([$logArray, $dataArray]);
 	$db->close();
 }

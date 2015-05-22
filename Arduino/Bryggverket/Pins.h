@@ -21,10 +21,6 @@
 #define ELEMENT4 12//the pin where the relay is connected
 
 
-
-#define boilingPoint 25
-//#define maxStep 32 //The max number of steps that can be received
 #define degree char(223) //To get the right Celcius-symbol
 
 #define Calibrator 0 //Calibration for the temp-sensor
-//#define noRandom 2

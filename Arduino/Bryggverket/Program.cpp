@@ -50,14 +50,12 @@ void Program::Receive()
 
 			if(check == checkSum)
 			{
-				loaded = true;	
-				//Serial.print("Success");
+				loaded = true;
 			}
 			else
 			{
 				lcd.failed();
 				loaded = false;
-				//Serial.print("Fail");
 			}
 		}
 		else
