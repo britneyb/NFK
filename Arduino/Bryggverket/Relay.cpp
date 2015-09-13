@@ -13,8 +13,6 @@ void Relay::Begin()
 	pinMode(ELEMENT4, OUTPUT);
 	pinMode(PUMP, OUTPUT);
 	pinMode(COOLINGPUMP, OUTPUT);
-	
-	//randNum = new int[noRandom];
 }
 
 void Relay::AllLow()

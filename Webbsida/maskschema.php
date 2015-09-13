@@ -22,9 +22,6 @@ else if ($type == "getList"){                //maskschema.php?type=getList
 else if ($type == "upLoad"){                 //maskschema.php?type=upLoad&name="namnet"&array="arrayen"
    upLoad();
 }
-else if ($type == "response"){               //maskschema.php?type=response
-   response();
-}
 else if ($type = "delete"){                  //maskschema.php?type=delete&name="namnet"
    delete();
 }
@@ -161,18 +158,14 @@ function upLoad(){
          $text .= ",".$check.",";
          $text .= count($array);
          $text .= $temp.",";
-         echo $text;
          $fp = fopen("/dev/ttyACM0","w");
          if(!$fp){
             echo "Can't find /dev/ttyACM0";
-            $fp = fopen("/dev/ttyACM1","w");
-            if(!$fp){
-               echo "Can't find /dev/ttyACM1";
-            }
          }
          fwrite($fp,$text);
          echo "Scheme sent";
          fclose($fp);
+         exec('python3 PythonPi.py');
       }
       else{
          echo "Arrayen tom";
@@ -184,7 +177,7 @@ function upLoad(){
 }
 
 function makeRow($name, $elementHeat, $elementKeepWarm){
-   $date = date('Y/m/d');
+   $date = date('Y/m/d H:i');
    $db = new MyDB("sqltemptime.db");
    if(!$db){
       echo $db->lastErrorMsg();
@@ -223,18 +216,3 @@ EOF;
    $db->close();
 }
 
-function response(){
-   $fp = fopen("/dev/ttyACM0","r");
-   if(!$fp){
-      echo "Can't find /dev/ttyACM0";
-      $fp = fopen("/dev/ttyACM1","r");
-      if(!$fp){
-         echo "Can't find /dev/ttyACM1";
-      }
-   }
-   //$respond = "";
-   $respond = fread($fp,10);
-   echo "test";
-   echo $respond;
-   fclose($fp);
-}

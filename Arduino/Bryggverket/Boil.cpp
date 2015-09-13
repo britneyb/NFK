@@ -102,9 +102,10 @@ boolean Boil::Start()
 	    digitalWrite(BUZZER, LOW);
 	}
 
-	if(second() == 1)
+	if(second() == 1 && curStarted)
 	{
-		Serial.print("boil,"+String(_id)+","+String(minute(totTime)+hour(totTime)*60)+","+CurrentTemp+"/");
+		int check = _id+minute(_totalTime)+hour(_totalTime)*60+minute(totTime)+hour(totTime)*60+CurrentTemp;
+		Serial.print("boil,"+String(_id)+","+String(minute(_totalTime)+hour(_totalTime)*60)+","+String(minute(totTime)+hour(totTime)*60)+","+CurrentTemp+","+String(check)+"/");
 	}
 
 	if(hour(totTime) <= 0 && minute(totTime) < _timeArr[_step-1] && curStarted && _steps == _step)
@@ -123,6 +124,9 @@ boolean Boil::Start()
 		digitalWrite(BUZZER, HIGH);
 		delay(500);
 		digitalWrite(BUZZER, LOW);
+		lcd.totalTime(_now);
+		int check = _id+minute(_totalTime)+hour(_totalTime)*60+minute(totTime)+hour(totTime)*60+CurrentTemp;
+		Serial.print("boil,"+String(_id)+","+String(minute(_totalTime)+hour(_totalTime)*60)+","+String(minute(totTime)+hour(totTime)*60)+","+CurrentTemp+","+String(check)+"/");
 	    return false;
 	}
 	return true;

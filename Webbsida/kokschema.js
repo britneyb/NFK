@@ -338,7 +338,6 @@ loadEvent(function(){							//Alla funktioner innanför här laddas in samtidigt
 					if(validateTemp(document.getElementById('boilTemp'))){
 						XHR.onreadystatechange = function(){
 							if(XHR.readyState == 4 && XHR.status == 200){
-								//getRespond();
 								alert(XHR.responseText);
 							}
 						}

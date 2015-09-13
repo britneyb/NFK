@@ -22,9 +22,6 @@ else if ($type == "getList"){                //kylschema.php?type=getList
 else if ($type == "upLoad"){                 //kylschema.php?type=upLoad&name="namnet"&temp="temperaturen"
    upLoad();
 }
-else if ($type == "response"){               //kylschema.php?type=response
-   response();
-}
 else if ($type = "delete"){                  //kylschema.php?type=delete&name="namnet"
    delete();
 }
@@ -133,18 +130,14 @@ function upLoad(){										//Funktion som skickar en sträng till arduinon.
          $text .= ",".$id;
          $check += $temp;
          $text .= ",".$check.",".$temp.",";
-         echo $text;
          $fp = fopen("/dev/ttyACM0","w");
          if(!$fp){
             echo "Can't find /dev/ttyACM0";
-            $fp = fopen("/dev/ttyACM1","w");
-            if(!$fp){
-               echo "Can't find /dev/ttyACM1";
-            }
          }
          fwrite($fp,$text);
          echo "Scheme sent";
          fclose($fp);
+         exec('python3 PythonPi.py');
       }
       else{
          echo "Invalid temp";
@@ -156,7 +149,7 @@ function upLoad(){										//Funktion som skickar en sträng till arduinon.
 }
 
 function makeRow($name){
-   $date = date('Y/m/d');
+   $date = date('Y/m/d H:i');
    $db = new MyDB("sqltemptime.db");
    if(!$db){
       echo $db->lastErrorMsg();

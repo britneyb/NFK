@@ -55,33 +55,25 @@ boolean Mash::Start()
 
 	if(CurrentTemp >= _tempArr[_step-1] && curStarted) //For the relay
 	{
-		someFlag_2 = true;
+		randomOnce = true;
 		relay.ElementLow();
 	}
 	else if(CurrentTemp < _tempArr[_step-1] && curStarted)
 	{
-		relay.Random(someFlag_2, _elRandom);
-		someFlag_2 = false;
+		relay.Random(randomOnce, _elRandom);
+		randomOnce = false;
 	}
 	else
 	{
 		relay.ReadElements(_elHeating);
 	}
 
-	/*if(digitalRead(SWITCH5))
-	{
-		digitalWrite(PUMP, HIGH);
-	}
-	else
-	{
-		digitalWrite(PUMP, LOW);
-	}*/
-
 	digitalWrite(PUMP, HIGH);
 
 	if(second() == 1)
 	{
-		Serial.print("mash,"+String(_id)+","+String(minute(totTime)+hour(totTime)*60)+","+CurrentTemp+"/");
+		int check = _id+minute(totTime)+hour(totTime)*60+CurrentTemp;
+		Serial.print("mash,"+String(_id)+",0,"+String(minute(totTime)+hour(totTime)*60)+","+CurrentTemp+","+String(check)+"/");
 	}
 
 	if(minute(curTime) >= _timeArr[_step-1] && (_steps) > _step && curStarted)
@@ -97,6 +89,8 @@ boolean Mash::Start()
 		digitalWrite(BUZZER, HIGH);
 		delay(500);
 		digitalWrite(BUZZER, LOW);
+		int check = _id+minute(totTime)+hour(totTime)*60+CurrentTemp;
+		Serial.print("mash,"+String(_id)+",0,"+String(minute(totTime)+hour(totTime)*60)+","+CurrentTemp+","+String(check)+"/");
 		return false;
 	}
 
@@ -108,9 +102,5 @@ void Mash::Unpause()
 	setTime(totTime);
 }
 
-void Mash::ProgramFinshed()
-{
-	relay.AllLow();
-}
 
 

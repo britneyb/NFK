@@ -37,9 +37,6 @@ private:
     Relay relay; //Our relay functions 
   	SerialString serialStr; //Our Serial functions
 
-    //Mash mSchedule;
-    //Boil bSchedule;
-
     String type;
     String name;
     int checkSum;
@@ -51,9 +48,7 @@ private:
     int elRandom;
     int id;
     int boilTemp;
-    //String name = ""; //The name for the scheme
 
-  	//int* arr; //Array that stores the values of time and temp 
   	int arrSize; //Stores the number of steps in the current scheme
   	boolean loaded; //A flag to check if the scheme has been loaded or not 
   	int CurrentTemp; //Stores the current temp

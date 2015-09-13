@@ -31,7 +31,8 @@ boolean Cooling::Start()
 
 	if(second() == 1)
 	{
-		Serial.print("cooling,"+String(_id)+","+String(minute(totTime)+hour(totTime)*60)+","+CurrentTemp+"/");
+		int check = _id+minute(totTime)+hour(totTime)*60+CurrentTemp;
+		Serial.print("cooling,"+String(_id)+",0,"+String(minute(totTime)+hour(totTime)*60)+","+CurrentTemp+","+String(check)+"/");
 	}
 
 	if(CurrentTemp <= _temp)
@@ -40,6 +41,8 @@ boolean Cooling::Start()
 		digitalWrite(BUZZER, HIGH);
 		delay(500);
 		digitalWrite(BUZZER, LOW);
+		int check = _id+minute(totTime)+hour(totTime)*60+CurrentTemp;
+		Serial.print("cooling,"+String(_id)+",0,"+String(minute(totTime)+hour(totTime)*60)+","+CurrentTemp+","+String(check)+"/");
 		return false;
 	}
 

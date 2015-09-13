@@ -9,31 +9,30 @@
 	</head>
 	<body>
 		<h1>Kylschema</h1>
-		<div id="divName">
-			Namn på Kylschema<br />
-			<input type="text" id="name" />
+		<div id="main">
+			<div id="divName">
+				Namn på Kylschema<br />
+				<input type="text" id="name" />
+			</div>
+			<div id="list" style="display:none">
+			</div>
+			<div id="edited" style="display:none">
+				<p>Säkert att du vill spara över?</p>
+				<button id="yes">Ja</button>
+				<button id="no">Nej</button>
+			</div>
+			<div id="divTemp">
+				Måltemperatur<br />
+				<input type="number" id="temp" />C
+			</div>
 		</div>
-		<div id="list" style="display:none">
-		</div>
-		<div id="edited" style="display:none">
-			<p>Säkert att du vill spara över?</p>
-			<button id="yes">Ja</button>
-			<button id="no">Nej</button>
-		</div>
-		<div id="divTemp">
-			Måltemperatur<br />
-			<input type="number" id="temp" />C
-		</div>
-		<button id="saveScheme">Spara Kylschema</button>
 		<div id="menu">
 			<ul>
 			  <li><a id="mainMenu" href="#">Huvudmeny</a></li>
 			  <li><a id="openScheme" href="#">Öppna Kylschema</a></li>
 			  <li><a id="upLoadScheme" href="#">Ladda upp Kylschema</a></li>
+			  <li><a id="saveScheme" href="#">Spara Kylschema</a></li>
 			</ul>
-			<!-- <button id="mainMenu">Huvudmeny</button>
-			<button id="openScheme">Öppna Kylschema</button>
-			<button id="upLoadScheme">Ladda upp Kylschema</button> -->
 		</div>
 	</body>
 </html>
