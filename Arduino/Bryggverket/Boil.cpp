@@ -22,6 +22,7 @@ Boil::Boil(int id, String* hopsArr, int* timeArr, int boilTemp, int totalTime, i
 	_currStep = now();
 	totTime = _totalTime;
 	curTime = totTime - _currStep;
+        firstTime = true;
 
 	setTime(0,0,0,0,0,0);
 	_zero = now();
@@ -74,7 +75,7 @@ boolean Boil::Start()
 		lcd.step(3, _step+1, 0, _timeArr[_step],_steps);
 	}
 
-	if(CurrentTemp < _boilTemp && curStarted)
+	if((CurrentTemp < _boilTemp || !firstTime) && curStarted)
 	{
 		relay.Random(randomOnce, _elRandom);
 		randomOnce = false;
@@ -83,11 +84,13 @@ boolean Boil::Start()
 	{
 		relay.ReadElements(_elHeating);
 	}
-	else if(CurrentTemp >= _boilTemp)
+	else if(CurrentTemp >= _boilTemp && firstTime)
 	{
 		relay.ElementLow();
 		randomOnce = true;
+                firstTime=false;
 	}
+
 
 	if(hour(totTime) <= 0 && minute(totTime) < _timeArr[_step-1] && _step < _steps && curStarted)
 	{

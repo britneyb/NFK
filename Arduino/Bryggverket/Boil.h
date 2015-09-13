@@ -35,6 +35,7 @@ private:
 	int _steps;
 	int _boilTemp;
 	int _id;
+        boolean firstTime;
 
 	time_t _zero;
 	time_t _now;
