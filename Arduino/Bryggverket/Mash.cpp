@@ -22,6 +22,8 @@ Mash::Mash(int id, int* tempArr, int* timeArr, int arrSize, int elHeating, int e
 	_elHeating = elHeating;
 	_elRandom = elRandom;
 	relay.SetRandom(_elRandom);
+        elementDelay=now();
+      
 }
 
 boolean Mash::Start()
@@ -52,16 +54,19 @@ boolean Mash::Start()
 	{
 		lcd.step(3, _step+1, _tempArr[_step], _timeArr[_step],0);
 	}
-
-	if(CurrentTemp >= _tempArr[_step-1] && curStarted) //For the relay
+	if(CurrentTemp >= _tempArr[_step-1] && curStarted)//For the relay
 	{
 		randomOnce = true;
-		relay.ElementLow();
+                if((elementDelay + 30) <= now()) //the element must not turn on and off if the temp is around the goaltemp. make a delay on 30 sec.
+		  relay.ElementLow();
+                
 	}
 	else if(CurrentTemp < _tempArr[_step-1] && curStarted)
 	{
 		relay.Random(randomOnce, _elRandom);
 		randomOnce = false;
+                elementDelay = now();
+                
 	}
 	else
 	{

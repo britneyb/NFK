@@ -39,7 +39,8 @@ class Mash
 	time_t totTime; //The total time
 	time_t curTime; //The time of the current step
 	time_t difTime; //The total time when the current step started
-
+        time_t elementDelay; //number of seconds the elements have been on since last turn on.
+        
 	boolean randomOnce=true;
 	boolean curStarted; //A flag to check whether the current step has started
 	
