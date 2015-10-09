@@ -28,6 +28,7 @@ boolean Cooling::Start()
 	lcd.cooling(totTime, CurrentTemp, _temp);
 
 	digitalWrite(COOLINGPUMP,HIGH);
+	digitalWrite(PUMP, HIGH);
 
 	if(second() == 1)
 	{

@@ -3,7 +3,7 @@
 #define ONE_WIRE_BUS A0
 
 #define PUMP A1
-#define COOLINGPUMP A2 //Not yet implemented
+#define COOLINGPUMP A2 
 #define BUZZER A3
 
 #define startButton 2 //The pin where the button is connected
