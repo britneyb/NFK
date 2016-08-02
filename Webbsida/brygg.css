@@ -74,7 +74,7 @@ a:link, a:visited {
     color: #FFFFFF;
     background-color: #98bf21;
     text-align: center;
-    padding: 4px;
+    padding: 20px;
     text-decoration: none;
     text-transform: uppercase;
 }
@@ -107,4 +107,7 @@ div#edited{
     background-color: #FFFFFF;
     z-index:1002;
     overflow: auto;
+}
+
+
 }

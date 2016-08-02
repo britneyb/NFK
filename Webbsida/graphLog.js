@@ -118,19 +118,19 @@ loadEvent(function(){							//Alla funktioner innanför här laddas in samtidigt
 					str += data[i]+"\n";
 				};
 				g = new Dygraph(document.getElementById("graphdiv"),str,{
-					title: 'Temperature (C)',
-					ylabel: 'Temperature (C)',
-					xlabel: 'Minutes',
+					title: 'Temperatur (C)',
+						ylabel: 'Temperatur (C)',
+						xlabel: 'Tid (Min)',
 				});
-				document.getElementById('name').innerHTML = "<b>Name:</b> "+scheme[1];
-					document.getElementById('date').innerHTML = " <b>Datetime:</b> "+scheme[2];
-					document.getElementById('type').innerHTML = " <b>Type:</b> "+scheme[3];
+				document.getElementById('name').innerHTML = "<b>Namn:</b> "+scheme[1];
+					document.getElementById('date').innerHTML = " <b>Datum och tid:</b> "+scheme[2];
+					document.getElementById('type').innerHTML = " <b>Typ:</b> "+scheme[3];
 					if(scheme[4] != null)
-						document.getElementById('elementHeating').innerHTML = " <b>Number of elements:</b> "+scheme[4];
+						document.getElementById('elementHeating').innerHTML = " <b>Antal element för uppvärmning:</b> "+scheme[4];
 					else
 						document.getElementById('elementHeating').innerHTML = "";
 					if(scheme[5] != null)
-						document.getElementById('elementKeepWarm').innerHTML = " <b>Number of randomelements:</b> "+scheme[5];
+						document.getElementById('elementKeepWarm').innerHTML = " <b>Antal element för underhållsvärme:</b> "+scheme[5];
 					else
 						document.getElementById('elementKeepWarm').innerHTML = "";
 					document.getElementById('list').innerHTML = "";
@@ -154,19 +154,19 @@ loadEvent(function(){							//Alla funktioner innanför här laddas in samtidigt
 						str += data[i]+"\n";
 					};
 					g = new Dygraph(document.getElementById("graphdiv"),str,{
-						title: 'Temperature (C)',
-						ylabel: 'Temperature (C)',
-						xlabel: 'Minutes',
+						title: 'Temperatur (C)',
+						ylabel: 'Temperatur (C)',
+						xlabel: 'Tid (Min)',
 					});
-					document.getElementById('name').innerHTML = "<b>Name:</b> "+scheme[1];
-					document.getElementById('date').innerHTML = " <b>Datetime:</b> "+scheme[2];
-					document.getElementById('type').innerHTML = " <b>Type:</b> "+scheme[3];
+					document.getElementById('name').innerHTML = "<b>Namn:</b> "+scheme[1];
+					document.getElementById('date').innerHTML = " <b>Datum och tid:</b> "+scheme[2];
+					document.getElementById('type').innerHTML = " <b>Typ:</b> "+scheme[3];
 					if(scheme[4] != null)
-						document.getElementById('elementHeating').innerHTML = " <b>Number of elements:</b> "+scheme[4];
+						document.getElementById('elementHeating').innerHTML = " <b>Antal element för uppvärmning:</b> "+scheme[4];
 					else
 						document.getElementById('elementHeating').innerHTML = "";
 					if(scheme[5] != null)
-						document.getElementById('elementKeepWarm').innerHTML = " <b>Number of randomelements:</b> "+scheme[5];
+						document.getElementById('elementKeepWarm').innerHTML = " <b>Antal element för underhållsvärme:</b> "+scheme[5];
 					else
 						document.getElementById('elementKeepWarm').innerHTML = "";
 				}
@@ -190,20 +190,20 @@ loadEvent(function(){							//Alla funktioner innanför här laddas in samtidigt
 						str += data[i]+"\n";
 					};
 					g = new Dygraph(document.getElementById("graphdiv"),str,{
-						title: 'Temperature (C)',
-						ylabel: 'Temperature (C)',
-						xlabel: 'Minutes',
+						title: 'Temperatur (C)',
+						ylabel: 'Temperatur (C)',
+						xlabel: 'Tid (Min)',
 					});
-					document.getElementById('name').innerHTML = "<b>Name:</b> "+scheme[1];
-					document.getElementById('date').innerHTML = " <b>Datetime:</b> "+scheme[2];
+					document.getElementById('name').innerHTML = "<b>Namn:</b> "+scheme[1];
+					document.getElementById('date').innerHTML = " <b>Datum och tid:</b> "+scheme[2];
 					loadedScheme = scheme[2];
-					document.getElementById('type').innerHTML = " <b>Type:</b> "+scheme[3];
+					document.getElementById('type').innerHTML = " <b>Typ:</b> "+scheme[3];
 					if(scheme[4] != null)
-						document.getElementById('elementHeating').innerHTML = " <b>Number of elements:</b> "+scheme[4];
+						document.getElementById('elementHeating').innerHTML = " <b>Antal element för uppvärmning:</b> "+scheme[4];
 					else
 						document.getElementById('elementHeating').innerHTML = "";
 					if(scheme[5] != null)
-						document.getElementById('elementKeepWarm').innerHTML = " <b>Number of randomelements:</b> "+scheme[5];
+						document.getElementById('elementKeepWarm').innerHTML = " <b>Antal element för underhållsvärme:</b> "+scheme[5];
 					else
 						document.getElementById('elementKeepWarm').innerHTML = "";
 					document.getElementById('list').innerHTML = "";
