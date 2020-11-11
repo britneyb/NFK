@@ -14,10 +14,12 @@ void Program::Default()
 	relay.Begin();
 	lcd.Begin();
 	pinMode(BUZZER, OUTPUT);
+  lcd.BootingUp();
 }
 
 void Program::Receive()
 {
+
 	String content = "";
 
 	content = serialStr.Read();
@@ -242,6 +244,3 @@ void Program::ProgramFinished()
 		lcd.programFinished();
 	}
 }
-
-
-

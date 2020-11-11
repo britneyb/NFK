@@ -106,6 +106,3 @@ void Mash::Unpause()
 {
 	setTime(totTime);
 }
-
-
-

@@ -1,7 +1,7 @@
 #ifndef Cooling_h
 #define Cooling_h
 
-#include <Time.h>
+#include <TimeLib.h>
 #include <OneWire.h>
 #include <DallasTemperature.h>
 #include <Wire.h>

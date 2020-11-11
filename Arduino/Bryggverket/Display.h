@@ -7,7 +7,7 @@
 
 #include <Wire.h> 
 #include <LiquidCrystal_I2C.h>
-#include <Time.h>
+#include <TimeLib.h>
 #include "Arduino.h"
 
 class Display
@@ -25,6 +25,7 @@ class Display
     void currentTemp(int temp, time_t curTime, boolean started);
     void cooling(time_t t, int cTemp, int temp);
     void step(int row, int cStep, int cTemp, int cTime, int steps);
+    void BootingUp();
   private:
   	LiquidCrystal_I2C lcd = LiquidCrystal_I2C(0x27,20,4);
 };

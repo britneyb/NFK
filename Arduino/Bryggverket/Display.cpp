@@ -97,18 +97,42 @@ void Display::totalTime(time_t t)
 {
 	lcd.setCursor(0,0);
 	lcd.print("Total: ");
-	lcd.setCursor(7,0);
+
+ /*
+  * Hour
+  */
+
+  if(hour(t)>9)
+	{lcd.setCursor(6,0);}
+  else
+	{lcd.setCursor(7,0);}
+ 
 	lcd.print(String(hour(t)));
 	lcd.setCursor(8,0);
-	lcd.print(":  ");
-	lcd.setCursor(9,0);
+	lcd.print(":0 ");
+ /*
+  * Min
+  */
+  if(minute(t)>9)
+	{lcd.setCursor(9,0);}
+  else
+  {lcd.setCursor(10,0);}
+  
 	lcd.print(String(minute(t)));
 	lcd.setCursor(11,0);
-	lcd.print(":  ");
-	lcd.setCursor(12,0);
+	lcd.print(":0 ");
+ /*
+  * Sec
+  */
+	
+	if(second(t)>9)
+	{lcd.setCursor(12,0);}
+  else
+  {lcd.setCursor(13,0);}
+  
 	lcd.print(String(second(t)));
-	lcd.setCursor(15,0);
-	lcd.print("     ");
+	lcd.setCursor(14,0);
+	lcd.print("       ");
 }
 
 void Display::currentTemp(int temp, time_t curTime, boolean started)
@@ -130,18 +154,30 @@ void Display::currentTemp(int temp, time_t curTime, boolean started)
 	}
 	else if(hour(curTime) <= 0 && minute(curTime) > 0 && started) //Changing between min and sec on the current step
 	{
-		lcd.setCursor(15,1);
-		lcd.print(" ");
-		lcd.setCursor(14,1);
+
+     if(minute(curTime)>9)
+    {lcd.setCursor(14,1);}
+    else
+    {
+      lcd.setCursor(14,1);
+      lcd.print("0");
+      lcd.setCursor(15,1);
+     }
+
 		lcd.print(String(minute(curTime)));
 		lcd.setCursor(16,1);
 		lcd.print(" min");
 	}
 	else if(minute(curTime) <= 0 && started)
 	{
-		lcd.setCursor(15,1);
-		lcd.print(" ");
-		lcd.setCursor(14,1);
+     if(second(curTime)>9)
+    {lcd.setCursor(14,1);}
+    else
+    {
+      lcd.setCursor(14,1);
+      lcd.print("0");
+      lcd.setCursor(15,1);
+     }
 		lcd.print(String(second(curTime)));
 		lcd.setCursor(16,1);
 		lcd.print(" sek");
@@ -189,16 +225,29 @@ void Display::step(int row, int cStep, int cTemp, int cTime, int steps)
 			lcd.print(String(char(223)));
 			lcd.setCursor(12,row);
 			lcd.print("C ");
-			lcd.setCursor(14,row);
-			lcd.print(String(cTime));
-			if(cTime <= 99)
+
+
+/*
+ * Sätt ut tiden
+ */
+      lcd.setCursor(13,row);    
+			if(cTime <= 9)
+      {
+        
+        lcd.print(" 0"+String(cTime));
+        lcd.setCursor(16,row);
+        lcd.print(" min");
+      }
+			else if(cTime <= 99)
 			{
+        lcd.print(" "+String(cTime));
 				lcd.setCursor(16,row);
 				lcd.print(" min");
 			}
 			else if(cTime > 99)
 			{
-				lcd.setCursor(17,row);
+        lcd.print(String(cTime));
+				lcd.setCursor(16,row);
 				lcd.print("min");
 			}
 		}
@@ -215,4 +264,13 @@ void Display::step(int row, int cStep, int cTemp, int cTime, int steps)
 			lcd.print("                    ");
 		}
 	}
+}
+void Display::BootingUp()
+{
+  lcd.setCursor(2,1);
+  lcd.print("Startar upp");
+  delay(500);
+  lcd.setCursor(2,2); 
+  lcd.print("Bryggverket");
+  delay(1000);
 }

@@ -1,4 +1,6 @@
-#include <Time.h>
+#include <LiquidCrystal_I2C.h>
+
+#include <TimeLib.h>
 #include <OneWire.h>
 #include <DallasTemperature.h>
 #include <Wire.h>
