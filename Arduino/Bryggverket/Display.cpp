@@ -57,8 +57,12 @@ void Display::getTemp(int row, int temp, boolean clear)
 {
 	lcd.setCursor(0,row);
 	lcd.print("Current: ");
-	lcd.setCursor(9,row);
-	lcd.print(String(temp));
+ lcd.setCursor(9,row);
+ if(temp<10 && temp >-1)
+    {lcd.print(" "+String(temp));}
+	else
+    {lcd.print(String(temp));}
+	
 	lcd.setCursor(11,row);
 	lcd.print(String(char(223)));//String(degree), 2, 16);
 	lcd.setCursor(12,row);
@@ -268,9 +272,9 @@ void Display::step(int row, int cStep, int cTemp, int cTime, int steps)
 void Display::BootingUp()
 {
   lcd.setCursor(2,1);
-  lcd.print("Startar upp");
+  lcd.print("Booting up..");
   delay(500);
   lcd.setCursor(2,2); 
-  lcd.print("Bryggverket");
+  lcd.print("the brewery");
   delay(1000);
 }
