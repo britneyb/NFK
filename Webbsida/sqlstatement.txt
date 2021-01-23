@@ -1,0 +1,5 @@
+SELECT timeTemp.time,timeTemp.temp
+FROM schema
+INNER JOIN timeTemp
+ON timeTemp.id=schema.id
+WHERE schema.id = 16
