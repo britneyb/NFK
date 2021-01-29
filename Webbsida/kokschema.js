@@ -94,6 +94,7 @@ loadEvent(function(){							//Alla funktioner innanför här laddas in samtidigt
 		                alert(XHR.responseText);
 		            }
 		        }
+		        XHR.open("GET", "kokschema.php?type=saveSchedule&name="+document.getElementById('name').value+"&array="+JSON.stringify(steps)+"&total="+document.getElementById('boilTime').value+"&wElements="+document.getElementById('warmingUp').value+"&mWarm="+document.getElementById('mHeating').value, true);
 		        XHR.send();
 	    	}
 		}
