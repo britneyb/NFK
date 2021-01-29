@@ -17,8 +17,7 @@ else if ($type == "getSchedule"){            //kokschema.php?type=getSchedule&na
    getSchedule();
 }
 else if ($type == "getList"){                //kokschema.php?type=getList
-   echo "test";
-   getList();
+    getList();
 }
 else if ($type == "upLoad"){                 //kokschema.php?type=upLoad&name="namnet"&array="arrayen"&total="totalatiden "
    upLoad();
@@ -55,6 +54,9 @@ function saveSchedule(){                     //Funktion som läser datan från G
    $array = json_decode($_REQUEST["array"]);
    $name = $_REQUEST["name"];
    $total = $_REQUEST["total"];
+   $wElements = $_REQUEST["wElements"];  
+   $mWarm= $_REQUEST["mWarm"]; 
+
    if(preg_match("/[a-zA-ZåäöÅÄÖ0-9]+/", $name)){
       if(!empty($array)){
          $hops = "";
@@ -66,7 +68,7 @@ function saveSchedule(){                     //Funktion som läser datan från G
          if(preg_match("/[a-zA-ZåäöÅÄÖ0-9]+/", $hops)){
             if(preg_match("/[0-9]+/", $time)){
                if (preg_match("/[0-9]+/", $total)){
-                  writeData($name, $hops, $time, $total);
+                  writeData($name, $hops, $time, $total, $wElements, $mWarm);
                }
                else{
                   echo "Hops not valid";
@@ -94,11 +96,11 @@ function getSchedule(){                      //Funktion som hämtar ett specifik
          echo $db->lastErrorMsg();
       }
       $sql = <<<EOF
-         SELECT * FROM boilschedule WHERE name = "$name";
+         SELECT name, total, elementheating, elementrndheating, spice, time FROM boilschedule WHERE name = "$name";
 EOF;
       $ret = $db->query($sql);
       $row=$ret->fetchArray();
-      for ($i = 0; $i < 4; $i++){
+      for ($i = 0; $i < 6; $i++){
          print($row[$i]." ");
       }
       $db->close();
@@ -123,14 +125,14 @@ EOF;
    $db->close();
 }
 
-function writeData($name, $hops, $time, $total){     //Funktion som lägger in scheman i databasen.
+function writeData($name, $hops, $time, $total, $wElements, $mWarm){     //Funktion som lägger in scheman i databasen.
    $db = new MyDB("sqltemptime.db");
    if(!$db){
       echo $db->lastErrorMsg();
    }
    $sql = <<<EOF
-      INSERT INTO boilschedule (name,spice,time,total)
-      VALUES ('$name', '$hops', '$time', '$total');
+      INSERT INTO boilschedule (name,spice,time,total, elementheating, elementrndheating)
+      VALUES ('$name', '$hops', '$time', '$total', '$wElements', '$mWarm');
 EOF;
    $ret = $db->exec($sql);
    if(!$ret){

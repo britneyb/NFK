@@ -94,7 +94,6 @@ loadEvent(function(){							//Alla funktioner innanför här laddas in samtidigt
 		                alert(XHR.responseText);
 		            }
 		        }
-		        XHR.open("GET", "kokschema.php?type=saveSchedule&name="+document.getElementById('name').value+"&array="+JSON.stringify(steps)+"&total="+document.getElementById('boilTime').value, true);
 		        XHR.send();
 	    	}
 		}
@@ -268,6 +267,11 @@ loadEvent(function(){							//Alla funktioner innanför här laddas in samtidigt
                 document.getElementById('boilTime').backgroundColor = "white";
                 document.getElementById('time').value = "";
                 document.getElementById('time').backgroundColor = "white";
+		document.getElementById('warmingUp').value = "";
+		document.getElementById('warmingUp').backgroundColor = "white";
+		document.getElementById('mHeating').value = "";
+		document.getElementById('mHeating').backgroundColor = "white";
+
                 document.getElementById('list').innerHTML = "";
 				for(var i = 0; i < list.length; i++){
 					var newParagraph = document.createElement('p');
@@ -319,11 +323,17 @@ loadEvent(function(){							//Alla funktioner innanför här laddas in samtidigt
 				document.getElementById('name').style.backgroundColor = "white";
 				document.getElementById('boilTime').value = scheme.shift();
 				document.getElementById('boilTime').style.backgroundColor = "white";
+				document.getElementById('warmingUp').value = scheme.shift();
+				document.getElementById('warmingUp').style.backgroundColor = "white";
+				document.getElementById('mHeating').value = scheme.shift();
+				document.getElementById('mHeating').style.backgroundColor = "white";
+
 				document.getElementById('list').innerHTML = "";
 				document.getElementById('list').style.display = "none";
 				for(var i = 0; i < (scheme.length)/2; i++){
 					addStep(scheme[i], scheme[i+((scheme.length)/2)]);
 				}
+
 			}
 		}
 		XHR.open("GET", "kokschema.php?type=getSchedule&name="+name, true);
